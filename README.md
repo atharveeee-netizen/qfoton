@@ -89,6 +89,14 @@ python simulate_custom_chip.py --preset ghz3
 
 ---
 
+---
+
+## Feedback & Contributions
+
+Your feedbacks are welcome! If you have suggestions, questions, or want to contribute new photonic quantum algorithms or hardware noise models, feel free to open an issue or pull request on [GitHub](https://github.com/atharveeee-netizen/qfoton).
+
+---
+
 ## License
 
 MIT License.
