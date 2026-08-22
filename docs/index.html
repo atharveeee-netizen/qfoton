@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>quphoton | 3D Silicon Photonic Quantum Chip Simulator</title>
+    <title>Qfóton | 3D Silicon Photonic Quantum Chip Simulator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -22,7 +22,7 @@
             <div>
                 <div class="flex items-center gap-3">
                     <span class="w-3.5 h-3.5 rounded-full bg-cyan-400 animate-ping"></span>
-                    <h1 class="text-3xl font-extrabold text-white tracking-tight cyan-glow">quphoton</h1>
+                    <h1 class="text-3xl font-extrabold text-white tracking-tight cyan-glow">Qfóton</h1>
                     <span class="bg-cyan-950/80 text-cyan-400 border border-cyan-700 text-xs px-3 py-1 rounded-full font-mono font-semibold">Linear Optical Quantum Computing (LOQC)</span>
                 </div>
                 <p class="text-gray-400 text-sm mt-1">Dual-Rail Qubits · Clements SU(N) Compilation · Hong-Ou-Mandel Interference · Boson Sampling</p>
@@ -53,7 +53,7 @@
             <!-- Hong-Ou-Mandel Quantum Interference Dip -->
             <div class="glass-panel rounded-2xl p-5 flex flex-col">
                 <h2 class="text-sm font-bold text-gray-200 uppercase tracking-wider mb-2">Hong-Ou-Mandel (HOM) Dip</h2>
-                <p class="text-xs text-gray-400 mb-2">Two-photon coincidence suppression at zero time delay (\(\Delta 	au = 0\))</p>
+                <p class="text-xs text-gray-400 mb-2">Two-photon coincidence suppression at zero time delay (Δτ = 0)</p>
                 <div class="flex-1 min-h-[220px]">
                     <canvas id="homChart"></canvas>
                 </div>
@@ -73,7 +73,7 @@
                 <div class="h-64">
                     <canvas id="bosonChart"></canvas>
                 </div>
-                <p class="text-xs text-gray-400 mt-2 font-mono">Matrix permanent transition probability: \(P(s 	o t) = |	ext{Perm}(U_{s,t})|^2\) computed across Haar-random unitary.</p>
+                <p class="text-xs text-gray-400 mt-2 font-mono">Matrix permanent transition probability: P(s → t) = |Perm(U_s,t)|² computed across Haar-random unitary.</p>
             </div>
 
             <!-- Photonic Performance Metric Cards -->
@@ -98,7 +98,6 @@
 
     </div>
 
-    <!-- Three.js Photonic Simulation Logic -->
     <script>
         const container = document.getElementById('chip-canvas-container');
         const scene = new THREE.Scene();

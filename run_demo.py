@@ -1,5 +1,5 @@
 """
-quphoton: 1-Command Interactive CLI Demo Runner
+Qfóton: 1-Command Interactive CLI Demo Runner
 Executes all linear optical quantum simulations in sequence with ASCII tables.
 """
 
@@ -22,7 +22,7 @@ from simulator.gds_layout import PhotonicLayoutExporter
 def banner():
     print("""
 ================================================================================
-                quphoton | LINEAR OPTICAL QUANTUM SIMULATOR
+                Qfóton | LINEAR OPTICAL QUANTUM SIMULATOR
                  Universal Clements Compilation and LOQC Suite
 ================================================================================
 """)

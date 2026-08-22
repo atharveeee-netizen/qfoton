@@ -1,5 +1,5 @@
 """
-SOTA Comprehensive Benchmark Suite for PhotoQ LOQC Engine.
+SOTA Comprehensive Benchmark Suite for Qfóton LOQC Engine.
 """
 import time
 import numpy as np
@@ -14,7 +14,7 @@ from simulator.hardware_noise import PhotonicHardwareNoiseModel
 
 def run_benchmarks():
     print("=" * 75)
-    print(" PhotoQ: SOTA COMPREHENSIVE PHOTONIC QUANTUM BENCHMARK SUITE")
+    print(" Qfóton: SOTA COMPREHENSIVE PHOTONIC QUANTUM BENCHMARK SUITE")
     print("=" * 75)
     
     N = 8

@@ -1,17 +1,19 @@
-# quphoton
+# Qfóton
 
 A Python library for designing, simulating, and compiling linear optical quantum circuits (LOQC). It handles dual-rail qubit operations, multi-mode unitary matrix decomposition (Clements and Reck meshes), Hong-Ou-Mandel interference, and matrix permanents for Boson Sampling.
+
+**Live 3D WebGL Dashboard**: [https://atharveeee-netizen.github.io/qfoton/](https://atharveeee-netizen.github.io/qfoton/)
 
 ## Why photons?
 
 Superconducting qubits need dilution refrigerators at 15 millikelvin (-273 C) because room temperature vibrations destroy their quantum states. Photons do not suffer from thermal noise in the same way. An optical quantum chip operates at room temperature (300 K) and moves quantum states at the speed of light along silicon waveguides.
 
-`quphoton` lets you build and test these circuits on your laptop.
+`Qfóton` lets you build and test these circuits on your laptop.
 
 ## What is in this repo
 
 ```
-quphoton/
+qfoton/
 ├── simulator/
 │   ├── clements_compiler.py    # Decomposes N x N unitaries into rectangular MZI grids
 │   ├── reck_compiler.py        # Triangular mesh unitary compiler (Reck 1994)
@@ -27,8 +29,9 @@ quphoton/
 │   └── transform_state.py      # Multi-photon Fock state propagation
 ├── benchmarks/
 │   └── run_sota_benchmarks.py  # Performance scaling benchmarks
-└── dashboard/
-    └── app.html                # 3D interactive silicon chip visualizer
+├── dashboard/
+│   └── app.html                # 3D interactive silicon chip visualizer
+└── run_demo.py                 # 1-command CLI demo runner
 ```
 
 ## Quick Start
@@ -41,7 +44,13 @@ Install standard scientific Python libraries:
 pip install numpy scipy matplotlib
 ```
 
-### 2. Compile an arbitrary Unitary matrix into physical silicon beam splitters
+### 2. Run the 1-Command CLI Suite
+
+```bash
+python run_demo.py
+```
+
+### 3. Compile an arbitrary Unitary matrix into physical silicon beam splitters
 
 ```python
 import numpy as np
@@ -57,19 +66,13 @@ for mzi in mzi_schedule:
     print(f"Modes ({mzi[0]}, {mzi[1]}) -> Theta: {mzi[2]:.3f} rad, Phi: {mzi[3]:.3f} rad")
 ```
 
-### 3. Test Hong-Ou-Mandel Interference
+### 4. Test Hong-Ou-Mandel Interference
 
 ```python
 from simulator.hardware_noise import PhotonicHardwareNoiseModel
 
 noise = PhotonicHardwareNoiseModel(indistinguishability_v=0.992)
 print(f"HOM Dip Quantum Visibility: {noise.get_hom_visibility() * 100:.2f}%")
-```
-
-### 4. Run the benchmark suite
-
-```bash
-python benchmarks/run_sota_benchmarks.py
 ```
 
 ## Benchmarks
