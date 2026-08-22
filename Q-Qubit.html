@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Q ⟩ Qubit</title>
+		<meta charset="utf-8">
+		<meta name="viewport"             content="width=device-width,initial-scale=1.0">
+		<meta name="description"          content="Quantum computing in your browser.">
+		<meta name="copyright"            content="Stewart Smith 2019–2020">
+		<meta name="keywords"             content="
+			Q, Q.js, Q-js, Qjs, quantum JavaScript,
+			quantum, quantum physics, quantum mechanics, superposition,
+			quantum computer, quantum computer programming, quantum computing, QC, 
+			quantum simulator, quantum computer simulator, 
+			qubit, qbit, gate, Hadamard, Bloch, Bloch Sphere,
+			Web, Web site, website, Web browser, browser, HTML, HTML5, JavaScript, ES6, CSS,
+			Chrome, Firefox, Safari, Opera, Brave, Edge, WebKit, Blink, Gecko, Mozilla,
+			Stewart Smith, Stewart, Stew, Stuart, Steven, Steve, Stewdio, stewartsmith, stew_rtsmith, @stew_rtsmith,
+			Moar, Moar Technologies Corp, MTC,
+			Google, IBM, Microsoft, Amazon, NASA, DWave, D-Wave,
+			Quil, OpenQASM,
+				ProjectQ, Qiskit, 
+				Quantum Development Kit, Cirq, Strawberry Fields, t|ket>,
+				QCL, Quantum pseudocode, Q#, Q|SI>, Q language, qGCL, QFC, QML, LIQUi|>, Quipper,
+			Stanford CS 269 Q: Quantum Computer Programming">
+		
+		<meta name="twitter:card"         content="summary_large_image">
+		<meta name="twitter:site"         content="@stew_rtsmith">
+		<meta name="twitter:creator"      content="@stew_rtsmith">
+		<meta name="twitter:title"        content="Q ⟩ Qubit">
+		<meta name="twitter:description"  content="Quantum computing in your browser.">
+		<meta name="twitter:image"        content="https://quantumjavascript.app/assets/Q-website-preview.jpg">
+		
+		<meta property="og:type"          content="website">
+		<meta property="og:title"         content="Q ⟩ Qubit">
+		<meta property="og:description"   content="Quantum computing in your browser.">
+		<meta property="og:image"         content="https://quantumjavascript.app/assets/Q-website-preview.jpg">
+		<meta property="og:url"           content="https://quantumjavascript.app/Qubit.html">
+		
+		<link rel="canonical" href="https://quantumjavascript.app/Qubit.html">
+		<link href="assets/Q-favicon-064.png" rel="icon" type="image/png">
+		<link href="assets/Q-favicon-144.png" rel="apple-touch-icon">
+		
+		<link rel="stylesheet" href="Q/Q.css">
+		<link rel="stylesheet" href="Q/Q-Circuit-Editor.css">
+		<link rel="stylesheet" href="assets/documentation.css">
+
+		<script src="https://www.googletagmanager.com/gtag/js" async></script>
+		<script src="assets/ga.js"></script>
+		<script src="Q/Q.js"></script>
+		<script src="Q/Q-ComplexNumber.js"></script>
+		<script src="Q/Q-Matrix.js"></script>
+		<script src="Q/Q-Qubit.js"></script>
+		<script src="Q/Q-Gate.js"></script>
+		<script src="Q/Q-History.js"></script>
+		<script src="Q/Q-Circuit.js"></script>
+		<script src="Q/Q-Circuit-Editor.js"></script>
+		<script src="assets/navigation.js"></script>
+
+		<script src="assets/Three/three.117.min.js"></script>
+		<script src="assets/Three/OrbitControls.js"></script>
+		<script src="assets/MeshLine/MeshLine.js"></script>
+		<script src="assets/Tween/tween.min.js"></script>
+		<script src="assets/SurfaceText.js"></script>
+		<script src="Q/Q-BlochSphere.js"></script>
+		
+	</head>
+	<body>
+		<main class="api">
+			<p>
+				Source code:
+				<a href="https://github.com/stewdio/q.js/blob/master/source/Q-Qubit.js?ts=4" target="_blank">
+					<code>Q-Qubit.js</code>
+				</a>
+			</p>
+			<hr>
+			
+
+
+
+			<h3>Perfect pairs</h3>
+			<p>
+				A <a href="https://en.wikipedia.org/wiki/Qubit" target="_blank">qubit</a>
+				is just a pair of numbers.
+				That’s it—two 
+				<a href="https://youtu.be/YYOKMUTTDdA" target="_blank">shiny happy number values,
+				holding hands</a>.
+				Let’s call the first number
+				“<code><a href="#this.alpha">alpha</a></code>” 
+				and the second number
+				“<code><a href="#this.beta">beta</a></code>.”
+				Look at this handsome couple:
+			</p>
+			<br>
+			<div class="center">
+				<code>alpha</code>, <code>beta</code>
+			</div>
+			<br>
+			<p>
+				We can package
+				<code><a href="#this.alpha">alpha</a></code>
+				and
+				<code><a href="#this.beta">beta</a></code>
+				together
+				by storing them in a very small
+				<a href="Q-Matrix.html">matrix</a>
+				that is only <strong>one</strong> unit wide
+				and <strong>two</strong> units tall—and
+				because this matrix is only one unit wide
+				it is not merely a matrix, it’s also a 
+				<a href="Q-Matrix.html#Vectors">vector</a>.
+				(What’s a <a href="Q-Matrix.html">matrix</a>?
+				What’s a <a href="Q-Matrix.html#Vectors">vector</a>? 
+				See the <a href="Q-Matrix.html"><code>Matrix</code> page</a> 
+				for quick refreshers on both.)
+			</p>
+			<p>
+				So when you think of a qubit you can imagine it as 
+				a 1 × 2 <a href="Q-Matrix.html">matrix</a>
+				<!-- (a <a href="Q-Matrix.html#Vectors"> column vector</a>) -->
+				containing its 
+				<code><a href="#this.alpha">alpha</a></code> value on the top
+				and its
+				<code><a href="#this.beta">beta</a></code> value on the bottom,
+				like so:
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td><code>alpha</code></td></tr>
+						<tr><td><code>beta</code></td></tr>
+					</table>
+				</div>
+			</div>
+			<br>
+			<p>
+				Now that we know a qubit is a 
+				<a href="Q-Matrix.html">matrix</a>,
+				we also know that we can perform
+				<a href="Q-Matrix.html#.add">addition</a> with qubits,
+				perform <a href="Q-Matrix.html#.multiply">multiplication</a> with qubits,
+				and so on—just as one can do with any matrix.
+				(That will become rather important
+				when we eventually introduce the idea of
+				<a href="Q-Gate.html">quantum gates</a>, 
+				which are also matrices.)
+			</p>
+
+
+
+
+			<h4 id="Predictable_couples">Predictable couples</h4>
+			<p>
+				The thing that makes this pair of numbers special
+				is their relationship to each other,
+				which we can define as follows:
+				<code><a href="#this.alpha">alpha</a></code>
+				multiplied by  
+				<code><a href="#this.alpha">alpha</a></code>, 
+				added to 
+				<code><a href="#this.beta">beta</a></code>
+				multiplied by 
+				<code><a href="#this.beta">beta</a></code>,
+				must always equal one.
+				We can express this as an equation:
+			</p>
+			<br>
+			<div class="maths center">
+				( <code><a href="#this.alpha">alpha</a></code> ×
+				<code><a href="#this.alpha">alpha</a></code> ) + 
+				( <code><a href="#this.beta">beta</a></code> ×
+				<code><a href="#this.beta">beta</a></code> ) = 1
+			</div>
+			<br>
+			<p>
+				The parentheses in the equation above 
+				are not strictly necessary
+				as the 
+				<a href="https://en.wikipedia.org/wiki/Order_of_operations" target="_blank">“order of operations” rules</a>
+				dictate that these multiplications
+				must be carried out prior to 
+				the additions—but emphasis can often be more helpful than brevity when learning something new.
+				And now that we understand this relationship
+				we can express it more compactly
+				using exponents rather than multiplications:
+				<code><a href="#this.alpha">alpha</a></code> squared
+ 				added to 
+				<code><a href="#this.beta">beta</a></code> squared
+				must always equal one.	
+			</p>
+			<br>
+			<div class="maths center">
+				<code><a href="#this.alpha">alpha</a></code><sup>2</sup> + 
+				<code><a href="#this.beta">beta</a></code><sup>2</sup> = 1
+			</div>
+			<br>
+			<p>
+				A bit <a href="#Complex_couple">further below</a> 
+				we’ll add one small wrinkle to this equation,
+				but otherwise this is
+				what defines a qubit.
+				That’s it. It’s that easy.
+			</p>
+
+
+
+
+			<h4 title="Brangelina.">Named couples</h4>
+			<p>
+				Let’s start plugging in values for 
+				<code><a href="#this.alpha">alpha</a></code>
+				and
+				<code><a href="#this.beta">beta</a></code>.
+				Each different value combination makes a different sort of qubit.
+				The most frequently used qubit value combinations
+				have names
+				and belong to a set of named vectors called 
+				<a href="https://en.wikipedia.org/wiki/Jones_calculus#The_Jones_vector" target="_blank">Jones vectors</a>.
+				We’ll begin with the two simplest qubits.
+				This first qubit is named 
+				<a href="#.HORIZONTAL">Horizontal</a>
+				and the second is named
+				<a href="#.VERTICAL">Vertical</a>.
+				Both are composed from a zero and a one
+				and we can see that this
+				satisfies our qubit definition above.
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td class="right"><code>alpha</code> = <strong>1</strong></td></tr>
+						<tr><td class="right"><code>beta</code> = <strong>0</strong></td></tr>
+					</table>
+				</div>
+				<div class="center middle">
+					A <a href="#.HORIZONTAL">Horizontal qubit</a> is considered<br>
+					to be “<code>0</code>” or “<code>OFF</code>.”
+					
+				</div>
+				<br>
+				<br>
+				<div class="maths">
+					<table class="equation">
+						<tr>
+							<td>
+								<code><a href="#this.alpha">alpha</a></code><sup>2</sup> + <code><a href="#this.beta">beta</a></code><sup>2</sup>
+							</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>1</strong><sup>2</sup> + <strong>0</strong><sup>2</sup>
+							</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>1</strong> + <strong>0</strong>
+							</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>1</strong>
+							</td>
+							<td>1 ✓</td>
+						</tr>
+					</table>
+				</div>
+				<br>
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td class="right"><code>alpha</code> = <strong>0</strong></td></tr>
+						<tr><td class="right"><code>beta</code> = <strong>1</strong></td></tr>
+					</table>
+				</div>
+				<div class="center middle">
+					A <a href="#.VERTICAL">Vertical qubit</a> is considered<br>
+					to be “<code>1</code>” or “<code>ON</code>.”
+				</div>
+				<br>
+				<br>
+				<div class="maths">
+					<table class="equation">
+						<tr>
+							<td>
+								<code><a href="#this.alpha">alpha</a></code><sup>2</sup> + <code><a href="#this.beta">beta</a></code><sup>2</sup>
+							</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>0</strong><sup>2</sup> + <strong>1</strong><sup>2</sup>
+							</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>0</strong> + <strong>1</strong>
+							</td>
+							<td>1</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>1</strong>
+							</td>
+							<td>1 ✓</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<br>
+			<br>
+			<p>
+				What does it mean to be named
+				<a href="#.HORIZONTAL">Horizontal</a> or
+				<a href="#.VERTICAL">Vertical</a>?
+				Where do these orientation-based names come from?
+				Are there more orientation-based names?
+				To understand, let’s plot these two qubit vectors on a graph.
+				We’ll use the 
+				<code><a href="#this.alpha">alpha</a></code> value
+				as our <span class="symbol">x</span> coordinate
+				and the  
+				<code><a href="#this.beta">beta</a></code> value
+				as our <span class="symbol">y</span> coordinate:
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td><code>alpha</code></td></tr>
+						<tr><td><code>beta</code></td></tr>
+					</table>
+				</div>
+				→&nbsp;&nbsp; ( <code>alpha</code>, <code>beta</code> )
+			</div>
+			<br>
+			<p>
+				Plotting  
+				<code><a href="#this.alpha">alpha</a></code>
+				and
+				<code><a href="#this.beta">beta</a></code>
+				as <span class="symbol">x</span> and <span class="symbol">y</span> 
+				yields (1, 0) for a 
+				<a href="#.HORIZONTAL">Horizontal qubit</a>
+				and (0, 1) for a 
+				<a href="#.VERTICAL">Vertical qubit</a>.
+			</p>
+			<br>
+			<div class="unit-circle no-animation">
+				<!-- <div class="unit-circle-outline"></div> -->
+				<div class="unit-circle-spoke-half unit-circle-spoke unit-circle-spoke-0 dashed"></div>
+				<div class="unit-circle-spoke-half unit-circle-spoke unit-circle-spoke-180"></div>
+				<div class="unit-circle-spoke-half unit-circle-spoke unit-circle-spoke-90"></div>
+				<div class="unit-circle-spoke-half unit-circle-spoke unit-circle-spoke-270 dashed"></div>
+				<div class="unit-circle-spoke-label unit-circle-spoke-label-90">Vertical</div>
+				<div class="unit-circle-spoke-label unit-circle-spoke-label-0">Horizontal</div>
+				<!-- <div class="unit-circle-label unit-circle-label-angle-0">0˚</div>
+				<div class="unit-circle-label unit-circle-label-angle-90">90˚</div> -->
+				<div class="unit-circle-label unit-circle-label-point-origin">0, 0</div>
+				<div class="unit-circle-label unit-circle-label-point-0">1, 0</div>
+				<div class="unit-circle-label unit-circle-label-point-90">0, 1</div>
+				<div class="unit-circle-label unit-circle-label-point-180">-1, 0</div>
+				<div class="unit-circle-label unit-circle-label-point-270">0, -1</div>
+			</div>
+			<p>
+				We can see that the values from a 
+				<a href="#.HORIZONTAL">Horizontal qubit</a>, 
+				when plotted as <span class="symbol">x</span> and <span class="symbol">y</span>,
+				form a horizontal line from the origin (0, 0)
+				out to (1, 0).
+				Meanwhile, 
+				when we plot the values of a 
+				<a href="#.VERTICAL">Vertical qubit</a>
+				as <span class="symbol">x</span> and <span class="symbol">y</span>,
+				it forms a vertical line from the origin (0, 0)
+				up to (0, 1).
+				Before we introduce more named 
+				<a href="#Jones_Vectors">Jones vectors</a>
+				let’s take what we’ve learned about qubit values
+				and generalize it for vectors
+				with more than two elements
+				so we can better understand what these qubit values truly mean.
+			</p>
+
+
+
+
+			<h4>State vectors</h4>
+			<p>
+				Did it seem strange to read that 
+				the qubit we refer to as “<code>0</code>” begins with an 
+				<code><a href="#this.alpha">alpha</a></code> value of 1?
+				(Or that the qubit we refer to as “<code>1</code>” begins with an 
+				<code><a href="#this.alpha">alpha</a></code> value of 0?)
+				Does that mean we refer to qubits 
+				by their <code><a href="#this.beta">beta</a></code> values?
+				Is that some sort of quantum computing convention?
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td class="right"><code>alpha</code> = <strong>1</strong></td></tr>
+						<tr><td class="right"><code>beta</code> = <strong>0</strong></td></tr>
+					</table>
+				</div>
+				<div class="center middle">
+					Recall that a 
+					<a href="#.HORIZONTAL">Horizontal qubit</a><br>
+					is considered
+					“<code>0</code>” or “<code>OFF</code>.”
+				</div>
+			</div>
+			<br>
+			<p>
+				The short answer is “No.”
+				To understand why, 
+				we must recognize that 
+				a qubit is the simplest example of a
+				quantum <em>state vector</em>—a
+				list of all possible states
+				for a quantum system to exist in,
+				with each possible state accompanied by the probability
+				that the system is indeed in that state.
+				When a single qubit is measured 
+				there are only two possible states 
+				for it to be in: 
+				<code><strong>0</strong></code> or <code><strong>1</strong></code>.
+				This is why a qubit is represented by a two-element vector;
+				one element per possible outcome.
+				On this very short list of possible outcomes,
+				<code><strong>0</strong></code> is the first possible outcome
+				and <code><strong>1</strong></code> is the second possible outcome.
+				When we say that a <a href="#.HORIZONTAL">Horizontal</a> qubit is “<code>0</code>”
+				<a href="https://www.youtube.com/watch?v=DfSL-HeIrxA" target="_blank">we’re not referring to the qubit’s
+				<code>beta</code> value at all</a>.
+				We’re instead highlighting the fact that
+				the <code>1</code> in this (1,&nbsp;0) pair
+				happens to be in the “zeroth” slot—the 
+				<code><a href="#this.alpha">alpha</a></code> slot
+				of this 
+				(<code><a href="#this.alpha">alpha</a></code>,
+				<code><a href="#this.beta">beta</a></code>) pair.
+				We’re saying that 
+				for the possible outcome “<code>0</code>”
+				our qubit is voting 1, or <code>TRUE</code>.
+				At the same time we’re saying that 
+				for the possible outcome “<code>1</code>”,
+				our qubit is voting 0, or <code>FALSE</code>.
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table class="chart">
+						<tr>
+							<td class="font-sans">
+								Outcome will be <code><strong>0</strong></code>:&nbsp;
+								<code>TRUE</code> (<code>1</code>)&nbsp;&nbsp; 
+							</td>
+						</tr>
+						<tr>
+							<td class="font-sans">
+								Outcome will be <code><strong>1</strong></code>:&nbsp;
+								<code>FALSE</code> (<code>0</code>)
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="center middle">
+					<a href="#.HORIZONTAL">Horizontal qubit</a>
+				</div>
+			</div>
+			<br>
+			<p>
+				For good measure
+				let’s look at the converse example.
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table class="chart">
+						<tr>
+							<td class="font-sans">
+								Outcome will be <code><strong>0</strong></code>:&nbsp;
+								<code>FALSE</code> (<code>0</code>)
+							</td>
+						</tr>
+						<tr>
+							<td class="font-sans">
+								Outcome will be <code><strong>1</strong></code>:&nbsp;
+								<code>TRUE</code> (<code>1</code>)&nbsp;&nbsp; 
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="center middle">
+					<a href="#.VERTICAL">Vertical qubit</a>
+				</div>
+			</div>
+			<br>
+			<p>
+				To further clarify—and 
+				to hint at how a <a href="Q-Circuit.html">quantum circuit</a> 
+				functions—let’s look at a state vector 
+				for a quantum system composed of <strong>two</strong> qubits.
+				With one qubit there were two possible outcomes: 
+				<code><strong>0</strong></code> and <code><strong>1</strong></code>.
+				(And because there are only two elements of a qubit vector we named them
+				<code><a href="#this.alpha">alpha</a></code> and
+				<code><a href="#this.beta">beta</a></code> 
+				to make referring to them more convenient.)
+				For two qubits there are four possible outcomes:
+				<code><strong>00</strong></code>,
+				<code><strong>01</strong></code>,
+				<code><strong>10</strong></code>, and
+				<code><strong>11</strong></code>.
+				(We won’t bother to name elements of state vectors larger than two. 
+				It would get unwieldy rather quickly.)
+				Which of those four possible outcomes 
+				might the following state vector represent?
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td>0</td></tr>
+						<tr><td>0</td></tr>
+						<tr><td>1</td></tr>
+						<tr><td>0</td></tr>
+					</table>
+				</div>
+				<div class="center middle">
+					A state vector for<br>
+					<strong>two</strong> qubits.
+				</div>
+			</div>
+			<br>
+			<p>
+				The above vector represents four possible outcomes
+				and we see that 
+				three out of those four possible outcomes
+				are <code>FALSE</code> (<code>0</code>).
+				Meanwhile, the third of those four possible outcomes
+				is <code>TRUE</code> (<code>1</code>).
+				Because the result value of the third possible outcome is
+				<code><strong>10</strong></code>
+				we see that this two qubit vector state
+				is telling us it represents a result of 
+				<code><strong>10</strong></code>.
+				Let’s break this down the same way we did 
+				with 
+				<a href="#.HORIZONTAL">Horizontal</a>
+				and
+				<a href="#.VERTICAL">Vertical</a>
+				qubits.
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table class="chart">
+						<tr>
+							<td class="font-sans">
+								Outcome will be <code><strong>00</strong></code>:&nbsp;
+								<code>FALSE</code> (<code>0</code>)
+							</td>
+						</tr>
+						<tr>
+							<td class="font-sans">
+								Outcome will be <code><strong>01</strong></code>:&nbsp;
+								<code>FALSE</code> (<code>0</code>)
+							</td>
+						</tr>
+						<tr>
+							<td class="font-sans">
+								Outcome will be <code><strong>10</strong></code>:&nbsp;
+								<code>TRUE</code> (<code>1</code>)&nbsp;&nbsp;
+							</td>
+						</tr>
+						<tr>
+							<td class="font-sans">
+								Outcome will be <code><strong>11</strong></code>:&nbsp;
+								<code>FALSE</code> (<code>0</code>)
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="center middle">
+					A state vector for<br>
+					<strong>two</strong> qubits.
+				</div>
+			</div>
+			<br>
+			<p>
+				We’ve learned that 
+				a single qubit is the simplest example of 
+				a quantum state vector.
+				It is a list of the votes per each possible 
+				outcome—and for a single qubit there are only two possible outcomes.
+				We’ve also seen that we can represent the state of a multi-qubit system
+				where there are more than two possible outcomes. 
+			</p>
+
+
+
+
+			<h4 id="Braket_notation">Ket notation</h4>
+			<p>
+				<a href="https://en.wikipedia.org/wiki/Paul_Dirac" target="_blank">Paul Dirac</a>’s 
+				<a href="https://en.wikipedia.org/wiki/Bra%E2%80%93ket_notation" target="_blank">“bra-ket” notation</a>
+				offers us a more compact
+				means of describing <a href="#State_vectors">quantum state vectors</a>—and by extension, qubits.
+				(While “bra-ket” offers us two named elements—“bra” and “ket”—for
+				our purposes we need only focus on the latter.)
+				Kets represent the result value 
+				that our quantum vector state represents.
+				They are expressed as values enclosed between 
+				a vertical bar
+				and a rightward angle bracket.
+				The following is pronounced “ket zero.”
+			</p>
+			<br>
+			<div class="center">
+				<span class="Q-state-vector ket">0</span>
+			</div>
+			<br>
+			<p>
+				We <a href="#Named_couples">began</a> 
+				by stating that 
+				a <a href="#.HORIZONTAL">Horizontal qubit</a>
+				represents “<code>0</code>”,
+				and later <a href="#State_vectors">explained</a> why this was so.
+				Kets provide us a convenient way 
+				to refer to this result state directly
+				as in-line text
+				rather than a clunky matrix.
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td>1</td></tr>
+						<tr><td>0</td></tr>
+					</table>
+				</div>=&nbsp;<span class="Q-state-vector ket">0</span>
+			</div>
+			<br>
+			<p>
+				Similarly, we <a href="#Named_couples">defined</a> a 
+				<a href="#.VERTICAL">Vertical qubit</a>
+				as representing “<code>1</code>”
+				and <a href="#State_vectors">illustrated this</a> as well.
+				We can now also express this column vector as a ket.
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td>0</td></tr>
+						<tr><td>1</td></tr>
+					</table>
+				</div>=&nbsp;<span class="Q-state-vector ket">1</span>
+			</div>
+			<br>
+			<p>
+				The convenience of ket notation
+				becomes more apparent
+				as we represent state vectors
+				that are larger than a single qubit.
+				(For <span class="symbol">n</span> qubits
+				we must use a state vector that has
+				2<sup><span class="symbol">n</span></sup>
+				elements.
+				Meanwhile our ket values are still just 
+				<span class="symbol">n</span> digits long.)
+				Here we express four possible states
+				of a two qubit system 
+				as both state vectors and their 
+				<a href="https://en.wikipedia.org/wiki/Qubit#Standard_representation" target="_blank">equivalent kets</a>.
+			</p>
+			<br>
+			<div class="center">
+				
+				<div class="no-wrap">
+					<div class="matrix">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>1</td></tr>
+							<tr><td>0</td></tr>
+							<tr><td>0</td></tr>
+							<tr><td>0</td></tr>
+						</table>
+					</div>
+					= <span class="Q-state-vector ket">00</span>,
+				</div>
+				
+				<div class="no-wrap">
+					<div class="matrix">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>0</td></tr>
+							<tr><td>1</td></tr>
+							<tr><td>0</td></tr>
+							<tr><td>0</td></tr>
+						</table>
+					</div>
+					= <span class="Q-state-vector ket">01</span>,
+				</div>
+				
+				<div class="no-wrap">
+					<div class="matrix">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>0</td></tr>
+							<tr><td>0</td></tr>
+							<tr><td>1</td></tr>
+							<tr><td>0</td></tr>
+						</table>
+					</div>
+					= <span class="Q-state-vector ket">10</span>,
+				</div>
+				
+				<div class="no-wrap">
+					<div class="matrix">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>0</td></tr>
+							<tr><td>0</td></tr>
+							<tr><td>0</td></tr>
+							<tr><td>1</td></tr>
+						</table>
+					</div>
+					= <span class="Q-state-vector ket">11</span>
+				</div>
+
+			</div>
+			<br>
+
+
+
+
+			<h4>Superposition</h4>
+			<p>
+				You’ve probably heard the term 
+				“<a href="https://en.wikipedia.org/wiki/Quantum_superposition" target="_blank">superposition</a>”—and along with that 
+				you’ve likely been spoonfed some measure of mysticism; 
+				<a href="https://youtu.be/CMdHDHEuOUE" target="_blank">pizza-bagels</a> and whatnot.
+				In the real, physical world, superposition is indeed weird magic.
+				But mathematically it’s dead simple:
+				Superposition is any qubit state 
+				where the 
+				<code><a href="#this.alpha">alpha</a></code>
+				and
+				<code><a href="#this.beta">beta</a></code>
+				values are anything other than
+				exactly 0 or exactly 1.
+				Up until now we’ve thought of 
+				<code><a href="#this.alpha">alpha</a></code>
+				and
+				<code><a href="#this.beta">beta</a></code>
+				values as being either 
+				<code>TRUE</code> (1) or <code>FALSE</code> (0)
+				but each is actually capable of expressing an entire spectrum between
+				<code>TRUE</code> (1) and <code>FALSE</code> (0).
+				Let’s investigate that idea by building on what we’ve already learned.
+			</p>
+
+			<p>
+				Given the constraint
+				<code><a href="#this.alpha">alpha</a></code><sup>2</sup> + 
+				<code><a href="#this.beta">beta</a></code><sup>2</sup> = 1, if we plot all of the possible
+				<code><a href="#this.alpha">alpha</a></code>
+				and 
+				<code><a href="#this.beta">beta</a></code>
+				values on a graph
+				as <span class="symbol">x</span> and <span class="symbol">y</span> respectively,
+				the outcome is a circle with a radius of 1 centered at the origin (0, 0); 
+				ie. a <a href="https://en.wikipedia.org/wiki/Unit_circle)" target="_blank">unit circle</a>.
+				All possible combinations of 
+				<code><a href="#this.alpha">alpha</a></code>
+				and
+				<code><a href="#this.beta">beta</a></code>
+				lay on the perimeter of this circle.
+				To illustrate this, here’s a plot of named 
+				<a href="#Jones_vectors">Jones vectors</a>
+				as well as their conjugates.
+			</p>
+			<div class="unit-circle" id="Unit_circle">
+				<div class="unit-circle-outline"></div>
+				<div class="unit-circle-spoke unit-circle-spoke-0"></div>
+				<div class="unit-circle-spoke unit-circle-spoke-45"></div>
+				<div class="unit-circle-spoke unit-circle-spoke-90"></div>
+				<div class="unit-circle-spoke unit-circle-spoke-135"></div>
+				<div class="unit-circle-spoke-label unit-circle-spoke-label-90">Vertical</div>
+				<div class="unit-circle-spoke-label unit-circle-spoke-label-45">Diagonal</div>
+				<div class="unit-circle-spoke-label unit-circle-spoke-label-0">Horizontal</div>
+				<div class="unit-circle-spoke-label unit-circle-spoke-label-315">Anti-diagonal</div>
+				<div class="unit-circle-label unit-circle-label-angle-0">0˚</div>
+				<div class="unit-circle-label unit-circle-label-angle-45">45˚</div>
+				<div class="unit-circle-label unit-circle-label-angle-90">90˚</div>
+				<div class="unit-circle-label unit-circle-label-angle-135">135˚</div>
+				<div class="unit-circle-label unit-circle-label-angle-180">180˚</div>
+				<div class="unit-circle-label unit-circle-label-angle-225">225˚</div>
+				<div class="unit-circle-label unit-circle-label-angle-270">270˚</div>
+				<div class="unit-circle-label unit-circle-label-angle-315">315˚</div>
+				<div class="unit-circle-label unit-circle-label-point-0">1, 0</div>
+				<div class="unit-circle-label unit-circle-label-point-45">
+					<table class="division">
+						<tr class="dividend"><td>1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>,
+					<table class="division">
+						<tr class="dividend"><td>1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>
+				</div>
+				<div class="unit-circle-label unit-circle-label-point-90">0, 1</div>
+				<div class="unit-circle-label unit-circle-label-point-135">
+					<table class="division">
+						<tr class="dividend"><td>-1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>,
+					<table class="division">
+						<tr class="dividend"><td>1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>
+				</div>
+				<div class="unit-circle-label unit-circle-label-point-180">-1, 0</div>
+				<div class="unit-circle-label unit-circle-label-point-225">
+					<table class="division">
+						<tr class="dividend"><td>-1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>,
+					<table class="division">
+						<tr class="dividend"><td>-1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>
+				</div>
+				<div class="unit-circle-label unit-circle-label-point-270">0, -1</div>
+				<div class="unit-circle-label unit-circle-label-point-315">
+					<table class="division">
+						<tr class="dividend"><td>1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>,
+					<table class="division">
+						<tr class="dividend"><td>-1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>
+				</div>
+			</div>
+			<p>
+				What the 
+				<code><a href="#this.alpha">alpha</a></code>
+				and 
+				<code><a href="#this.beta">beta</a></code>
+				values represent are the individual
+				<a href="https://en.wikipedia.org/wiki/Probability_amplitude" target="_blank">probability amplitudes</a>
+				for each outcome; that a qubit
+				when measured will be in either a
+				<span class="Q-state-vector ket">0</span>
+				or a
+				<span class="Q-state-vector ket">1</span>
+				state.
+				Measurement itself causes a qubit’s
+				<a href="https://en.wikipedia.org/wiki/Wave_function_collapse"  target="_blank">probability wave to collapse</a>,
+				bringing an end to its superposition.
+				The probability that upon measurement a qubit’s
+				<a href="https://en.wikipedia.org/wiki/Probability_amplitude" target="_blank">probability amplitude</a>
+				will 
+				<a href="#.prototype.collapse">collapse</a> to 
+				<span class="Q-state-vector ket">0</span>
+				is <code><a href="#this.alpha">alpha</a></code><sup>2</sup>,
+				while the probability that it will 
+				<a href="#.prototype.collapse">collapse</a> to 
+				<span class="Q-state-vector ket">1</span>
+				is <code><a href="#this.beta">beta</a></code><sup>2</sup>.
+			</p>
+			<p>
+				We already know that a
+				<a href="#.HORIZONTAL">Horizontal qubit</a> 
+				exists in a state of
+				<span class="Q-state-vector ket">0</span>
+				(“ket zero”)
+				and therefore has a 100% chance of being measured as 
+				<span class="Q-state-vector ket">0</span>.
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td>1</td></tr>
+						<tr><td>0</td></tr>
+					</table>
+				</div>
+			</div>
+			<br>
+			<p>
+				Similarly, we also know that a
+				<a href="#.VERTICAL">Vertical qubit</a>
+				exists in a state of
+				<span class="Q-state-vector ket">1</span>
+				(“ket one”)
+				and therefore has a 100% chance of being measured as 
+				<span class="Q-state-vector ket">1</span>.
+			</p>
+			<br>
+			<div class="center">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td>0</td></tr>
+						<tr><td>1</td></tr>
+					</table>
+				</div>
+			</div>
+			<br>
+			<p>
+				Meanwhile, a 
+				<a href="#.DIAGONAL">Diagonal qubit</a>
+				exists in a state of superposition as
+				<span class="Q-state-vector ket">+</span>
+				(“ket plus”).
+				It is a state which does not have a definite result value prior to measurement
+				but it does of course have a definite state vector
+				and that state vector has a positive orientation.
+				(Recall our <a href="#Unit_circle">unit circle</a> diagram above 
+				to see how this value lays in a positive quadrant of the graph.)
+				There is a 50% chance of it being measured as 
+				<span class="Q-state-vector ket">0</span>
+				(“ket zero”)
+				and a 50% chance of it being measured as 
+				<span class="Q-state-vector ket">1</span>
+				(“ket one”).
+			</p>
+			<br>
+			<div class="center maths">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td>1</td></tr>
+						<tr><td>1</td></tr>
+					</table>
+				</div>
+				×
+				<table class="division">
+					<tr class="dividend"><td>1</td></tr>
+					<tr class="divisor"><td>√ 2</td></tr>
+				</table>
+				=
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td><strong>1 ÷ √ 2</strong></td></tr>
+						<tr><td><strong>1 ÷ √ 2</strong></td></tr>
+					</table>
+				</div>
+				<br>
+				<br>
+				<table class="equation">
+					<tr>
+						<td>
+							<code><a href="#this.alpha">alpha</a></code><sup>2</sup> + <code><a href="#this.beta">beta</a></code><sup>2</sup>
+						</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>
+							(<strong>1 ÷ √ 2</strong>)<sup>2</sup> + (<strong>1 ÷ √ 2</strong>)<sup>2</sup>
+						</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>
+							(<strong>1 ÷ 2</strong>) + (<strong>1 ÷ 2</strong>)
+						</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>
+							<strong>0.5</strong> + <strong>0.5</strong>
+						</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>
+							<strong>1</strong>
+						</td>
+						<td>1 ✓</td>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<br>
+			<p>
+				And finally, an
+				<a href="#.ANTI_DIAGONAL">Anti-diagonal qubit</a>
+				also exists in a state of superposition,
+				but as 
+				<span class="Q-state-vector ket">-</span>
+				(“ket minus”).
+				Like the
+				<a href="#.DIAGONAL">Diagonal qubit</a>
+				it has a 50% chance of being measured as 
+				<span class="Q-state-vector ket">0</span>
+				(“ket zero”)
+				and a 50% chance of being measured as 
+				<span class="Q-state-vector ket">1</span>
+				(“ket one”).
+
+			</p>
+			<br>
+			<div class="center maths">
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td class="right">1</td></tr>
+						<tr><td class="right">-1</td></tr>
+					</table>
+				</div>
+				×
+				<table class="division">
+					<tr class="dividend"><td>1</td></tr>
+					<tr class="divisor"><td>√ 2</td></tr>
+				</table>
+				=
+				<div class="matrix qubit">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr><td class="right"><strong>1 ÷ √ 2</strong></td></tr>
+						<tr><td class="right"><strong>-1 ÷ √ 2</strong></td></tr>
+					</table>
+				</div>
+				<br>
+				<br>
+				<table class="equation">
+					<tr>
+						<td>
+							<code><a href="#this.alpha">alpha</a></code><sup>2</sup> + <code><a href="#this.beta">beta</a></code><sup>2</sup>
+						</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>
+							(<strong>1 ÷ √ 2</strong>)<sup>2</sup> + (<strong>-1 ÷ √ 2</strong>)<sup>2</sup>
+						</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>
+							(<strong>1 ÷ 2</strong>) + (<strong>1 ÷ 2</strong>)
+						</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>
+							<strong>0.5</strong> + <strong>0.5</strong>
+						</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>
+							<strong>1</strong>
+						</td>
+						<td>1 ✓</td>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<p>
+				What does it mean that a
+				<a href="#.DIAGONAL">Diagonal qubit</a> state 
+				and an
+				<a href="#.ANTI_DIAGONAL">Anti-diagonal qubit</a> state
+				collapse with the same probabilies?
+				What about their conjugates which also behave in this same fashion?
+				These questions begin to hint at the quirks of 
+				<a href="Q-Circuit.html">quantum circuits</a>;
+				the aspects of quantum computing
+				that quantum algorithms are engineered to take advantage of.
+			</p>
+
+
+
+
+			<h4 id="Complex_couples">Complex couples</h4>
+			<p>
+				We’ve spent the majority of this primer
+				describing qubits as containing 
+				<code><a href="#this.alpha">alpha</a></code>
+				and 
+				<code><a href="#this.beta">beta</a></code>
+				values ranging from 0 up to 1.
+				The <a href="#Unit_circle">unit circle above</a>
+				illustrates that these values can also range from 
+				0 down to -1.
+				While all of this remains true, 
+				the story is slightly more <em>complex</em>.
+			</p>
+			<p>
+				Qubits are actually made of 
+				<a href="Q-ComplexNumber.html">complex number</a> pairs,
+				meaning there is an <em>imaginary component.</em>
+				(See the <a href="Q-ComplexNumber.html"><code>ComplexNumber</code>
+				page</a> for a quick refresher on 
+				<a href="Q-ComplexNumber.html#Real_numbers">real</a>, 
+				<a href="Q-ComplexNumber.html#Imaginary_numbers">imaginary</a>, and 
+				<a href="Q-ComplexNumber.html#Complex_numbers">complex numbers</a>.)
+				This means <em>one</em> qubit is actually made of <em>four</em> parts:
+				The <code><a href="#this.alpha">alpha</a></code> value
+				has a ① <code><a href="Q-ComplexNumber.html#this.real">real</a></code>
+				component and an ②
+				<code><a href="Q-ComplexNumber.html#this.imaginary">imaginary</a></code>
+				one.
+				The <code><a href="#this.beta">beta</a></code> value
+				also has a ③ <code><a href="Q-ComplexNumber.html#this.real">real</a></code>
+				component and an ④
+				<code><a href="Q-ComplexNumber.html#this.imaginary">imaginary</a></code>
+				one.
+			</p>
+			<p>
+				To account for this we must slightly evolve
+				our definition of a qubit;
+				specifically the relationship between its 
+				<code><a href="#this.alpha">alpha</a></code>
+				and
+				<code><a href="#this.beta">beta</a></code>
+				values.
+				Rather than simply adding their squares together,
+				we must instead add the squares of their
+				<a href="https://en.wikipedia.org/wiki/Absolute_value" target="_blank">absolute values</a>.
+				Our evolved equation, 
+				which indicates absolute values 
+				by enclosing numbers between vertical bars,
+				now looks like this:
+			</p>
+			<br>
+			<div class="maths center">
+				|<code><a href="#this.alpha">alpha</a></code>|<sup>2</sup> + 
+				|<code><a href="#this.beta">beta</a></code>|<sup>2</sup> = 1
+			</div>
+			<br>
+			<p>
+				By taking the <a href="https://en.wikipedia.org/wiki/Absolute_value" target="_blank">absolute values</a>
+				of
+				<code><a href="#this.alpha">alpha</a></code>
+				and
+				<code><a href="#this.beta">beta</a></code>
+				before squaring them,
+				we continue to ensure that our sum of squares
+				will equal exactly 1; that it continues to equal a simple,  
+				<a href="Q-ComplexNumber.html#Real_numbers">real number</a>
+				rather than an 
+				<a href="Q-ComplexNumber.html#Imaginary_numbers">imaginary</a> or 
+				<a href="Q-ComplexNumber.html#Complex_numbers">complex</a> number.
+			</p>
+	
+
+
+
+			<h4 id="Bloch_sphere">The Bloch sphere</h4>
+			<p>
+				And that’s really it. 
+				That’s what makes a mathematical qubit.
+				But with that last-minute addition of 
+				<a href="Q-ComplexNumber.html">complex numbers</a> above,
+				we can no longer visualize a qubit 
+				as a two-dimensional <a href="#Unit_circle">unit circle</a>. 
+				Instead we must map our two complex values
+				onto a three dimensional graph known as a  
+				<a href="https://en.wikipedia.org/wiki/Bloch_sphere" target="_blank">Bloch sphere</a>.
+				<!--
+
+				THIS IS A TERRIBLE AND INACCURATE EXPLANATION!
+				MUST COME BACK AND RE-WRITE, FOCUS ON THE MATH!
+
+				If you’re familiar with complex numbers you may expect them to add <em>two</em> dimensions to our unit circle rather than one.
+				By taking the absolute value of <span class="symbol">a</span> or <span class="symbol">b</span>
+				we effectively cancel out this extra dimension.
+				-->
+				Select one of the following qubit states 
+				to observe its graph on the Bloch sphere.
+				Tap and drag the sphere itself to rotate it.
+			</p>
+			
+			<div class="bloch-sphere-qubit-selector center"></div>
+			<div class="bloch-sphere-qubit-descriptions">
+				<div class="bloch-sphere-qubit-description" 
+					id="bloch-sphere-qubit-description-h">
+					<div class="bloch-sphere-qubit-name"><strong>Horizontal</strong> qubit</div>
+					<div class="matrix qubit">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>1</td></tr>
+							<tr><td>0</td></tr>
+						</table>
+					</div>
+					<div class="comment">
+						Imagine the 
+						<a href="https://en.wikipedia.org/wiki/North_Pole" target="_blank">North Pole</a>.
+					</div>
+				</div>
+				<div class="bloch-sphere-qubit-description" 
+					id="bloch-sphere-qubit-description-v">
+					<div class="bloch-sphere-qubit-name"><strong>Vertical</strong> qubit</div>
+					<div class="matrix qubit">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>0</td></tr>
+							<tr><td>1</td></tr>
+						</table>
+					</div>
+					<div class="comment">
+						Imagine the 
+						<a href="https://en.wikipedia.org/wiki/South_Pole" target="_blank">South Pole</a>.
+					</div>
+				</div>
+				<div class="bloch-sphere-qubit-description" 
+					id="bloch-sphere-qubit-description-d">
+					<div class="bloch-sphere-qubit-name"><strong>Diagonal</strong> qubit</div>
+					<div class="matrix qubit">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>1</td></tr>
+							<tr><td>1</td></tr>
+						</table>
+					</div>
+					×
+					<table class="division">
+						<tr class="dividend"><td>1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>
+					<div class="comment">
+						Imagine the 
+						<a href="https://en.wikipedia.org/wiki/Gulf_of_Guinea" target="_blank">Gulf of Guinea</a>
+						off of Africa.
+					</div>
+				</div>
+				<div class="bloch-sphere-qubit-description" 
+					id="bloch-sphere-qubit-description-a">
+					<div class="bloch-sphere-qubit-name"><strong>Anti-diagonal</strong> qubit</div>
+					<div class="matrix qubit">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>&nbsp;1</td></tr>
+							<tr><td>-1</td></tr>
+						</table>
+					</div>
+					×
+					<table class="division">
+						<tr class="dividend"><td>1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>
+					<div class="comment">
+						Imagine 
+						<a href="https://en.wikipedia.org/wiki/Kiribati" target="_blank">Kiribati</a>
+						in the Pacific Ocean.
+					</div>
+				</div>
+				<div class="bloch-sphere-qubit-description" 
+					id="bloch-sphere-qubit-description-r">
+					<div class="bloch-sphere-qubit-name"><strong>Right-hand circular polarized</strong> qubit</div>
+					<div class="matrix qubit">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>&nbsp;1</td></tr>
+							<tr><td>-<span class="symbol">i</span></td></tr>
+						</table>
+					</div>
+					×
+					<table class="division">
+						<tr class="dividend"><td>1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>
+					<div class="comment">
+						Imagine the
+						<a href="https://en.wikipedia.org/wiki/Gal%C3%A1pagos_Islands" target="_blank">Galápagos Islands</a>
+						in the Pacific Ocean.
+					</div>
+				</div>
+				<div class="bloch-sphere-qubit-description" 
+					id="bloch-sphere-qubit-description-l">
+					<div class="bloch-sphere-qubit-name"><strong>Left-hand circular polarized</strong> qubit</div>
+					<div class="matrix qubit">
+						<div class="matrix-bracket-left"></div>
+						<div class="matrix-bracket-right"></div>
+						<table>
+							<tr><td>1</td></tr>
+							<tr><td><span class="symbol">i</span></td></tr>
+						</table>
+					</div>
+					×
+					<table class="division">
+						<tr class="dividend"><td>1</td></tr>
+						<tr class="divisor"><td>√ 2</td></tr>
+					</table>	
+					<div class="comment">
+						Imagine
+						<a href="https://en.wikipedia.org/wiki/Sumatra" target="_blank">Sumatra</a>
+						in the Indian Ocean.
+					</div>
+				</div>
+			</div>
+			<div class="interactive-container" id="bloch-sphere">
+				<div class="interactive-component" id="bloch-angles">					
+					<code><span id="bloch-theta">—</span>˚</code> 
+					polar angle θ <span class="comment">(theta)</span>
+					<br>
+					<code><span id="bloch-phi">—</span>˚</code> 
+					azimuth angle ϕ <span class="comment">(phi)</span>
+				</div>
+				<div class="bloch-sphere-orbit-controls"></div>
+			</div>
+
+			
+			
+
+
+
+
+
+
+
+
+			<hr>
+			<h3>Constructor</h3>
+			<p>
+				<span class="constructor">Qubit</span>
+				<code class="value-type">Function([ <a href="Q.html">Q</a>.Matrix* ][ 
+					alpha: Number or <a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html">ComplexNumber</a>, 
+					beta: Number or <a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html">ComplexNumber</a> [, 
+					label: String [, name: String ]]]) => <a href="Q.html">Q</a>.Qubit</code>
+				<br>
+				<code>Qubit</code>
+				extends <code><a href="Q.html">Q</a>.<a href="Q-Matrix.html">Matrix</a></code>
+				and therefore inherits its 
+				<a href="Q-Matrix.html#Static_properties">static</a> and 
+				<a href="Q-Matrix.html#Prototype_properties">prototypal</a> properties.
+				The <code>Qubit</code> constructor 
+				can accept as a single argument a 
+				<code><a href="Q.html">Q</a>.<a href="Q-Matrix.html">Matrix</a></code> instance, 
+				or anything that inherits from 
+				<code><a href="Q.html">Q</a>.<a href="Q-Matrix.html">Matrix</a></code>—such as
+				a <code><a href="Q.html">Q</a>.Qubit</code> instance—and will 
+				return a new qubit constructed from the passed object’s values.
+			</p>
+			<p>
+				Alternatively, the constructor
+				expects two arguments that are each either
+				instances of <code>Number</code> or 
+				<code><a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html">ComplexNumber</a></code>
+				which will will then correspond to the qubit’s 
+				<code><a href="#this.alpha">alpha</a></code>
+				and 
+				<code><a href="#this.beta">beta</a></code>
+				values.
+				Further, an optional third argument may be supplied for
+				<code><a href="#this.label">label</a></code>—expected 
+				in the form of a single character <code>String</code>—to be
+				used as a tiny label for the qubit when represented in diagram or graphic form. 
+				Even further, an optional fourth argument may be supplied for
+				<code><a href="#this.name">name</a></code>—expected
+				as a <code>String</code>—to be
+				used as a more descriptive name for the qubit.
+				If arguments for 
+				<code><a href="#this.label">label</a></code>
+				or 
+				<code><a href="#this.name">name</a></code>
+				are not supplied then
+				the constructor checks against the list of existing 
+				<code><a href="#.constants">constants</a></code>
+				and if a qubit with matching
+				<code><a href="#this.alpha">alpha</a></code>
+				and 
+				<code><a href="#this.beta">beta</a></code>
+				values is found then the corresponding
+				<code><a href="#this.label">label</a></code>
+				and / or 
+				<code><a href="#this.name">name</a></code>
+				will be copied to this new instance.
+			</p>
+			<p>
+				When a new qubit is created it internally invokes the
+				<code><a href="Q.html">Q</a>.<a href="Q-Matrix.html">Matrix</a></code> constructor,
+				such that <code>new <a href="Q.html">Q</a>.Qubit( 
+					<a href="#this.alpha">alpha</a>,
+					<a href="#this.beta">beta</a>
+				)</code>
+				is similar to
+				<code>new <a href="Q.html">Q</a>.<a href="Q-Matrix.html">Matrix</a>([ 
+					<a href="#this.alpha">alpha</a> ],
+					[ <a href="#this.beta">beta</a>
+				])</code>.
+				If the two supplied values do not satisfy the assertion that
+				|<code><a href="#this.alpha">alpha</a></code>|<sup>2</sup> + 
+				|<code><a href="#this.beta">beta</a></code>|<sup>2</sup> = 1 
+				then an error is thrown.
+			</p>
+<pre><code>
+var fox = new <a href="Q.html">Q</a>.Qubit( 1, 0 )
+</code></pre>
+			<ul class="properties">
+				<li>
+					<dt id="this.alpha">alpha</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html">ComplexNumber</a></code>
+						The first of two values 
+						that identify the state of a qubit.
+					</dd>
+				</li>
+				<li>
+					<dt id="this.beta">beta</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html">ComplexNumber</a></code>
+						The second of two values 
+						that identify the state of a qubit.
+					</dd>
+				</li>
+				<li>
+					<dt id="this.label">label</dt>
+					<dd>
+						<code class="value-type">String</code>
+						Single character representing this qubit state, 
+						for example ‘H’ for <a href="#.HORIZONTAL">horizontal</a>. 
+						This can be passed to the constructor as an optional third argument 
+						or automatically assigned based on existing <code><a href="Q.html">Q</a>.Qubit.<a href="#.constants">constants</a></code>
+						If no match is found among existings constants the ‘?’ character is assigned.
+					</dd>
+				</li>
+				<li>
+					<dt id="this.name">name</dt>
+					<dd>
+						<code class="value-type">String</code>
+						The name of the qubit state, assigned based on existing <code><a href="Q.html">Q</a>.Qubit.<a href="#.constants">constants</a></code>.
+						If no match is found among existings constants the name is left empty.
+					</dd>
+				</li>
+				<li>
+					<dt id="this.index">index</dt>
+					<dd>
+						<code class="value-type">Number</code>
+						An identification number assigned to the instance based on the
+						auto-incrementing static number <code><a href="Q.html">Q</a>.Qubit.<a href="#.index">index</a></code>.
+						Used for minding the total number of instances created.
+					</dd>
+				</li>
+			</ul>
+			<hr>
+			<h3>Static properties</h3>
+			<p>
+				Because <code>Q.Qubit</code> extends <code>Q.<a href="Q-Matrix.html">Matrix</a></code>,
+				the following append or replace the latter’s existing 
+				<a href="Q-Matrix.html#Static_properties">static properties</a>.
+			</p>
+			<ul class="properties">
+				<li>
+					<dt id=".help">help</dt>
+					<dd>
+						<code class="value-type">Function ⇒ String</code>
+						Calls and returns the value of 
+						<code><a href="Q.html">Q</a>.<a href="#.help">help</a></code>,
+						passing <code><a href="Q.html">Q</a>.Qubit</code> as the argument.
+					</dd>
+				</li>
+				<li>
+					<dt id=".index">index</dt>
+					<dd>
+						<code class="value-type">Number</code>
+						The number of instances created so far.
+					</dd>
+				</li>
+			</ul>
+			<h4>Constants and constant creation</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".constants">constants</dt>
+					<dd>
+						<code class="value-type">Object</code>
+						Constants are appended <em>directly</em> to the 
+						<code><a href="Q.html">Q</a>.Qubit</code> object.
+						For convenience they are also appended to this
+						<code><a href="Q.html">Q</a>.Qubit</code>.constants</code> object
+						to make looking up constants in the JavaScript console trivial,
+						and to make iterating across all constants convenient via functions like 
+						<code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries" target="_blank">Object.entries</a></code>,
+						<code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank">Object.keys</a></code>,
+						<code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values" target="_blank">Object.values</a></code>,
+						and so on.
+						<!-- Configured to be unwritable once appended via
+						<code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank">Object.defineProperty</a></code>
+						and they are labeled in uppercase to signal to us that this is so. -->
+						The intention that a property act as a constant is signaled 
+						by its labelling in all-uppercase.
+					</dd>
+				</li>
+				<li>
+					<dt id=".createConstant">createConstant</dt>
+					<dd>
+						<code class="value-type">Function( key: String, value: * )<!-- → undefined --></code>
+						Appends a property named by <code>key</code> 
+						with a value of <code>value</code>
+						to both the 
+						<code><a href="Q.html">Q</a>.Qubit</code> object 
+						and its <code><a href="#.constants">constants</a></code> property.
+					</dd>
+				</li>
+				<li>
+					<dt id=".createConstants">createConstants</dt>
+					<dd>
+						<code class="value-type">Function( … )</code>
+						Expects an even number of arguments.
+						Will use each pair in the sequence of arguments to call
+						<code><a href="#.createConstant">createConstant</a></code>.
+					</dd>
+				</li>
+			</ul>
+			<h4 id="Jones_vectors">Constants — Jones Vectors</h4>
+			<p>
+				<code><a href="Q.html">Q</a>.Qubit</code> provides the following built-in <a href="https://en.wikipedia.org/wiki/Jones_calculus#Jones_vectors" target="_blank">Jones vectors</a>.
+			</p>
+			<ul class="properties">
+				<li>
+					<dt id=".HORIZONTAL">HORIZONTAL</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Qubit</code>
+						Initialized as
+						<code>new <a href="Q.html">Q</a>.Qubit( 1, 0, 'H', 'Horizontal' )</code>.
+						Commonly thought of as “zero” or “off.”
+						Described by the following matrix:<br>
+						<div class="matrix qubit">
+							<div class="matrix-bracket-left"></div>
+							<div class="matrix-bracket-right"></div>
+							<table>
+								<tr><td>1</td></tr>
+								<tr><td>0</td></tr>
+							</table>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".VERTICAL">VERTICAL</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Qubit</code>
+						Initialized as
+						<code>new <a href="Q.html">Q</a>.Qubit( 0, 1, 'V', 'Vertical' )</code>.
+						Commonly thought of as “one” or “on.”
+						Described by the following matrix:<br>
+						<div class="matrix qubit">
+							<div class="matrix-bracket-left"></div>
+							<div class="matrix-bracket-right"></div>
+							<table>
+								<tr><td>0</td></tr>
+								<tr><td>1</td></tr>
+							</table>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".DIAGONAL">DIAGONAL</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Qubit</code>
+						Initialized as
+						<code>new <a href="Q.html">Q</a>.Qubit( Math.SQRT1_2, Math.SQRT1_2, 'D', 'Diagonal' )</code>.
+						Described by the following matrix:<br>
+						<div class="maths">
+							<div class="matrix qubit">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr><td>1</td></tr>
+									<tr><td>1</td></tr>
+								</table>
+							</div>
+							×
+							<table class="division">
+								<tr class="dividend"><td>1</td></tr>
+								<tr class="divisor"><td>√ 2</td></tr>
+							</table>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".ANTI_DIAGONAL">ANTI_DIAGONAL</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Qubit</code>
+						Initialized as
+						<code>new <a href="Q.html">Q</a>.Qubit( Math.SQRT1_2, -Math.SQRT1_2, 'A', 'Anti-diagonal' )</code>.
+						Described by the following matrix:<br>
+						<div class="maths">
+							<div class="matrix qubit">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr><td>1</td></tr>
+									<tr><td>-1</td></tr>
+								</table>
+							</div>
+							×
+							<table class="division">
+								<tr class="dividend"><td>1</td></tr>
+								<tr class="divisor"><td>√ 2</td></tr>
+							</table>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".RIGHT_HAND_CIRCULAR_POLARIZED">RIGHT_HAND_CIRCULAR_POLARIZED</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Qubit</code>
+						Initialized as
+						<code>new <a href="Q.html">Q</a>.Qubit( Math.SQRT1_2, new <a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html">ComplexNumber</a>( 0, -Math.SQRT1_2 ), 'R', 'Right-hand Circular Polarized' )</code>.
+						Described by the following matrix:<br>
+						<div class="maths">
+							<div class="matrix qubit">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr><td>1</td></tr>
+									<tr><td>-<span class="symbol">i</span></td></tr>
+								</table>
+							</div>
+							×
+							<table class="division">
+								<tr class="dividend"><td>1</td></tr>
+								<tr class="divisor"><td>√ 2</td></tr>
+							</table>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".LEFT_HAND_CIRCULAR_POLARIZED">LEFT_HAND_CIRCULAR_POLARIZED</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Qubit</code>
+						Initialized as
+						<code>new <a href="Q.html">Q</a>.Qubit( Math.SQRT1_2, new <a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html">ComplexNumber</a>( 0, Math.SQRT1_2 ), 'L', 'Left-hand Circular Polarized' )</code>.
+						Described by the following matrix:<br>
+						<div class="maths">
+							<div class="matrix qubit">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr><td>1</td></tr>
+									<tr><td><span class="symbol">i</span></td></tr>
+								</table>
+							</div>
+							×
+							<table class="division">
+								<tr class="dividend"><td>1</td></tr>
+								<tr class="divisor"><td>√ 2</td></tr>
+							</table>
+						</div>
+					</dd>
+				</li>
+			</ul>
+			<h4>Inspection</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".collapse">collapse</dt>
+					<dd>
+						<code class="value-type">Function( <a href="Q.html">Q</a>.Qubit ) ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Returns a new <code><a href="Q.html">Q</a>.Qubit</code> randomly chosen to be either
+						<code>new <a href="Q.html">Q</a>.Qubit( 1, 0 )</code> 
+						— The <code><a href="#.HORIZONTAL">HORIZONTAL</a></code> constant —
+						or
+						<code>new <a href="Q.html">Q</a>.Qubit( 0, 1 )</code> 
+						— The <code><a href="#.VERTICAL">VERTICAL</a></code> constant —
+						based on the probability of the supplied qubit argument.
+					</dd>
+				</li>
+				<li>
+					<dt id=".applyGate">applyGate</dt>
+					<dd>
+						<code class="value-type">Function( <a href="Q.html">Q</a>.Qubit ) ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Description TK.
+					</dd>
+				</li>
+				<li>
+					<dt id=".areEqual">areEqual</dt>
+					<dd>
+						<code class="value-type">Function( a: <a href="Q.html">Q</a>.Qubit, b: <a href="Q.html">Q</a>.Qubit ) ⇒ Boolean</code>
+						If the <code><a href="#.alpha">alpha</a></code> of each are within 
+						<code>Q.<a href="Q.html#.EPSILON">EPSILON</a></code>
+						and the <code><a href="#.beta">beta</code></a> of each are within 
+						<code>Q.<a href="Q.html#.EPSILON">EPSILON</a></code>
+						then returns <code>true</code>, otherwise <code>false</code>.
+					</dd>
+				</li>
+				<li>
+					<dt id=".toBlochSphere">toBlochSphere</dt>
+					<dd>
+						<code class="value-type">Function( <a href="Q.html">Q</a>.Qubit ) ⇒ Object</code>
+						Returns the following object for a given qubit’s probability state,
+						useful for rendering a <a href="#Bloch_sphere">Bloch Sphere</a> representation.
+<pre><code>
+{
+	theta, <span class="comment">//  Polar angle θ.</span>
+	phi,   <span class="comment">//  Azimuth angle ϕ.</span>
+
+	
+	<span class="comment">//  Bloch vector,
+	//  the surface point on a Bloch Sphere.</span>
+
+	vector: { x, y, z },
+
+	
+	<span class="comment">//  Bloch vector “corrected”
+	//  for Y-up coordinate systems.</span>
+
+	position: {
+
+		x: vector.<strong>y</strong>,<span class="comment">//  Note this Y here.</span>
+		y: vector.<strong>z</strong>,<span class="comment">//  Note this Z here.</span>
+		z: vector.<strong>x</strong> <span class="comment">//  Note this X here.</span>
+	}
+}
+</code></pre>
+					</dd>
+				</li>
+				<!--
+
+					toXYZ
+					fromBlochSphere
+					fromXYZ
+
+				-->
+				<li>
+					<dt id=".toText">toText</dt>
+					<dd>
+						<code class="value-type">Function( <a href="Q.html">Q</a>.Qubit ) ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Description TK.
+					</dd>
+				</li>
+				<li>
+					<dt id=".findByBeta">findByBeta</dt>
+					<dd>
+						<code class="value-type">Function( <a href="Q.html">Q</a>.Qubit ) ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Description TK.
+					</dd>
+				</li>
+			</ul>
+			<hr>
+			<h3>Prototype properties</h3>
+			<p>
+				Because <code><a href="Q.html">Q</a>.Qubit</code> extends <code><a href="Q.html">Q</a>.<a href="Q-Matrix.html">Matrix</a></code>,
+				the following append or replace the latter’s existing prototype properties.
+			</p>
+			<h4>Non-destructive methods</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".prototype.clone">clone</dt>
+					<dd>
+						<code class="value-type">Function ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Returns a new instance with the values for
+						<code><a href="#this.real">alpha</a></code>
+						and
+						<code><a href="#this.imaginary">beta</a></code>
+						copied from this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.collapse">collapse</dt>
+					<dd>
+						<code class="value-type">Function ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Calls and returns the result of the
+						<a href="#.collapse"><code>collapse</code> static method</a>,
+						passing the calling instance as an argument.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.applyGate">applyGate</dt>
+					<dd>
+						<code class="value-type">Function( gate: <a href="Q.html">Q</a>.Gate ) ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Description TK.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.isEqualTo">isEqualTo</dt>
+					<dd>
+						<code class="value-type">Function( otherQubit: <a href="Q.html">Q</a>.Qubit ) ⇒ Boolean</code>
+						Calls and returns the result of the
+						<a href="#.areEqual"><code>areEqual</code> static method</a>,
+						passing the calling instance and <code>otherQubit</code> as arguments.
+						Will not return a <code><a href="Q.html">Q</a>.Qubit</code> instance, 
+						and therefore halts
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						along this prototype.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.toBlochSphere">toBlochSphere</dt>
+					<dd>
+						<code class="value-type">Function ⇒ Object</code>
+						Calls and returns the result of static method 
+						<code>Q.Qubit.<a href="#.toBlochSphere">toBlochSphere</a>( this )</code>.
+						Will not return a <code><a href="Q.html">Q</a>.Qubit</code> instance, 
+						and therefore halts
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						along this prototype.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.toText">toText</dt>
+					<dd>
+						<code class="value-type">Function ⇒ String</code>
+						Description TK.
+						Will not return a <code><a href="Q.html">Q</a>.Qubit</code> instance, 
+						and therefore halts
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						along this prototype.
+					</dd>
+				</li>
+			</ul>
+			<h4>Destructive methods</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".prototype.copy$">copy$</dt>
+					<dd>
+						<code class="value-type">Function( otherQubit: <a href="Q.html">Q</a>.Qubit ) ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Overwrites this instances’s
+						<code><a href="Q-Matrix.html#this.rows">rows</a> Array</code>
+						with that of 
+						<code>otherQubit</code>.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.collapse$">collapse$</dt>
+					<dd>
+						<code class="value-type">Function ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Expects no arguments.
+						Calls the non-destructive <code><a href="#.prototype.collapse">collapse</a></code> method,
+						then uses <code><a href="#.prototype.copy$">copy$</a></code> to overwrite
+						this qubit’s values.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.applyGate$">applyGate$</dt>
+					<dd>
+						<code class="value-type">Function( gate: <a href="Q.html">Q</a>.Gate ) ⇒ <a href="Q.html">Q</a>.Qubit</code>
+						Description TK.
+					</dd>
+				</li>
+			</ul>
+		</main>
+		<script>
+
+
+//  Examples created in the docs:
+
+var fox = new Q.Qubit( 1, 0 )
+
+
+
+
+
+
+    //////////////////
+   //              //
+  //   Overhead   //
+ //              //
+//////////////////
+
+
+//  Three.js overhead for creating a scene, etc.
+//  including orbit controls
+//  for our Bloch Sphere explorer.
+
+const
+container = document.getElementById( 'bloch-sphere' ),
+fov       = 45,
+width     = container.offsetWidth,
+height    = container.offsetHeight,
+aspect    = width / height,
+near      = 0.1,
+far       = 12,
+scene     = new THREE.Scene(),
+camera    = new THREE.PerspectiveCamera( fov, aspect, near, far ),
+renderer  = new THREE.WebGLRenderer({ 
+
+	alpha: true,
+	antialias: true
+}),
+controls = new THREE.OrbitControls( camera, document.querySelector( '.bloch-sphere-orbit-controls' ))
+
+
+container.appendChild( renderer.domElement )
+camera.position.z = 4
+renderer.setPixelRatio( window.devicePixelRatio )
+renderer.setSize( width, height )
+scene.add( camera )
+controls.enableZoom = false
+controls.enablePan  = false
+
+window.addEventListener( 'resize', function(){
+
+	const
+	width  = container.offsetWidth,
+	height = container.offsetHeight
+	
+	camera.aspect = width / height
+	camera.updateProjectionMatrix()
+	renderer.setSize( width, height )
+
+}, false )
+
+
+
+
+
+
+    /////////////////
+   //             //
+  //   Content   //
+ //             //
+/////////////////
+
+
+const light = new THREE.PointLight( 0xFFFFFF, 0.3, 0 )
+light.position.set( -3, 6, 0 )
+camera.add( light )
+scene.add( new THREE.AmbientLight( 0xFFFFFF, 0.7 ))
+
+const blochSphere = new Q.BlochSphere( function(){
+	
+	document
+	.getElementById( 'bloch-theta' )
+	.innerText = ( this.state.theta * Q.RADIANS_TO_DEGREES ).toFixed().padStart( 4, ' ' )
+	
+	document
+	.getElementById( 'bloch-phi' )
+	.innerText = ( this.state.phi * Q.RADIANS_TO_DEGREES ).toFixed().padStart( 4, ' ' )
+})
+scene.add( blochSphere.group )
+
+
+
+
+
+
+    ///////////////////
+   //               //
+  //   Interface   //
+ //               //
+///////////////////
+
+
+const 
+blochSphereQubits = document.querySelector( '.bloch-sphere-qubit-selector' ),
+selectBlochQubit  = function( qubit ){
+
+
+	//  Mark the appropriate qubit as selected.
+
+	const qubitEl = document.getElementById( 
+
+		'bloch-sphere-qubit-'+ 
+		 qubit.symbol.toLowerCase() 
+	)
+	Array
+	.from( document.querySelectorAll( '.bloch-sphere-qubit' ))
+	.forEach( function( el ){
+
+		if( el === qubitEl ) el.classList.add( 'selected' )
+		else el.classList.remove( 'selected' )
+	})
+
+
+	//  Reveal the description for this qubit.
+
+	const descriptionEl = document.getElementById( 
+
+		'bloch-sphere-qubit-description-'+ 
+		 qubit.symbol.toLowerCase() 
+	)
+	Array
+	.from( document.querySelectorAll( '.bloch-sphere-qubit-description' ))
+	.forEach( function( el ){
+
+		if( el === descriptionEl ){
+
+			el.classList.add( 'show' )
+		}
+		else {
+
+			el.classList.remove( 'show' )
+		}
+	})
+
+
+	//  Set a new target for the Bloch sphere.
+
+	blochSphere.setTargetState( qubit.toBlochSphere())
+}
+
+'HDLARV'.split( '' ).forEach( function( symbol ){
+
+	const
+	qubit = Q.Qubit.findBySymbol( symbol ),
+	qubitElement = document.createElement( 'div' ),
+	qubitGutsElement = document.createElement( 'div' )
+
+	qubitElement.classList.add( 'bloch-sphere-qubit' )
+	qubitElement.setAttribute( 'id', 'bloch-sphere-qubit-'+ symbol.toLowerCase() )
+	qubitElement.setAttribute( 'title', qubit.name +' qubit' )
+	qubitElement.innerText = symbol
+	qubitElement.addEventListener( 'click', function(){
+
+		selectBlochQubit( qubit )
+	})
+	blochSphereQubits.appendChild( qubitElement )
+
+	// qubitGutsElement.innerText = symbol
+	// qubitElement.appendChild( qubitGutsElement )
+})
+
+
+
+
+
+
+
+const render = function(){
+
+	requestAnimationFrame( render )
+	controls.update()
+	blochSphere.update()
+	TWEEN.update()
+	renderer.render( scene, camera )
+}
+
+
+blochSphere.group.rotation.x = Math.PI *  0.3
+blochSphere.group.rotation.y = Math.PI / -4
+selectBlochQubit( Q.Qubit.HORIZONTAL )
+render()
+
+
+
+
+
+
+
+
+		</script>
+	</body>
+</html>

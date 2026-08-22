@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Q ⟩ Learning Resources</title>
+		<meta charset="utf-8">
+		<meta name="viewport"             content="width=device-width,initial-scale=1.0">
+		<meta name="description"          content="Quantum computing in your browser.">
+		<meta name="copyright"            content="Stewart Smith 2019–2020">
+		<meta name="keywords"             content="
+			Q, Q.js, Q-js, Qjs, quantum JavaScript,
+			quantum, quantum physics, quantum mechanics, superposition,
+			quantum computer, quantum computer programming, quantum computing, QC, 
+			quantum simulator, quantum computer simulator, 
+			qubit, qbit, gate, Hadamard, Bloch, Bloch Sphere,
+			Web, Web site, website, Web browser, browser, HTML, HTML5, JavaScript, ES6, CSS,
+			Chrome, Firefox, Safari, Opera, Brave, Edge, WebKit, Blink, Gecko, Mozilla,
+			Stewart Smith, Stewart, Stew, Stuart, Steven, Steve, Stewdio, stewartsmith, stew_rtsmith, @stew_rtsmith,
+			Moar, Moar Technologies Corp, MTC,
+			Google, IBM, Microsoft, Amazon, NASA, DWave, D-Wave,
+			Quil, OpenQASM,
+				ProjectQ, Qiskit, 
+				Quantum Development Kit, Cirq, Strawberry Fields, t|ket>,
+				QCL, Quantum pseudocode, Q#, Q|SI>, Q language, qGCL, QFC, QML, LIQUi|>, Quipper,
+			Stanford CS 269 Q: Quantum Computer Programming">
+		
+		<meta name="twitter:card"         content="summary_large_image">
+		<meta name="twitter:site"         content="@stew_rtsmith">
+		<meta name="twitter:creator"      content="@stew_rtsmith">
+		<meta name="twitter:title"        content="Q ⟩ Learning Resources">
+		<meta name="twitter:description"  content="Quantum computing in your browser.">
+		<meta name="twitter:image"        content="https://quantumjavascript.app/assets/Q-website-preview.jpg">
+		
+		<meta property="og:type"          content="website">
+		<meta property="og:title"         content="Q ⟩ Learning Resources">
+		<meta property="og:description"   content="Quantum computing in your browser.">
+		<meta property="og:image"         content="https://quantumjavascript.app/assets/Q-website-preview.jpg">
+		<meta property="og:url"           content="https://quantumjavascript.app/references.html">
+		
+		<link rel="canonical" href="https://quantumjavascript.app/references.html">
+		<link href="assets/Q-favicon-064.png" rel="icon" type="image/png">
+		<link href="assets/Q-favicon-144.png" rel="apple-touch-icon">
+		
+		<link rel="stylesheet" href="Q/Q.css">
+		<link rel="stylesheet" href="Q/Q-Circuit-Editor.css">
+		<link rel="stylesheet" href="assets/documentation.css">
+
+		<script src="https://www.googletagmanager.com/gtag/js" async></script>
+		<script src="assets/ga.js"></script>
+		<script src="Q/Q.js"></script>
+		<script src="Q/Q-ComplexNumber.js"></script>
+		<script src="Q/Q-Matrix.js"></script>
+		<script src="Q/Q-Qubit.js"></script>
+		<script src="Q/Q-Gate.js"></script>
+		<script src="Q/Q-History.js"></script>
+		<script src="Q/Q-Circuit.js"></script>
+		<script src="Q/Q-Circuit-Editor.js"></script>
+		<script src="assets/navigation.js"></script>
+		
+	</head>
+	<body>
+		<main>
+
+
+			<h3>Gentle introductions</h3>
+			<p>
+				You’ve heard the term 
+				“<a href="https://en.wikipedia.org/wiki/Quantum_computing" target="_blank">quantum computing</a>” 
+				but you’re not sure what it means.
+				(And what does a quantum computer even look like?)
+				Don’t be afraid. 
+				Start with these gentle introductions.
+			</p>
+
+
+
+
+			<h4>What is a quantum computer?</h4>
+			<a class="call-out" href="https://youtu.be/OWJCfOvochA" target="_blank"><img class="hero" src="assets/references/talia-gershon.jpg"></a>
+			<p>
+				<a class="call-out" href="https://youtu.be/OWJCfOvochA" target="_blank">https://youtu.be/OWJCfOvochA</a>
+				<br>
+				Dr. Talia Gershon is the director of research strategy and growth initiatives at IBM.
+				In this twenty-minute video for WIRED Magazine (2018)
+				she expertly explains quantum computing
+				to five levels of understanding—personified by a child, 
+				teen, undergrad, grad student, and a field professional.
+				She also refers to an actual quantum computer apparatus 
+				that she’s brought with her to these dialogues. 
+				I have great respect for the art of explaining complex subjects
+				in a way that makes them intuitive
+				without losing the truth of the subject.
+				Dr. Gershon makes this tough task look easy.
+				<br>
+				<a href="https://www.linkedin.com/in/talia-gershon/" target="_blank">Dr. Talia Gershon on LinkedIn</a><br>
+				<a href="https://twitter.com/DrTaliaGershon" target="_blank">Dr. Talia Gershon on Twitter</a>
+			</p>
+
+
+
+			<h4>Quantum concepts, the easy way</h4>
+			<p>
+				You don’t need a 
+				<a href="https://en.wikipedia.org/wiki/Doctor_of_Philosophy" target="_blank">PhD</a>
+				in quantum physics to play with quantum computing.
+				After all, this computer you’re reading from doesn’t understand quantum physics.
+				Instead, it merely plugs together a few basic concepts
+				in order to simulate quantum computation.
+				Each of the following documentation pages 
+				focus on one of the conceptual building blocks
+				used to create Q.js.
+				Taken together (and in this order) 
+				they’ll teach you everything you need to know 
+				to get started.
+				Haven’t done math like this since high school?
+				That’s ok.
+				These are gentle refreshers.
+			</p>
+			<br>
+			<ol>
+				<li><a href="Q-ComplexNumber.html">Complex numbers</a>.</li>
+				<li><a href="Q-Matrix.html">Matrices</a>.</li>
+				<li><a href="Q-Qubit.html">Quantum bits (qubits)</a>.</li>
+				<li><a href="Q-Gate.html">Quantum logic gates</a>.</li>
+				<li><a href="Q-Circuit.html">Quantum circuits</a>.</li>
+			</ol>
+			<br>
+			<p>
+				Since the above pages also serve as documentation for the Q.js code API
+				you may notice some code examples sprinkled into these primers for added clarity.
+				Code not your thing? That’s ok too. 
+				It won’t hinder you to skip over those bits.				
+				For each page the concept primers end
+				and the API documentation begins 
+				with the heading titled <strong>Constructor</strong>.
+				(From there onwards it’s all about the code.)
+			</p>
+
+
+
+			<h4>The Quantum Computing talk</h4>
+			<a class="call-out" href="https://www.smbc-comics.com/comic/the-talk-3" target="_blank"><img class="hero" src="assets/references/the-talk.jpg"></a>
+			<p>
+				<a class="call-out" href="https://www.smbc-comics.com/comic/the-talk-3" target="_blank">https://www.smbc-comics.com/comic/the-talk-3</a>
+				<br>
+				Cartoonist Zach Weinersmith teams up with Scott Aaronson, 
+				director of the <a href="http://www.cs.utexas.edu/~qic/" target="_blank">Quantum Information Center</a>
+				at the University of Texas at Austin,
+				to produce “The Talk” (2016)—a one-off comic that is both humorous and informative. 
+				It also takes gentle swipes at pop science’s 
+				mangled metaphors for explaining quantum phenomena.
+				Remember, parents: “If you don’t talk to your kids about quantum computing
+				someone else will.”
+				<br>
+				<a href="https://www.scottaaronson.com/" target="_blank">Scott Aaronson’s website</a><br>
+				<a href="https://twitter.com/ZachWeiner" target="_blank">Zach Weinersmith on Twitter</a>
+			</p>
+
+
+
+
+			<hr>
+			<h3>Quantum communities</h3>
+			<h4>The Quantum Daily</h4>
+			<a class="call-out" href="https://thequantumdaily.com/" target="_blank"><img class="hero" src="assets/references/the-quantum-daily.png"></a>
+			<p>
+				<a class="call-out" href="https://thequantumdaily.com/" target="_blank">https://thequantumdaily.com</a><br>
+				The Quantum Daily (TQD) is the 
+				leading online information and data platform 
+				dedicated exclusively to Quantum Computing. 
+				TQD provides incisively written articles, 
+				information on quantum computing companies, 
+				market research and more.  
+			</p>
+
+
+
+			<hr>
+			<h3>Help—I am a programmer.</h3>
+			<p>
+				Ok, so you’re no stranger to variables, basic algebra, and 
+				banging your head against a keyboard.
+				It turns out that’s all you need to get started.
+			</p>	
+			<h4>
+				Andrew Helwer’s 
+				“Quantum computing for computer scientists”
+				lecture for Microsoft Research (2018)
+			</h4>
+			<img class="hero" src="assets/references/andrew-helwer.jpg">
+			<p>
+				<a class="call-out" href="https://youtu.be/F_Riqjdh2oM" target="_blank">https://youtu.be/F_Riqjdh2oM</a>
+				<br>
+				Named after the book of the same title—a book 
+				Andrew reveres—this lecture explains qubits as matrices,
+				gate operations as matrices, 
+				superposition,
+				and demonstrates an example of quantum computing’s 
+				exponential power over classical computing.
+				This is the video that inspired me to build Q.js.
+				I’ve watched it about 100 times, 
+				and each time I’m able to gleen a sliver of new insight. 
+				<br>
+				<a href="https://www.microsoft.com/en-us/research/uploads/prod/2018/05/40655.compressed.pdf" target="_blank">Lecture slides</a><br>
+				<a href="https://www.microsoft.com/en-us/research/video/quantum-computing-computer-scientists/" target="_blank">Entry on Microsoft Research’s portal</a><br>
+				<a href="https://www.linkedin.com/in/ahelwer/" target="_blank">Andrew Helwer on LinkedIn</a>
+			</p>
+			
+
+			<h4>
+				Noson Yanofsky and
+				Mirco Mannucci’s
+				“Quantum Computing for Computer Scientists” (2008)
+			</h4>
+			<img class="hero" src="assets/references/quantum-computing-for-computer-scientists.jpg">
+			<p>
+				<!--
+				<a class="call-out" target="https://pdfs.semanticscholar.org/6337/14a7b044fca5f8870ab3b2204929c99b5c72.pdf" target="_blank">https://pdfs.semanticscholar.org/6337/14a7b044fca5f8870ab3b2204929c99b5c72.pdf</a> (This linked PDF includes the table of contents and preface only.)
+				<br>
+				-->
+				Don’t have a degree in maths or physics—but know how to code?
+				This book is for you!
+				Noson and Mirco explain quantum computing
+				in terms you’ll grok.
+				I highly recommend it.
+				<br>
+				<a href="https://www.cambridge.org/core/books/quantum-computing-for-computer-scientists/8AEA723BEE5CC9F5C03FDD4BA850C711" target="_blank">Entry on Cambridge University Press</a><br>
+				<a href="https://books.google.com/books?id=U1chAwAAQBAJ" target="_blank">Entry on Google Books</a><br>
+				<a href="https://www.amazon.com/Quantum-Computing-Computer-Scientists-Yanofsky/dp/0521879965" target="_blank">Purchase from Amazon</a><br>
+				<a href="https://www.barnesandnoble.com/w/quantum-computing-for-computer-scientists-noson-s-yanofsky/1100947717?ean=9780521879965" target="_blank">Purchase from Barnes & Noble</a><br>
+				<a href="https://www.target.com/p/quantum-computing-for-computer-scientists-by-noson-s-yanofsky-mirco-a-mannucci-hardcover/-/A-77844810" target="_blank">Purchase from Target</a>
+			</p>
+
+
+			<h4>
+				Michael Nielsen and 
+				Isaac Chuang’s
+				“Quantum computation and quantum information” (2000, 2010)
+			</h4>
+			<img class="hero" src="assets/references/quantum-computing-and-quantum-information.jpg">
+			<p>
+				<a class="call-out" href="http://mmrc.amss.cas.cn/tlb/201702/W020170224608149940643.pdf" target="_blank">http://mmrc.amss.cas.cn/tlb/201702/W020170224608149940643.pdf</a>
+				<br>
+				This tome is a must-have, foundational book for quantum computing.
+				Beware: It is full of maths symbols. 
+				As such I’ve found it useful to breeze-read through some sections,
+				totally unconcerned about if I’m truly absorbing the material or not.
+				Then to go back and read it again.
+				And again.
+				And yet again.
+				And so on.
+				By employing this unanxious repetition across days / moods / contexts it is almost by accident that the puzzle pieces begin to join and the picture comes in to focus.
+				Useless trivia:
+				It’s been nick-named “Mike & Ike” in honor
+				of the authors and the candy.
+				<br>
+				<a href="https://en.wikipedia.org/wiki/Quantum_Computation_and_Quantum_Information" target="_blank">Entry on Wikipedia</a><br>
+				<a href="https://books.google.com/books?id=-s4DEy7o-a0C" target="_blank">Entry on Google Books</a><br>
+				<a href="https://www.amazon.com/Quantum-Computation-Information-10th-Anniversary/dp/1107002176" target="_blank">Purchase from Amazon</a><br>
+				<a href="https://www.barnesandnoble.com/w/quantum-computation-and-quantum-information-michael-a-nielsen/1100942343?ean=9781107002173" target="_blank">Purchase from Barnes & Noble</a><br>
+				<a href="https://www.target.com/p/quantum-computation-and-quantum-information-10-edition-by-michael-a-nielsen-isaac-l-chuang/-/A-78109376" target="_blank">Purchase from Target</a>
+			</p>
+
+
+			<hr>
+			<h3>Particulars</h3>
+			<h4>
+				Gwilym Newton’s
+				“Playing with the Bloch Sphere”
+				blog post (2019)
+			</h4>
+			<p>
+				<a class="call-out" href="https://quantumcomputing.stackexchange.com/questions/4720/what-circuit-or-operation-corresponds-to-the-tensor-product" target="_blank">https://quantumcomputing.stackexchange.com/questions/4720/what-circuit-or-operation-corresponds-to-the-tensor-product</a>
+				<br>
+				Published just days after I began work on Q.js, 
+				this blog post by Gwilym Newton of IBM solved a problem I was banging my head against the wall over:
+				How to properly convert a qubit’s 
+				<code><a href="Q-Qubit.html#this.alpha">alpha</a></code>
+				and 
+				<code><a href="Q-Qubit.html#this.beta">beta</a></code> 
+				properties in to <a href="Q-Qubit.html#.toBlochSphere">phi and theta angles</a>!
+				If you’re building your own 
+				<a href="Q-Qubit.html#Bloch_sphere">Bloch Sphere visualizer</a>
+				you’ll notice this is surprisingly difficult to find code examples of.
+				Gwilym’s description helped me out.
+				<br>
+				<a href="https://www.ibm.com/blogs/emerging-technology/author/gwilym-newton/" target="_blank">Gwilym Newton on IBM Blogs</a><br>
+				<a href="https://www.linkedin.com/in/gwilym-newton-91774659/" target="_blank">Gwilym Newton on LinkedIn</a><br>
+				<a href="https://twitter.com/Trevelyan_Panda" target="_blank">Gwilym Newton on Twitter</a>
+			</p>
+			<!--
+			<h4>CNOT product is factorable</h4>
+			<p>
+				(but then shows an entangled state that is not)
+				https://quantumcomputing.stackexchange.com/questions/4720/what-circuit-or-operation-corresponds-to-the-tensor-product
+			</p>
+
+
+			<p>
+				3 things that make quantum speedup:
+
+				Superposition
+
+				Entanglement 
+
+				Interference
+			</p>
+			-->
+
+
+
+
+			<hr>
+			<h3 id="Quantum_JavaScript_Qjs">Quantum JavaScript (Q.js)</h3>
+			<h4>Q turns 1 (Medium)</h4>
+			<img class="hero" src="assets/references/quantum-javascript-medium.jpg">
+			<p>
+				<a class="call-out" href="https://medium.com/@stew_rtsmith/quantum-javascript-d1effb84a619" target="_blank">https://medium.com/@stew_rtsmith/quantum-javascript-d1effb84a619</a><br>
+				A post written on the occasion of Q’s first birthday.
+			</p>
+			<h4>Q source code (GitHub)</h4>
+			<p>
+				<a class="call-out" href="https://github.com/stewdio/q.js" target="_blank">https://github.com/stewdio/q.js</a>
+				<br>
+				Q.js is open-source—and you can join right in!
+				Download the code. Contribute to it. Fork it.
+				Because the repo <em>is</em> the 
+				documentation / examples / concept primer / source code,
+				everything exists at this one location.
+			</p>
+			<h4>Q documentation and tools</h4>
+			<p>
+				<a class="call-out" href="https://quantumjavascript.app/" target="_blank">https://quantumjavascript.app</a>
+				<br>
+				This very site that you are reading right now.
+			</p>
+			<h4 id="Qjs_on_twitter">#Qjs on Twitter</h4>
+			<p>
+				<a class="call-out" href="https://twitter.com/stew_rtsmith/status/1123415441915957250" target="_blank">https://twitter.com/stew_rtsmith/status/1123415441915957250</a>
+				<br>
+				The original Q.js Twitter thread started 
+				in April 2019 with a clumsy ASCII diagram of a 
+				<a href="https://en.wikipedia.org/wiki/Hadamard_matrix" target="_blank">Hadamard matrix</a>. 
+				From there the thread documents the 
+				twists and turns of Q.js as it continues to evolve.
+				Let’s use the hashtag
+				<a href="https://twitter.com/hashtag/Qjs" target="_blank">#Qjs</a>, eh?
+			</p>
+			<h4>Stewart Smith, Q creator</h4>
+			<p>
+				<a class="call-out" href="http://stewartsmith.io" target="_blank">http://stewartsmith.io</a>
+				<br>
+				Hi, I’m Stewart.
+				I do other things besides attempt to teach myself quantum computing.
+				I’ve been educated as a graphic designer and fine artist,
+				but began coding at an early age.
+				I’ve worked for the big tech companies,
+				created artworks for museums and galleries around the world,
+				and have spent the last few years
+				creating tools for virtual reality. 
+				(That looks way more glamorous in writing than it is in real life.)
+				I live in Brooklyn NY with my family and will never move to San Francisco ;)
+				<br>
+				<a href="http://stewartsmith.io" target="_blank">Stewart Smith’s website</a><br>
+				<a href="https://twitter.com/stew_rtsmith" target="_blank">Stewart Smith on Twitter</a><br>
+				<a href="https://www.linkedin.com/in/stewart-smith-profile" target="_blank">Stewart Smith on LinkedIn</a><br>
+				<a href="https://github.com/stewdio/" target="_blank">Stewart Smith on GitHub</a><br>
+				<a href="https://medium.com/@stew_rtsmith" target="_blank">Stewart Smith on Medium</a>
+			</p>
+
+
+
+
+		</main>
+	</body>
+</html>

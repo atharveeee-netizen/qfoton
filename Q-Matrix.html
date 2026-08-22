@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Q ⟩ Matrix</title>
+		<meta charset="utf-8">
+		<meta name="viewport"             content="width=device-width,initial-scale=1.0">
+		<meta name="description"          content="Quantum computing in your browser.">
+		<meta name="copyright"            content="Stewart Smith 2019–2020">
+		<meta name="keywords"             content="
+			Q, Q.js, Q-js, Qjs, quantum JavaScript,
+			quantum, quantum physics, quantum mechanics, superposition,
+			quantum computer, quantum computer programming, quantum computing, QC, 
+			quantum simulator, quantum computer simulator, 
+			qubit, qbit, gate, Hadamard, Bloch, Bloch Sphere,
+			Web, Web site, website, Web browser, browser, HTML, HTML5, JavaScript, ES6, CSS,
+			Chrome, Firefox, Safari, Opera, Brave, Edge, WebKit, Blink, Gecko, Mozilla,
+			Stewart Smith, Stewart, Stew, Stuart, Steven, Steve, Stewdio, stewartsmith, stew_rtsmith, @stew_rtsmith,
+			Moar, Moar Technologies Corp, MTC,
+			Google, IBM, Microsoft, Amazon, NASA, DWave, D-Wave,
+			Quil, OpenQASM,
+				ProjectQ, Qiskit, 
+				Quantum Development Kit, Cirq, Strawberry Fields, t|ket>,
+				QCL, Quantum pseudocode, Q#, Q|SI>, Q language, qGCL, QFC, QML, LIQUi|>, Quipper,
+			Stanford CS 269 Q: Quantum Computer Programming">
+		
+		<meta name="twitter:card"         content="summary_large_image">
+		<meta name="twitter:site"         content="@stew_rtsmith">
+		<meta name="twitter:creator"      content="@stew_rtsmith">
+		<meta name="twitter:title"        content="Q ⟩ Matrix">
+		<meta name="twitter:description"  content="Quantum computing in your browser.">
+		<meta name="twitter:image"        content="https://quantumjavascript.app/assets/Q-website-preview.jpg">
+		
+		<meta property="og:type"          content="website">
+		<meta property="og:title"         content="Q ⟩ Matrix">
+		<meta property="og:description"   content="Quantum computing in your browser.">
+		<meta property="og:image"         content="https://quantumjavascript.app/assets/Q-website-preview.jpg">
+		<meta property="og:url"           content="https://quantumjavascript.app/Matrix.html">
+		
+		<link rel="canonical" href="https://quantumjavascript.app/Matrix.html">
+		<link href="assets/Q-favicon-064.png" rel="icon" type="image/png">
+		<link href="assets/Q-favicon-144.png" rel="apple-touch-icon">
+		
+		<link rel="stylesheet" href="Q/Q.css">
+		<link rel="stylesheet" href="Q/Q-Circuit-Editor.css">
+		<link rel="stylesheet" href="assets/documentation.css">
+
+		<script src="https://www.googletagmanager.com/gtag/js" async></script>
+		<script src="assets/ga.js"></script>
+		<script src="Q/Q.js"></script>
+		<script src="Q/Q-ComplexNumber.js"></script>
+		<script src="Q/Q-Matrix.js"></script>
+		<script src="Q/Q-Qubit.js"></script>
+		<script src="Q/Q-Gate.js"></script>
+		<script src="Q/Q-History.js"></script>
+		<script src="Q/Q-Circuit.js"></script>
+		<script src="Q/Q-Circuit-Editor.js"></script>
+		<script src="assets/navigation.js"></script>
+		
+	</head>
+	<body>
+		<main class="api">
+			<p>
+				Source code:
+				<a href="https://github.com/stewdio/q.js/blob/master/source/Q-Matrix.js?ts=4" target="_blank">
+					<code>Q-Matrix.js</code>
+				</a>
+			</p>
+			<hr>
+			<h3>Grid of numbers</h3>
+			<p>
+				A <a href="https://en.wikipedia.org/wiki/Matrix_(mathematics)" target="_blank">matrix</a>
+				is just a grid of numbers; rows and columns containing values.
+				Matrices can be of any size.
+				Here’s an example of a 3 × 2 matrix. 
+				It is 3 columns wide and 2 rows tall,
+				containing the values 1 through 6.
+			</p>
+			<br>
+			<div class="maths center">
+				<div class="matrix">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table id="rows-and-columns-3x2">
+						<tr>
+							<td>1</td><td>2</td><td>3</td>
+						</tr>
+						<tr>
+							<td>4</td><td>5</td><td>6</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<br>
+			<p>
+				When describing the dimensions of a matrix 
+				we always specify the number of rows first,
+				then the number of columns. 
+				The above is an example of a 3 × 2 matrix,
+				while below is a matrix containing similar data, but in a 2 × 3 configuration.
+			</p>
+			<div class="maths center">
+				<div class="matrix">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table id="rows-and-columns-2x3">
+						<tr>
+							<td>1</td><td>2</td>
+						</tr>
+						<tr>
+							<td>3</td><td>4</td>
+						</tr>
+						<tr>
+							<td>5</td><td>6</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<h4>Order matters</h4>
+			<p>
+				Q thinks about matrices in 
+				<a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order" target="_blank"><strong>row-major</strong> order</a>.
+				This means we read the values just as they are ordered above,
+				starting with the top-most row, reading values from left to right,
+				then proceeding to the next row down and repeating that process.
+				Our choice of row-major order makes reading and writing matrix values 
+				more akin to reading and writing in English;
+				easier to type and program here.
+				<!-- To illustrate the difference, here’s an example of a 3 × 2 matrix in <strong>column-major</strong> order. -->
+			</p>
+			<br>
+			<div class="maths center">
+				<table>
+					<tr>
+						<td>
+							<div class="matrix" id="row-major-3x2">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>1</td><td>2</td><td>3</td>
+									</tr>
+									<tr>
+										<td>4</td><td>5</td><td>6</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+						<td class="left">
+							<a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order" target="_blank"><strong>Row-major</strong> order</a>.
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="matrix" id="column-major-3x2">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>1</td><td>3</td><td>5</td>
+									</tr>
+									<tr>
+										<td>2</td><td>4</td><td>6</td>
+									</tr>
+								</table>
+							</div>
+						</td>
+						<td class="left">
+							<a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order" target="_blank"><strong>Column-major</strong> order</a>.
+						</td>
+					</tr>
+				</table>
+			</div>
+			
+
+
+
+			<h4 id="Vectors">Vectors are slices</h4>			
+			<p>
+				While a matrix is a two-dimensional <em>grid</em> of numbers,
+				a vector is more like a <em>slice</em> of numbers—such as 
+				a “skinny” matrix that is only one column wide,
+				<!-- (a <em>column vector</em>), -->
+				or a “flat” matrix that is only one row high.
+				<!-- (a <em>row</em> vector). -->
+				Let’s look at some examples of 
+				matrices that are simultaneously vectors.
+			</p>
+			<br>
+			<div class="center">
+				<table>
+					<tr>
+						<td>
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+								</table>
+							</div>
+						</td>
+						<td>
+							<div class="middle">
+								Any “flat” matrix is<br>
+								a <em>row</em> vector.
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr><td>1</td></tr>
+									<tr><td>2</td></tr>
+									<tr><td>3</td></tr>
+									<tr><td>4</td></tr>
+								</table>
+							</div>
+						</td>
+						<td>
+							<div class="middle">
+								Any “skinny” matrix is<br>
+								a <em>column</em> vector.
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr><td>1</td><td>2</td></tr>
+									<tr><td>3</td><td>4</td></tr>
+								</table>
+							</div>
+						</td>
+						<td>
+							<div class="middle">
+								But matrices with<br>
+								more than one column<br>
+								or more than one row<br>
+								are <strong>not</strong> vectors.
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<br>
+			<p>
+				While the above 2 × 2 matrix is not a vector, 
+				you could say that it <em>contains</em> vectors:
+				Two <em>column</em> vectors
+				or two <em>row</em> vectors.
+			</p>
+			<p>
+				Because vectors are just a type of matrix
+				we can 
+				<a href="#.add">add</a> them, 
+				<a href="#.multiply">multiply</a> them,
+				and so on—just like any other matrix.
+				Vectors will play a prominent role in defining 
+				<a href="Q-Qubit.html">qubits</a>
+				and expressing the state of a 
+				<a href="Q-Circuit.html">quantum circuit</a>.
+			</p>
+
+
+
+
+			<h4>Complex numbers</h4>
+			<p>
+				Instead of just storing 
+				<a href="Q-ComplexNumber.html#Real_numbers">regular old numbers</a>,
+				our matrices are geared to store
+				<a href="Q-ComplexNumber.html#Complex_numbers">complex numbers</a>.
+				(This is because 
+				<a href="Q-Qubit.html">qubits</a> are really just a pair of
+				complex numbers
+				that we store in a 1 × 2 matrix.
+				So, yes—the example matrices above are actually all <em>larger</em> than qubits are!)
+				In general, we don’t even have to think about 
+				the fact that our matrices are storing complex numbers
+				because 
+				<code><a href="Q.html">Q</a>.<a href="Q-Matrix.html#Constructor">Matrix</a></code> is
+				happy to accept regular JavaScript <code>Number</code> values as input—and 
+				<code><a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html#Constructor">ComplexNumber</a></code>
+				will silently handle the conversion for us.
+			</p>
+
+
+
+
+			<hr>
+			<h3 id="Constructor">Constructor</h3>
+			<p>
+				<span class="constructor">Matrix</span>
+				<code class="value-type">Function([ size: Number ] or [ width: Number, height: Number ] or [ rows: arguments ]) => <a href="Q.html">Q</a>.Matrix</code>
+				<br>
+				The <code>Matrix</code> class creates and operates on matrices of arbitrary dimensions. 
+				This is in contrast to some popular graphics libraries
+				which optimize for specific sizes of matrices—with corresponding class names like
+				<code>Matrix3</code> (for 3 × 3 matrices) or <code>Matrix4</code> (for 4 × 4 matrices).
+				Q, meanwhile, is much more flexible. 
+				The constructor expects an argument list of 
+				equal-length arrays where each array represents a row of column values. 
+				<code>Matrix</code> then automatically determines the dimensions based on the number of 
+				arguments (rows) and length of each row (number of columns). 
+				The constructor will throw an error if the row lengths are not equal. 
+			</p>
+			<p>
+				Upon creation <code>Matrix</code> converts all argument values of type <code>Number</code> 
+				to <code><a href="Q.html">Q</a>.<a href="Q-ComplexNumber.html">ComplexNumber</a></code> instances.
+				Currently <code>Matrix</code> does not support recursion;
+				a matrix cannot contain matrices as values.
+				A matrix also cannot change its dimensions, making destructive properties 
+				that yield matrices of a different size (like <code>multiply$</code>, for example) impossible.
+			</p>
+<pre><code>
+var a = new <a href="Q.html">Q</a>.Matrix(  
+	[ 1, 2, 3 ],  
+	[ 4, 5, 6 ])
+</code></pre>
+			<div class="maths">
+				<div class="matrix">
+					<div class="matrix-bracket-left"></div>
+					<div class="matrix-bracket-right"></div>
+					<table>
+						<tr>
+							<td>1</td><td>2</td><td>3</td>
+						</tr>
+						<tr>
+							<td>4</td><td>5</td><td>6</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<ul class="properties">
+				<li>
+					<dt id="this.rows">rows</dt>
+					<dd>
+						<code class="value-type">Array</code>
+						The list of supplied <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments" target="_blank">arguments</a></code>.
+					</dd>
+				</li>
+				<li>
+					<dt id="this.columns">columns</dt>
+					<dd>
+						<code class="value-type">Array</code>
+						The list of getters and setters that operate on the <a href="#this.rows">rows</a> property to appear as if this property contained actual values. 
+					</dd>
+				</li>
+				<li>
+					<dt id="this.index">index</dt>
+					<dd>
+						<code class="value-type">Number</code>
+						An identification number assigned to the instance,
+						used for minding the total number of instances created.
+					</dd>
+				</li>
+			</ul>
+			<h4 id="Import_and_export_formats">Import and export formats</h4>
+			<p>
+				Getting data in and out of any system can be laborious. 
+				With that in mind, <code><a href="Q.html">Q</a>.Matrix</code> comes with helper methods for
+				importing and exporting the following common formats:
+			</p>
+			<ul>
+				<li><a href="#.fromCsv">Comma separated values (CSV)</a></li>
+				<li><a href="#.fromTsv">Tab separated values (TSV)</a></li>
+				<li><a href="#.fromXsv">Arbitrary character separated values (XSV)</a></li>
+				<li><a href="#.fromHtml">HTML table code</a></li>
+			</ul>
+			<hr>
+			<h3 id="Static_properties">Static properties</h3>
+			<ul class="properties">
+				<li>
+					<dt id=".help">help</dt>
+					<dd>
+						<code class="value-type">Function ⇒ String</code>
+						Calls and returns the value of 
+						<code><a href="Q.html">Q</a>.<a href="#.help">help</a></code>,
+						passing <code><a href="Q.html">Q</a>.Matrix</code> as the argument.
+					</dd>
+				</li>
+				<li>
+					<dt id=".index">index</dt>
+					<dd>
+						<code class="value-type">Number</code>
+						The number of instances created so far.
+					</dd>
+				</li>
+			</ul>
+			<h4>Constants and constant creation</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".constants">constants</dt>
+					<dd>
+						<code class="value-type">Object</code>
+						Constants are appended <em>directly</em> to the 
+						<code><a href="Q.html">Q</a>.Matrix</code> object.
+						For convenience they are also appended to this
+						<code><a href="Q.html">Q</a>.Matrix</code>.constants</code> object
+						to make looking up constants in the JavaScript console trivial,
+						and to make iterating across all constants convenient via functions like 
+						<code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries" target="_blank">Object.entries</a></code>,
+						<code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys" target="_blank">Object.keys</a></code>,
+						<code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values" target="_blank">Object.values</a></code>,
+						and so on.
+						<!-- Configured to be unwritable once appended via
+						<code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank">Object.defineProperty</a></code>
+						and they are labeled in uppercase to signal to us that this is so. -->
+						The intention that a property act as a constant is signaled 
+						by its labelling in all-uppercase.
+					</dd>
+				</li>
+				<li>
+					<dt id=".createConstant">createConstant</dt>
+					<dd>
+						<code class="value-type">Function( key: String, value: * )<!-- → undefined --></code>
+						Appends a property named by <code>key</code> 
+						with a value of <code>value</code>
+						to both the 
+						<code>Matrix</code> object 
+						and its <code><a href="#.constants">constants</a></code> property.
+					</dd>
+				</li>
+				<li>
+					<dt id=".createConstants">createConstants</dt>
+					<dd>
+						<code class="value-type">Function( … )</code>
+						Expects an even number of arguments.
+						Will use each pair in the sequence of arguments to call
+						<code><a href="#.createConstant">createConstant</a></code>.
+					</dd>
+				</li>
+			</ul>
+			<h4 id="Example_matrices">Constants — Example matrices</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".IDENTITY_2X2">IDENTITY_2X2</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Matrix</code>
+						Initialized as
+						<code><a href="Q.html">Q</a>.Matrix.<a href="#.createIdentity">createIdentity</a>( 2 )</code>.
+						Described by the following matrix:
+						<div class="maths">
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>1</td><td>0</td>
+									</tr>
+									<tr>
+										<td>0</td><td>1</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".IDENTITY_3X3">IDENTITY_3X3</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Matrix</code>
+						Initialized as
+						<code><a href="Q.html">Q</a>.Matrix.<a href="#.createIdentity">createIdentity</a>( 3 )</code>.
+						Described by the following matrix:
+						<div class="maths">
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>1</td><td>0</td><td>0</td>
+									</tr>
+									<tr>
+										<td>0</td><td>1</td><td>0</td>
+									</tr>
+									<tr>
+										<td>0</td><td>0</td><td>1</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".IDENTITY_4X4">IDENTITY_4X4</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Matrix</code>
+						Initialized as
+						<code><a href="Q.html">Q</a>.Matrix.<a href="#.createIdentity">createIdentity</a>( 4 )</code>.
+						Described by the following matrix:
+						<div class="maths">
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>1</td><td>0</td><td>0</td><td>0</td>
+									</tr>
+									<tr>
+										<td>0</td><td>1</td><td>0</td><td>0</td>
+									</tr>
+									<tr>
+										<td>0</td><td>0</td><td>1</td><td>0</td>
+									</tr>
+									<tr>
+										<td>0</td><td>0</td><td>0</td><td>1</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".CONSTANT0_2X2">CONSTANT0_2X2</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Matrix</code>
+						Initialized as
+<pre><code>
+new <a href="Q.html">Q</a>.Matrix(
+	[ 1, 1 ],
+	[ 0, 0 ])
+</code></pre>
+						Described by the following matrix:
+						<div class="maths">
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>1</td><td>1</td>
+									</tr>
+									<tr>
+										<td>0</td><td>0</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".CONSTANT1_2X2">CONSTANT1_2X2</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Matrix</code>
+						Initialized as
+<pre><code>
+new <a href="Q.html">Q</a>.Matrix(
+	[ 0, 0 ],
+	[ 1, 1 ])
+</code></pre>
+						Described by the following matrix:
+						<div class="maths">
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>0</td><td>0</td>
+									</tr>
+									<tr>
+										<td>1</td><td>1</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".NEGATION_2X2">NEGATION_2X2</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Matrix</code>
+						Initialized as
+<pre><code>
+new <a href="Q.html">Q</a>.Matrix(
+	[ 0, 1 ],
+	[ 1, 0 ])
+</code></pre>
+						Described by the following matrix:
+						<div class="maths">
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>0</td><td>1</td>
+									</tr>
+									<tr>
+										<td>1</td><td>0</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</dd>
+				</li>
+				<li>
+					<dt id=".TEST_MAP_9X9">TEST_MAP_9X9</dt>
+					<dd>
+						<code class="value-type"><a href="Q.html">Q</a>.Matrix</code>
+						Initialized as
+<pre><code>
+new <a href="Q.html">Q</a>.Matrix(
+	[ 11, 21, 31, 41, 51, 61, 71, 81, 91 ],
+	[ 12, 22, 32, 42, 52, 62, 72, 82, 92 ],
+	[ 13, 23, 33, 43, 53, 63, 73, 83, 93 ],
+	[ 14, 24, 34, 44, 54, 64, 74, 84, 94 ],
+	[ 15, 25, 35, 45, 55, 65, 75, 85, 95 ],
+	[ 16, 26, 36, 46, 56, 66, 76, 86, 96 ],
+	[ 17, 27, 37, 47, 57, 67, 77, 87, 97 ],
+	[ 18, 28, 38, 48, 58, 68, 78, 88, 98 ],
+	[ 19, 29, 39, 49, 59, 69, 79, 89, 99 ])
+</code></pre>
+						Described by the following matrix:
+						<div class="maths">
+							<div class="matrix">
+								<div class="matrix-bracket-left"></div>
+								<div class="matrix-bracket-right"></div>
+								<table>
+									<tr>
+										<td>11</td>
+										<td>21</td>
+										<td>31</td>
+										<td>41</td>
+										<td>51</td>
+										<td>61</td>
+										<td>71</td>
+										<td>81</td>
+										<td>91</td>
+									</tr>
+									<tr>
+										<td>12</td>
+										<td>22</td>
+										<td>32</td>
+										<td>42</td>
+										<td>52</td>
+										<td>62</td>
+										<td>72</td>
+										<td>82</td>
+										<td>92</td>
+									</tr>
+									<tr>
+										<td>13</td>
+										<td>23</td>
+										<td>33</td>
+										<td>43</td>
+										<td>53</td>
+										<td>63</td>
+										<td>73</td>
+										<td>83</td>
+										<td>93</td>
+									</tr>
+									<tr>
+										<td>14</td>
+										<td>24</td>
+										<td>34</td>
+										<td>44</td>
+										<td>54</td>
+										<td>64</td>
+										<td>74</td>
+										<td>84</td>
+										<td>94</td>
+									</tr>
+									<tr>
+										<td>15</td>
+										<td>25</td>
+										<td>35</td>
+										<td>45</td>
+										<td>55</td>
+										<td>65</td>
+										<td>75</td>
+										<td>85</td>
+										<td>95</td>
+									</tr>
+									<tr>
+										<td>16</td>
+										<td>26</td>
+										<td>36</td>
+										<td>46</td>
+										<td>56</td>
+										<td>66</td>
+										<td>76</td>
+										<td>86</td>
+										<td>96</td>
+									</tr>
+									<tr>
+										<td>17</td>
+										<td>27</td>
+										<td>37</td>
+										<td>47</td>
+										<td>57</td>
+										<td>67</td>
+										<td>77</td>
+										<td>87</td>
+										<td>97</td>
+									</tr>
+									<tr>
+										<td>18</td>
+										<td>28</td>
+										<td>38</td>
+										<td>48</td>
+										<td>58</td>
+										<td>68</td>
+										<td>78</td>
+										<td>88</td>
+										<td>98</td>
+									</tr>
+									<tr>
+										<td>19</td>
+										<td>29</td>
+										<td>39</td>
+										<td>49</td>
+										<td>59</td>
+										<td>69</td>
+										<td>79</td>
+										<td>89</td>
+										<td>99</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</dd>
+				</li>
+			</ul>
+			<h4>Static inspection</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".isMatrixLike">isMatrixLike</dt>
+					<dd>
+						<code class="value-type">Function( object: * ) ⇒ Boolean</code>
+						Returns <code>true</code> 
+						if <code>object</code> is an instance of 
+						<code><a href="Q.html">Q</a>.Matrix</code>
+						or if <code><a href="Q.html">Q</a>.Matrix</code>
+						is in <code>object</code>’s prototype chain,
+						otherwise returns <code>false</code>.
+					</dd>
+				</li>
+				<li>
+					<dt id=".getWidth">getWidth</dt>
+					<dd>
+						<code class="value-type">Function( m: <a href="Q.html">Q</a>.Matrix ) ⇒ Number</code>
+						Returns the number of columns in this matrix.
+					</dd>
+				</li>
+				<li>
+					<dt id=".getHeight">getHeight</dt>
+					<dd>
+						<code class="value-type">Function( m: <a href="Q.html">Q</a>.Matrix ) ⇒ Number</code>
+						Returns the number of rows in this matrix.
+					</dd>
+				</li>
+				<li>
+					<dt id=".haveEqualDimensions">haveEqualDimensions</dt>
+					<dd>
+						<code class="value-type">Function( a: <a href="Q.html">Q</a>.Matrix, b: <a href="Q.html">Q</a>.Matrix ) ⇒ Boolean</code>
+						Returns <code>true</code>
+						if both matrices have the same number of rows
+						and the same number of columns, 
+						otherwise returns <code>false</code>.
+					</dd>
+				</li>
+				<li>
+					<dt id=".isWithinRange">isWithinRange</dt>
+					<dd>
+						<code class="value-type">Function( n: Number, minimum: Number, maximum: Number ) ⇒ Boolean</code>
+						Returns <code>true</code>
+						if <code>n</code> is an integer,
+						and is greater than or equal to <code>minimum</code>,
+						and is less than or equal to <code>maximum</code>,
+						otherwise returns <code>false</code>.
+						Used to determine if a value is a valid row or column number.
+					</dd>
+				</li>
+			</ul>
+			<h4>Creation from description</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".createSquare">createSquare</dt>
+					<dd>
+						<code class="value-type">Function([ size: Number = 2[, f: Function = function(){ return 0 }]]) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Creates a square matrix of width and height equal to <code>size</code>.
+						<code>f</code> is invoked for each cell of the matrix 
+						and is passed two arguments, 
+						<code>x: Number</code> and <code>y: Number</code>,
+						which correspond to the address of the cell.
+						The result of <code>f</code> is then assigned to that cell.
+						Returns the resulting matrix.
+					</dd>
+				</li>
+				<li>
+					<dt id=".createZero">createZero</dt>
+					<dd>
+						<code class="value-type">Function( size: Number ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Calls <code><a href="#.createSquare">createSquare</a></code> 
+						with the passed <code>size</code> argument,
+						but no function argument,
+						to yield a matrix of all zeros.
+						Returns the resulting matrix.
+					</dd>
+				</li>
+				<li>
+					<dt id=".createOne">createOne</dt>
+					<dd>
+						<code class="value-type">Function( size: Number ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Calls <code><a href="#.createSquare">createSquare</a></code> 
+						with the passed <code>size</code> argument,
+						and an <code>f</code> argument that invariably returns <code>1</code>,
+						to yield a matrix of all ones.
+						Returns the resulting matrix.
+					</dd>
+				</li>
+				<li>
+					<dt id=".createIdentity">createIdentity</dt>
+					<dd>
+						<code class="value-type">Function( size: Number ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Calls <code><a href="#.createSquare">createSquare</a></code> 
+						with the passed <code>size</code> argument,
+						and an <code>f</code> argument 
+						that yields an identity matrix.
+						Returns the resulting matrix.
+					</dd>
+				</li>
+			</ul>
+			<h4>Creation from data import</h4>
+			<ul class="properties">
+				<!-- li>
+					<dt id=".from">from</dt>
+					<dd>
+						<code class="value-type">Function( format: String ) ⇒ Function</code>
+						Returns a <code><a href="Q.html">Q</a>.Matrix</code> static method 
+						of the name <code>'from'+ format</code> (if one exists),
+						otherwise returns an instance of 
+						<code><a href="Q.html">Q</a>.<a href="Q.html#error">error</a></code>.
+					</dd>
+				</li -->
+				<li>
+					<dt id=".fromArray">fromArray</dt>
+					<dd>
+						<code class="value-type">Function( array: Array ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Ingests matrix data from an <code>Array</code> of 
+						values where each element represents a row
+						that is itself an <code>Array</code> of values,
+						and returns the result.
+						Note how this differs from the <code>Matrix</code> 
+						<a href="#Constructor">constructor</a>
+						which uses the function’s <code>Array</code>-like arguments list directly.
+					</dd>
+				</li>
+				<li>
+					<dt id=".fromXsv">fromXsv</dt>
+					<dd>
+						<code class="value-type">Function( input: String, rowSeparator: String, valueSeparator: String ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Ingests matrix data from a <code>String</code> of 
+						values that are sepearated in to rows by <code>rowSeparator</code>
+						and separated in to values (columns) by <code>valueSeparator</code>,
+						and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".fromCsv">fromCsv</dt>
+					<dd>
+						<code class="value-type">Function( csv: String ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Ingests matrix data from a <code>String</code> of 
+						comma-separated-values 
+						and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".fromTsv">fromTsv</dt>
+					<dd>
+						<code class="value-type">Function( tsv: String ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Ingests matrix data from a <code>String</code> of 
+						tab-separated-values 
+						and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".fromHtml">fromHtml</dt>
+					<dd>
+						<code class="value-type">Function( html: String ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Ingests matrix data from a <code>String</code> of 
+						HTML table code
+						and returns the result.
+					</dd>
+				</li>
+			</ul>
+			<h4>Static maths</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".add">add</dt>
+					<dd>
+						<code class="value-type">Function( a: <a href="Q.html">Q</a>.Matrix, b: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Adds the two supplied matrices together and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".multiplyScalar">multiplyScalar</dt>
+					<dd>
+						<code class="value-type">Function( a: <a href="Q.html">Q</a>.Matrix, b: Number ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Multiplies the supplied matrix by the supplied scalar and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".multiply">multiply</dt>
+					<dd>
+						<code class="value-type">Function( a: <a href="Q.html">Q</a>.Matrix, b: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Multiplies the two supplied matrices together and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".multiplyTensor">multiplyTensor</dt>
+					<dd>
+						<code class="value-type">Function( a: <a href="Q.html">Q</a>.Matrix, b: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Returns the <code><a href="https://en.wikipedia.org/wiki/Tensor_product" target="_blank">tensor product</a></code>
+						of the two supplied matrices.
+					</dd>
+				</li>
+			</ul>
+			<hr>
+			<h3 id="Prototype_properties">Prototype properties</h3>
+			<h4>Self inspection</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".prototype.isValidRow">isValidRow</dt>
+					<dd>
+						<code class="value-type">Function( rowIndex: Number ) ⇒ Boolean</code>
+						Returns true if <code>rowIndex</code>
+						is greater than or equal to zero
+						and is less than the height of this matrix,
+						otherwise returns <code>false</code>.
+						Will return a <code>Boolean</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.isValidColumn">isValidColumn</dt>
+					<dd>
+						<code class="value-type">Function( columnIndex: Number ) ⇒ Boolean</code>
+						Returns true if <code>columnIndex</code>
+						is greater than or equal to zero
+						and is less than the width of this matrix,
+						otherwise returns <code>false</code>.
+						Will return a <code>Boolean</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.isValidAddress">isValidAddress</dt>
+					<dd>
+						<code class="value-type">Function( x: Number, y: Number ) ⇒ Boolean</code>
+						Returns <code>true</code>
+						if <code>x</code> is a valid row index
+						and <code>y</code> is a valid column index,
+						otherwise returns <code>false</code>.
+						Will return a <code>Boolean</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.getWidth">getWidth</dt>
+					<dd>
+						<code class="value-type">Function ⇒ Number</code>
+						Calls and returns the value of 
+						<code><a href="Q.html">Q</a>.Matrix.<a href="#.getWidth">getWidth</a></code>,
+						passing itself as the argument.
+						Will return a <code>Number</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.getHeight">getHeight</dt>
+					<dd>
+						<code class="value-type">Function ⇒ Number</code>
+						Calls and returns the value of 
+						<code><a href="Q.html">Q</a>.Matrix.<a href="#.getHeight">getHeight</a></code>,
+						passing itself as the argument.
+						Will return a <code>Number</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+			</ul>
+			<h4>Data export (non-destructive)</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".prototype.read">read</dt>
+					<dd>
+						<code class="value-type">Function( x: Number, y: Number ) ⇒ <a href="Q.html">Q</a>.ComplexNumber</code>
+						Returns the value of this matrix’s cell at row <code>y</code>
+						and column <code>x</code>.
+						Equivalent to 
+						<code>this.columns[ x ][ y ]</code>
+						or 
+						<code>this.rows[ y ][ x ]</code>
+						but with safety mechanisms.
+						Will return a <code>Number</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.clone">clone</dt>
+					<dd>
+						<code class="value-type">Function ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Returns a new instance with the value for
+						<code><a href="#this.rows">rows</a></code>
+						copied from this instance.
+						The <a href="#Constructor">constructor</a> will 
+						populate the values for <code><a href="#this.columns">columns</a></code> as well.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.toArray">toArray</dt>
+					<dd>
+						<code class="value-type">Function ⇒ Array</code>
+						Returns the value of this instance’s
+						<code><a href="#this.rows">rows</a></code> property.
+						Will return an <code>Array</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.toXsv">toXsv</dt>
+					<dd>
+						<code class="value-type">Function( rowSeparator: String, valueSeparator: String ) ⇒ String</code>
+						Returns the value of this matrix
+						expressed as a <code>String</code> delimited by the supplied arguments.
+						Will return a <code>String</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.toCsv">toCsv</dt>
+					<dd>
+						<code class="value-type">Function ⇒ String</code>
+						Creates a comma-separated-values table and returns it as a <code>String</code>.
+						Will return a <code>String</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.toTsv">toTsv</dt>
+					<dd>
+						<code class="value-type">Function ⇒ String</code>
+						Creates a tab-separated-values table and returns it as a <code>String</code>.
+						Will return a <code>String</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.toHtml">toHtml</dt>
+					<dd>
+						<code class="value-type">Function ⇒ String</code>
+						Creates HTML table code and returns it as a <code>String</code>.
+						Will return a <code>String</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.toHtml">toDom</dt>
+					<dd>
+						<code class="value-type">Function ⇒ DocumentFragment</code>
+						Arriving soon.
+						Will return a <code>DocumentFragment</code> value, 
+						thereby halting 
+						<a href="https://en.wikipedia.org/wiki/Fluent_interface" target="_blank">“Fluent interface” method chaining</a>
+						for this instance.
+					</dd>
+				</li>
+			</ul>
+			<h4>Data import (destructive)</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".prototype.write$">write$</dt>
+					<dd>
+						<code class="value-type">Function( x: Number, y: Number, n: Number or <a  href="Q.html">Q</a>.ComplexNumber ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Writes a value, <code>n</code>, to the specified cell address
+						of this matrix.
+						Equivalent to 
+						<code>this.columns[ x ][ y ] = n</code>,
+						or 
+						<code>this.rows[ y ][ x ] = n</code>,
+						but with safety checks.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.copy$">copy$</dt>
+					<dd>
+						<code class="value-type">Function( m: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Copies the value for
+						<code><a href="#this.rows">rows</a></code>
+						from the supplied argument, <code>m</code>,
+						if <code>m</code>
+						is a matrix of equal dimensions to this instance,
+						otherwise returns <code><a href="Q.html">Q</a>.<a href="Q.html#.error">error</a></code>.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.fromArray$">fromArray$</dt>
+					<dd>
+						<code class="value-type">Function( array: Array ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Passes the supplied 
+						<code>array</code> argument
+						to the 
+						<a href="#.fromArray"><code>fromArray</code> static method</a>,
+						then uses 
+						<code><a href="#.prototype.copy$">copy$</a></code>
+						to copy that result in to this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.fromCsv$">fromCsv$</dt>
+					<dd>
+						<code class="value-type">Function( csv: String ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Passes the supplied 
+						<code>csv</code> argument
+						to the 
+						<a href="#.fromCsv"><code>fromCsv</code> static method</a>,
+						then uses 
+						<code><a href="#.prototype.copy$">copy$</a></code>
+						to copy that result in to this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.fromTsv$">fromTsv$</dt>
+					<dd>
+						<code class="value-type">Function( tsv: String ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Passes the supplied 
+						<code>tsv</code> argument
+						to the 
+						<a href="#.fromTsv"><code>fromTsv</code> static method</a>,
+						then uses 
+						<code><a href="#.prototype.copy$">copy$</a></code>
+						to copy that result in to this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.fromHtml$">fromHtml$</dt>
+					<dd>
+						<code class="value-type">Function( html: String ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Passes the supplied 
+						<code>html</code> argument
+						to the 
+						<a href="#.fromHtml"><code>fromHtml</code> static method</a>,
+						then uses 
+						<code><a href="#.prototype.copy$">copy$</a></code>
+						to copy that result in to this instance.
+					</dd>
+				</li>
+			</ul>
+			<h4>Maths operations (non-destructive)</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".prototype.add">add</dt>
+					<dd>
+						<code class="value-type">Function( otherMatrix: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Passes this instance as the first argument 
+						and <code>otherMatrix</code> as the second argument
+						to the
+						<a href="#.add"><code>add</code> static method</a>
+						and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.multiplyScalar">multiplyScalar</dt>
+					<dd>
+						<code class="value-type">Function( scalar: Number ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Passes this instance as the first argument 
+						and <code>otherMatrix</code> as the second argument
+						to the
+						<a href="#.multiplyScalar"><code>multiplyScalar</code> static method</a>
+						and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.multiply">multiply</dt>
+					<dd>
+						<code class="value-type">Function( otherMatrix: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Passes this instance as the first argument 
+						and <code>otherMatrix</code> as the second argument
+						to the
+						<a href="#.multiply"><code>multiply</code> static method</a>
+						and returns the result.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.multiplyTensor">multiplyTensor</dt>
+					<dd>
+						<code class="value-type">Function( otherMatrix: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Passes this instance as the first argument 
+						and <code>otherMatrix</code> as the second argument
+						to the
+						<a href="#.multiplyTensor"><code>multiplyTensor</code> static method</a>
+						and returns the result.
+					</dd>
+				</li>
+			</ul>
+			<h4>Maths operations (destructive)</h4>
+			<ul class="properties">
+				<li>
+					<dt id=".prototype.add$">add$</dt>
+					<dd>
+						<code class="value-type">Function( otherMatrix: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Calls the <a href="#.prototype.add"><code>add</code>
+						instance method</a> 
+						with <code>otherMatrix</code> as an argument
+						and <code><a href="#.copy$">copies</a></code> the result to this instance.
+					</dd>
+				</li>
+				<li>
+					<dt id=".prototype.multiplyScalar$">multiplyScalar$</dt>
+					<dd>
+						<code class="value-type">Function( otherMatrix: <a href="Q.html">Q</a>.Matrix ) ⇒ <a href="Q.html">Q</a>.Matrix</code>
+						Calls the <a href="#.prototype.multiplyScalar"><code>multiplyScalar</code>
+						instance method</a> 
+						with <code>otherMatrix</code> as an argument
+						and <code><a href="#.copy$">copies</a></code> the result to this instance.
+					</dd>
+				</li>
+			</ul>
+		</main>
+		<script>
+
+
+
+
+//  First, what do the docs have to say?
+
+// console.log( '\n\nQ.Matrix\n\n', Q.Matrix.help(), '\n\n' )
+
+
+//  We’re going to use `var` here instead of `let` or `const`
+//  because it’s more flexible for your console-hacking needs.
+
+
+
+var a = new Q.Matrix(  
+
+	[ 1, 2, 3 ],  
+	[ 4, 5, 6 ]
+) 
+
+
+//  More complex tensor product.
+/*
+var matrixA = new <a href="Q.html">Q</a>.Matrix(
+	[ 1, 2 ],
+	[ 3, 4 ])
+console.log( 'Matrix A =', matrixA.toTsv(), '\n\n' )
+
+var matrixB = new <a href="Q.html">Q</a>.Matrix(
+	[ 0, 5 ],
+	[ 6, 7 ])
+console.log( 'Matrix B =', matrixB.toTsv(), '\n\n' )
+
+console.log( 'Matrix A ⊗ Matrix B =', matrixA.multiplyTensor( matrixB ).toTsv(), '\n\n' )
+
+
+
+
+/*
+console.log( '\n\nQ.Matrix\n', Q.extractDocumentation( Q.Matrix ), '\n\n' )
+console.log( '\n\nQ.Matrix.prototype.multiply\n', Q.extractDocumentation( Q.Matrix.prototype.multiply ), '\n\n' )
+
+
+console.log( 'Q.Matrix.IDENTITY_2X2', Q.Matrix.IDENTITY_2X2 )
+console.log( 'Q.Matrix.IDENTITY_3X3', Q.Matrix.IDENTITY_3X3 )
+console.log( 'Q.Matrix.IDENTITY_4X4', Q.Matrix.IDENTITY_4X4 )
+
+
+console.log( 'Q.Matrix.CNOT', Q.Matrix.CNOT )
+console.log( '\nQ.Matrix.CNOT.toHtml()', Q.Matrix.CNOT.toHTML(), '\n\n' )
+console.log( '\nQ.Matrix.TEST_MAP_9X9.toCSV()', Q.Matrix.TEST_MAP_9X9.toCSV(), '\n\n' )
+console.log( '\nQ.Matrix.TEST_MAP_9X9.toTsv()', Q.Matrix.TEST_MAP_9X9.toTsv(), '\n\n' )
+
+
+console.log( 'How many matrices have we created?', Q.Matrix.index )
+*/
+
+
+/*
+var a = new <a href="Q.html">Q</a>.Matrix(
+	[ 2, 2, 2 ],
+	[ 2, 2, 2 ],
+	[ 2, 2, 2 ])
+
+var b = new <a href="Q.html">Q</a>.Matrix(
+	[ 3 ],
+	[ 3 ],
+	[ 3 ])
+
+console.log( 'a.multiply( b ).toTsv()', a.multiply( b ).toTsv() )
+
+
+
+
+var c = new <a href="Q.html">Q</a>.Matrix(
+	[ 1, 2, 3 ],
+	[ 4, 5, 6 ],
+	[ 7, 8, 9 ])
+
+var d = new <a href="Q.html">Q</a>.Matrix(
+	[ 1 ],
+	[ 2 ],
+	[ 3 ])
+
+console.log( 'c.multiply( d ).toTsv()', c.multiply( d ).toTsv() )
+
+
+
+var e = new <a href="Q.html">Q</a>.Matrix(
+	[ 1, 2 ],
+	[ 3, 4 ])
+
+var f = new <a href="Q.html">Q</a>.Matrix(
+	[ 1, 2 ],
+	[ 3, 4 ])
+
+console.log( 'e.multiply( df ).toTsv()', e.multiply( f ).toTsv() )
+
+
+
+
+
+var twos = new <a href="Q.html">Q</a>.Matrix(
+	[ 2, 2, 2 ],
+	[ 2, 2, 2 ],
+	[ 2, 2, 2 ])
+
+var threes = new <a href="Q.html">Q</a>.Matrix(
+	[ 3, 3, 3 ],
+	[ 3, 3, 3 ],
+	[ 3, 3, 3 ])
+
+
+console.log( 'Q.Matrix.IDENTITY_2X2.multiply( e ).toTsv()', Q.Matrix.IDENTITY_2X2.multiply( e ))
+console.log( 'Q.Matrix.IDENTITY_3X3.multiply( c ).toTsv()', Q.Matrix.IDENTITY_3X3.multiply( c ))
+*/
+
+
+
+/*
+
+var a = new <a href="Q.html">Q</a>.Matrix(
+	[ 1, 2 ],
+	[ 3, 4 ])
+
+var b = new <a href="Q.html">Q</a>.Matrix(
+	[ 0, 5 ],
+	[ 6, 7 ])
+
+// console.log( 'a.multiplyTensor( b )', a.multiplyTensor( b ))
+
+*/
+
+
+
+
+
+//  Import and export formats.
+
+var csv = Q.Matrix.fromCsv(`
+	1, 2, 3
+	4, 5, 6
+	7, 8, 9`)
+// console.log( 'Matrix from CSV', csv.toTsv(), '\n\n' )
+
+
+var tsv = Q.Matrix.fromTsv(`1	2	3
+4	5	6
+7	8	9`)
+// console.log( 'Matrix from TSV', tsv.toTsv(), '\n\n' )
+
+
+var html = `
+<table>
+	<tr>
+		<td>1</td>
+		<td>2</td>
+		<td>3</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>5</td>
+		<td>6</td>
+	</tr>
+	<tr>
+		<td>7</td>
+		<td>8</td>
+		<td>9</td>
+	</tr>
+</table> `
+
+// console.log( 'Matrix from HTML', Q.Matrix.fromHtml( html ).toTsv(), '\n\n' )
+
+
+
+		</script>
+	</body>
+</html>
