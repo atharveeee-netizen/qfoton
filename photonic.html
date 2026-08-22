@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qfóton | 3D Silicon Photonic Quantum Chip Simulator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js & OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #030712; color: #f9fafb; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .glass-panel { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(75, 85, 99, 0.4); }
+        .cyan-glow { text-shadow: 0 0 25px rgba(6, 182, 212, 0.6); }
+        #canvas3d { width: 100%; height: 100%; display: block; border-radius: 0.75rem; cursor: grab; }
+        #canvas3d:active { cursor: grabbing; }
+    </style>
+</head>
+<body class="p-4 md:p-6 antialiased">
+<div style="background: #0f172a; padding: 12px 24px; display: flex; gap: 16px; align-items: center; border-bottom: 2px solid #06b6d4; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; position: sticky; top: 0; z-index: 99999; flex-wrap: wrap;">
+    <strong style="color: #06b6d4; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">Qfoton Suite</strong>
+    <a href="index.html" style="color: #f1f5f9; text-decoration: none; padding: 5px 12px; border-radius: 6px; background: rgba(255,255,255,0.08); font-weight: 500;">3D Bloch & Matrix (q.js)</a>
+    <a href="playground.html" style="color: #f1f5f9; text-decoration: none; padding: 5px 12px; border-radius: 6px; background: rgba(255,255,255,0.08); font-weight: 500;">Drag-Drop Studio (q.js)</a>
+    <a href="wybiral/index.html" style="color: #f1f5f9; text-decoration: none; padding: 5px 12px; border-radius: 6px; background: rgba(255,255,255,0.08); font-weight: 500;">Canvas Simulator (wybiral)</a>
+    <a href="photonic.html" style="color: #f1f5f9; text-decoration: none; padding: 5px 12px; border-radius: 6px; background: rgba(6,182,212,0.25); border: 1px solid #06b6d4; font-weight: 600;">3D Silicon Photonic Chip</a>
+    <a href="https://github.com/atharveeee-netizen/qfoton" target="_blank" style="margin-left: auto; color: #38bdf8; text-decoration: none; font-weight: 600;">GitHub Repository</a>
+</div>
+
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <header class="glass-panel rounded-2xl p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-2xl border-cyan-500/20">
+            <div>
+                <div class="flex items-center gap-3">
+                    <span class="w-3.5 h-3.5 rounded-full bg-cyan-400 animate-ping"></span>
+                    <h1 class="text-3xl font-black text-white tracking-tight cyan-glow">Qfóton</h1>
+                    <span class="bg-cyan-950/80 text-cyan-400 border border-cyan-700 text-xs px-3 py-1 rounded-full font-mono font-semibold">Linear Optical Quantum Computing (LOQC)</span>
+                </div>
+                <p class="text-gray-400 text-sm mt-1">Universal Clements SU(N) Compilation · Hong-Ou-Mandel Interference · Boson Sampling</p>
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+                <span class="px-3.5 py-1.5 rounded-lg bg-emerald-950/70 border border-emerald-600 text-emerald-400 text-xs font-mono font-semibold">Room-Temp: 300 K (0 mK Cryo)</span>
+                <button onclick="injectPhotons()" class="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-sm font-bold rounded-xl transition shadow-lg shadow-cyan-500/25 active:scale-95">⚡ Inject Single Photons</button>
+            </div>
+        </header>
+
+        <!-- Main 3D Interactive Workbench -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- 3D Viewport with OrbitControls -->
+            <div class="glass-panel rounded-2xl p-5 flex flex-col lg:col-span-2 shadow-2xl relative">
+                <div class="flex justify-between items-center mb-3">
+                    <div>
+                        <h2 class="text-sm font-bold text-gray-200 uppercase tracking-wider flex items-center gap-2">
+                            <span>🎮 Interactive 3D Silicon Photonic Chip</span>
+                        </h2>
+                        <p class="text-xs text-gray-400">Click and drag to rotate in 3D · Scroll to zoom · Right-click to pan</p>
+                    </div>
+                    <span class="text-xs font-mono bg-cyan-950 border border-cyan-700 text-cyan-400 px-2.5 py-1 rounded-md">4 Spatial Modes</span>
+                </div>
+                
+                <!-- 3D Canvas -->
+                <div class="w-full h-96 rounded-xl overflow-hidden bg-gray-950/90 relative border border-gray-800" id="canvas-container">
+                    <canvas id="canvas3d"></canvas>
+                    <div class="absolute bottom-3 left-3 bg-gray-900/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-gray-700 text-[11px] font-mono text-gray-300 pointer-events-none">
+                        Mode 0 (Top) & Mode 1 (Bottom) ➔ 50:50 Directional Coupler ➔ Phase Modulators
+                    </div>
+                </div>
+
+                <!-- Interactive Hardware Sliders -->
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-900/50 p-4 rounded-xl border border-gray-800">
+                    <div>
+                        <div class="flex justify-between text-xs font-mono text-gray-300 mb-1">
+                            <span>Beam Splitter Mixing Angle (θ):</span>
+                            <span id="thetaVal" class="text-cyan-400 font-bold">0.785 rad (50:50)</span>
+                        </div>
+                        <input type="range" min="0" max="1.5708" step="0.01" value="0.7854" id="thetaSlider" oninput="updateTheta(this.value)" class="w-full accent-cyan-500 cursor-pointer">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-mono text-gray-300 mb-1">
+                            <span>Thermo-Optic Phase Shift (φ):</span>
+                            <span id="phiVal" class="text-purple-400 font-bold">0.000 rad (0°)</span>
+                        </div>
+                        <input type="range" min="0" max="6.283" step="0.05" value="0" id="phiSlider" oninput="updatePhi(this.value)" class="w-full accent-purple-500 cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hong-Ou-Mandel Quantum Interference Graph -->
+            <div class="glass-panel rounded-2xl p-5 flex flex-col shadow-2xl">
+                <h2 class="text-sm font-bold text-gray-200 uppercase tracking-wider mb-1">Hong-Ou-Mandel (HOM) Dip</h2>
+                <p class="text-xs text-gray-400 mb-3">Two-photon coincidence suppression at zero time delay (Δτ = 0 ps)</p>
+                <div class="flex-1 min-h-[240px]">
+                    <canvas id="homChart"></canvas>
+                </div>
+                <div class="mt-3 p-3 bg-gray-900/60 rounded-xl border border-gray-800 space-y-1.5 text-xs font-mono">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Quantum Visibility:</span>
+                        <span class="text-emerald-400 font-bold">99.4% (Indistinguishable)</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Dip Minimum (P_11):</span>
+                        <span class="text-cyan-400 font-bold">0.002 (Bunched)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Boson Sampling Distribution & Architecture Specs -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Boson Sampling Spectrum -->
+            <div class="glass-panel rounded-2xl p-5 flex flex-col lg:col-span-2 shadow-2xl">
+                <div class="flex justify-between items-center mb-2">
+                    <h2 class="text-sm font-bold text-gray-200 uppercase tracking-wider">Boson Sampling Output Spectrum (#P-Hard Matrix Permanents)</h2>
+                    <span class="text-xs font-mono text-purple-400">Ryser Algorithm O(N 2^N)</span>
+                </div>
+                <div class="h-60">
+                    <canvas id="bosonChart"></canvas>
+                </div>
+                <p class="text-xs text-gray-400 mt-2 font-mono">Transition probability: P(s ➔ t) = |Perm(U_s,t)|² across Haar-random optical interferometer.</p>
+            </div>
+
+            <!-- Hardware Specifications Cards -->
+            <div class="flex flex-col gap-3.5">
+                <div class="glass-panel rounded-xl p-4 border-l-4 border-emerald-500">
+                    <p class="text-xs text-gray-400 uppercase font-semibold">Operating Temperature</p>
+                    <p class="text-2xl font-black text-emerald-400 mt-1">300 <span class="text-sm font-medium text-gray-400">Kelvin (Room Temp)</span></p>
+                    <span class="text-xs text-emerald-400">Zero Cryogenic Overhead</span>
+                </div>
+                <div class="glass-panel rounded-xl p-4 border-l-4 border-cyan-500">
+                    <p class="text-xs text-gray-400 uppercase font-semibold">Optical Gate Latency</p>
+                    <p class="text-2xl font-black text-cyan-400 mt-1">0.12 <span class="text-sm font-medium text-gray-400">nanoseconds</span></p>
+                    <span class="text-xs text-cyan-400">Speed-of-Light Silicon Waveguides</span>
+                </div>
+                <div class="glass-panel rounded-xl p-4 border-l-4 border-purple-500">
+                    <p class="text-xs text-gray-400 uppercase font-semibold">Speedup vs Classical Supercomputer</p>
+                    <p class="text-2xl font-black text-purple-400 mt-1">106,830x <span class="text-sm font-medium text-gray-400">(N=14)</span></p>
+                    <span class="text-xs text-purple-400">Polynomial vs Exponential</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Three.js 3D Scene Initialization with OrbitControls -->
+    <script>
+        const canvas = document.getElementById('canvas3d');
+        const container = document.getElementById('canvas-container');
+        
+        // Scene, Camera, Renderer
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x030712);
+        
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, 7, 9);
+        
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // OrbitControls (Allows full 3D interactive click-drag rotation, zoom, pan)
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2 - 0.05; // Prevent going beneath floor
+
+        // Silicon Substrate
+        const chipGeo = new THREE.BoxGeometry(11, 0.25, 6);
+        const chipMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.2, metalness: 0.85 });
+        const chip = new THREE.Mesh(chipGeo, chipMat);
+        scene.add(chip);
+
+        // Silicon Waveguides (Glowing Cyan Rails)
+        const waveguideMat = new THREE.MeshStandardMaterial({ color: 0x06b6d4, emissive: 0x06b6d4, emissiveIntensity: 0.6, roughness: 0.1 });
+        const modes = [-1.5, -0.5, 0.5, 1.5];
+        modes.forEach(z => {
+            const wgGeo = new THREE.BoxGeometry(10.5, 0.08, 0.12);
+            const wg = new THREE.Mesh(wgGeo, waveguideMat);
+            wg.position.set(0, 0.16, z);
+            scene.add(wg);
+        });
+
+        // 50:50 Directional Coupler (Beam Splitter Block)
+        const bsGeo = new THREE.BoxGeometry(2.2, 0.15, 2.4);
+        const bsMat = new THREE.MeshStandardMaterial({ color: 0x8b5cf6, emissive: 0x8b5cf6, emissiveIntensity: 0.4, transparent: true, opacity: 0.75 });
+        const bsMesh = new THREE.Mesh(bsGeo, bsMat);
+        bsMesh.position.set(-1.5, 0.22, 0);
+        scene.add(bsMesh);
+
+        // Thermo-Optic Phase Shifter Pads (Gold Electrodes)
+        const heaterGeo = new THREE.BoxGeometry(1.8, 0.12, 0.35);
+        const heaterMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.9, roughness: 0.2 });
+        const heater1 = new THREE.Mesh(heaterGeo, heaterMat);
+        heater1.position.set(2.2, 0.22, -0.5);
+        const heater2 = new THREE.Mesh(heaterGeo, heaterMat);
+        heater2.position.set(2.2, 0.22, 0.5);
+        scene.add(heater1);
+        scene.add(heater2);
+
+        // Lighting
+        const mainLight = new THREE.PointLight(0x38bdf8, 2.5, 50);
+        mainLight.position.set(2, 6, 4);
+        scene.add(mainLight);
+        scene.add(new THREE.AmbientLight(0x475569, 1.5));
+
+        // Photon Particles
+        const photonGeo = new THREE.SphereGeometry(0.14, 16, 16);
+        const photonMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
+        const photon1 = new THREE.Mesh(photonGeo, photonMat);
+        const photon2 = new THREE.Mesh(photonGeo, photonMat);
+        scene.add(photon1);
+        scene.add(photon2);
+
+        let pX = -5.0;
+        let isInjecting = true;
+        let currentTheta = 0.7854;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            if (isInjecting) {
+                pX += 0.08;
+                if (pX > 5.0) pX = -5.0;
+
+                // Before Beam Splitter (Separate Ports)
+                if (pX < -1.5) {
+                    photon1.position.set(pX, 0.25, -0.5);
+                    photon2.position.set(pX, 0.25, 0.5);
+                } 
+                // After Beam Splitter: Hong-Ou-Mandel Bunching into Mode 1
+                else {
+                    photon1.position.set(pX, 0.25, 0.5 - 0.1);
+                    photon2.position.set(pX, 0.25, 0.5 + 0.1 + 0.15 * Math.sin(pX * 8));
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+
+        // Charts
+        const delays = [-4, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 4];
+        const coincidences = delays.map(d => 0.5 * (1 - 0.994 * Math.exp(-(d**2)/1.5)));
+        const ctxHom = document.getElementById('homChart').getContext('2d');
+        const homChart = new Chart(ctxHom, {
+            type: 'line',
+            data: {
+                labels: delays.map(d => d + ' ps'),
+                datasets: [{
+                    data: coincidences,
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.12)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#fef08a',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 10 } } },
+                    y: { min: 0, max: 0.6, grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 10 } } }
+                }
+            }
+        });
+
+        const ctxBoson = document.getElementById('bosonChart').getContext('2d');
+        new Chart(ctxBoson, {
+            type: 'bar',
+            data: {
+                labels: ['|111000⟩', '|110100⟩', '|101100⟩', '|011100⟩', '|110010⟩', '|101010⟩', '|011010⟩', '|001110⟩', '|110001⟩', '|000111⟩'],
+                datasets: [{
+                    data: [0.184, 0.142, 0.121, 0.115, 0.094, 0.082, 0.076, 0.071, 0.063, 0.052],
+                    backgroundColor: '#8b5cf6',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { family: 'monospace', size: 10 } } },
+                    y: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 10 } } }
+                }
+            }
+        });
+
+        function updateTheta(val) {
+            currentTheta = parseFloat(val);
+            document.getElementById('thetaVal').innerText = parseFloat(val).toFixed(3) + " rad";
+        }
+
+        function updatePhi(val) {
+            const deg = (parseFloat(val) * 180 / Math.PI).toFixed(0);
+            document.getElementById('phiVal').innerText = parseFloat(val).toFixed(3) + ` rad (${deg}°)`;
+        }
+
+        function injectPhotons() {
+            pX = -5.0;
+        }
+    </script>
+</body>
+</html>
