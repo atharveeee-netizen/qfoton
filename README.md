@@ -1,55 +1,97 @@
 # Qfóton
 
-A full-stack linear optical quantum computing platform and silicon photonic chip simulator. Features interactive drag-and-drop circuit design, universal Clements and Reck SU(N) unitary compilation, Hong-Ou-Mandel quantum interference, and #P-hard matrix permanent Boson Sampling.
+A high-performance Python library for designing, simulating, and compiling linear optical quantum circuits (LOQC) and room-temperature silicon photonic chips.
 
-**Live Application**: [https://atharveeee-netizen.github.io/qfoton/](https://atharveeee-netizen.github.io/qfoton/)  
 **GitHub Repository**: [https://github.com/atharveeee-netizen/qfoton](https://github.com/atharveeee-netizen/qfoton)
 
 ---
 
-## Interactive Web Suite
+## Why Silicon Photonics?
 
-Experience Qfóton in your browser:
-* **[Quantum Circuit Studio](https://atharveeee-netizen.github.io/qfoton/)**: Visual drag-and-drop circuit designer with live measurement probabilities and state vectors.
-* **[3D Photonic Chip Simulator](https://atharveeee-netizen.github.io/qfoton/photonic.html)**: Interactive silicon waveguide mesh, directional couplers, and real-time Hong-Ou-Mandel dip analysis.
-* **[Canvas Quantum Visualizer](https://atharveeee-netizen.github.io/qfoton/wybiral/index.html)**: Interactive canvas circuit stepping engine.
+Superconducting qubits require multi-million dollar dilution refrigerators cooled to 15 millikelvin (-273 C) because ambient thermal vibrations destroy quantum coherence.
+
+Photons do not interact with ambient room heat. Silicon photonic quantum chips operate at room temperature (300 K) and execute quantum operations at the speed of light along optical waveguides with zero cryogenic cooling.
+
+`Qfóton` provides a complete computational framework to design, compile, and benchmark these physical quantum optical architectures on a standard computer.
 
 ---
 
-## Python Simulation Core & Quick Start
+## Repository Architecture
 
-### 1. Requirements
-Install standard scientific libraries:
-```bash
-pip install numpy scipy matplotlib
+```
+qfoton/
+├── simulator/
+│   ├── clements_compiler.py    # Universal SU(N) Rectangular MZI Mesh Decomposition (Optica 2016)
+│   ├── reck_compiler.py        # Reck Triangular Unitary Decomposition (PRL 1994)
+│   ├── fast_permanents.py      # Vectorized Glynn/Ryser matrix permanent engine (#P-Hard)
+│   ├── hardware_noise.py       # Waveguide loss, spectral jitter, and SNSPD detector noise
+│   ├── graph_solver.py         # Solves Dense Subgraph and Max-Clique via optical interference
+│   ├── klm_cnot.py             # 2-qubit CNOT gate using ancilla photons and post-selection
+│   ├── state_tomography.py     # Density matrix reconstruction via Maximum Likelihood Estimation
+│   ├── hafnian_gbs.py          # Matrix Hafnian engine for Gaussian Boson Sampling
+│   ├── gds_layout.py           # Exports microfabrication CAD coordinates for silicon foundries
+│   ├── Gates.py                # Beam splitters, phase shifters, and MZI primitives
+│   ├── Circuit.py              # Linear optical circuit builder and mode tracker
+│   └── transform_state.py      # Multi-photon Fock state propagation
+├── benchmarks/
+│   └── run_sota_benchmarks.py  # SOTA performance scaling benchmark suite
+├── run_demo.py                 # 1-Command CLI demo runner with ASCII tables
+├── requirements.txt            # Pure Python dependencies (numpy, scipy, matplotlib)
+└── README.md                   # Full documentation & references
 ```
 
-### 2. 1-Command CLI Demo Suite
-Run all physical simulations with formatted ASCII tables:
+---
+
+## Quick Start
+
+### 1. Requirements & Installation
+
+```bash
+git clone https://github.com/atharveeee-netizen/qfoton.git
+cd qfoton
+pip install -r requirements.txt
+```
+
+### 2. 1-Command CLI Demo Runner
+
+Execute all physical quantum simulations (Clements decomposition, Hong-Ou-Mandel interference, matrix permanents, graph optimization, and KLM CNOT gate):
+
 ```bash
 python run_demo.py
 ```
 
-### 3. Compile Arbitrary Unitary Matrix to Physical Silicon MZIs
+### 3. Python API: Compile Arbitrary Quantum Gate to Physical Silicon MZIs
+
 ```python
 import numpy as np
 from simulator.clements_compiler import clements_decompose
 
-# Random 4x4 unitary (Haar measure)
+# Generate a random 4x4 unitary (Haar measure)
 z = (np.random.randn(4, 4) + 1j * np.random.randn(4, 4)) / np.sqrt(2.0)
 U, _ = np.linalg.qr(z)
 
-# Decompose into physical MZI phase angles
+# Decompose into physical MZI phase angles (Clements 2016 standard)
 mzi_schedule = clements_decompose(U)
 for mzi in mzi_schedule:
     print(f"Modes ({mzi[0]}, {mzi[1]}) -> Theta: {mzi[2]:.3f} rad, Phi: {mzi[3]:.3f} rad")
 ```
 
+### 4. Python API: Hong-Ou-Mandel Quantum Interference Simulation
+
+```python
+from simulator.hardware_noise import PhotonicHardwareNoiseModel
+
+noise = PhotonicHardwareNoiseModel(indistinguishability_v=0.995, g2_zero=0.002)
+print(f"HOM Dip Quantum Visibility: {noise.get_hom_visibility() * 100:.2f}%")
+```
+
 ---
 
-## Benchmarks & Performance
+## Computational Complexity & Benchmarks
 
-| Matrix Size (N) | Classical Determinant (ms) | Classical Permanent (ms) | Optical Propagation (0.12 ns) | Speedup Factor |
+Evaluating matrix permanents for Boson Sampling is #P-hard. The table below compares classical CPU runtimes against physical optical transit time (0.12 ns across a 2 cm silicon chip):
+
+| Matrix Dimension (N) | Classical Determinant (ms) | Classical Permanent (ms) | Optical Propagation Time | Speedup Factor |
 | :--- | :--- | :--- | :--- | :--- |
 | N = 4 | 0.08 ms | 0.13 ms | 0.12 ns | 132x |
 | N = 8 | 0.01 ms | 1.53 ms | 0.12 ns | 1,532x |
@@ -62,17 +104,20 @@ for mzi in mzi_schedule:
 ## References
 
 1. Knill, E., Laflamme, R., & Milburn, G. J. (2001). A scheme for efficient quantum computation with linear optics. *Nature*, 409(6816), 46-52.
-2. Clements, W. R., et al. (2016). Optimal design for universal multiport interferometers. *Optica*, 3(12), 1460-1465.
-3. Reck, M., et al. (1994). Experimental realization of any discrete unitary operator. *Physical Review Letters*, 73(1), 58.
-4. Aaronson, S., & Arkhipov, A. (2011). The computational complexity of linear optics. *STOC*, 333-342.
+2. Clements, W. R., Humphreys, P. C., Metcalf, B. J., Kolthammer, W. S., & Walmsley, I. A. (2016). Optimal design for universal multiport interferometers. *Optica*, 3(12), 1460-1465.
+3. Reck, M., Zeilinger, A., Bernstein, H. J., & Bertani, P. (1994). Experimental realization of any discrete unitary operator. *Physical Review Letters*, 73(1), 58.
+4. Aaronson, S., & Arkhipov, A. (2011). The computational complexity of linear optics. *Proceedings of the 43rd Annual ACM Symposium on Theory of Computing (STOC)*, 333-342.
 5. Hong, C. K., Ou, Z. Y., & Mandel, L. (1987). Measurement of subpicosecond time intervals between two photons by interference. *Physical Review Letters*, 59(18), 2044.
 6. Carolan, J., et al. (2015). Universal linear optics. *Science*, 349(6249), 711-716.
 7. Hamilton, C. S., et al. (2017). Gaussian boson sampling. *Physical Review Letters*, 119(17), 170501.
-8. Bromley, T. R., et al. (2020). Applications of near-term photonic quantum computers. *Quantum Science and Technology*, 5(3), 034010.
+8. Bromley, T. R., et al. (2020). Applications of near-term photonic quantum computers: software and algorithms. *Quantum Science and Technology*, 5(3), 034010.
 9. Heurtel, N., et al. (2023). Perceval: A software platform for discrete variable photonic quantum computing. *Quantum*, 7, 931.
 10. Russell, N. J., et al. (2017). Direct dialling of arbitrary unitary matrices on integrated photonic circuits. *Nature Communications*, 8(1), 1838.
-11. James, D. F., et al. (2001). Measurement of qubits. *Physical Review A*, 64(5), 052312.
+11. James, D. F., Kwiat, P. G., Munro, W. J., & White, A. G. (2001). Measurement of qubits. *Physical Review A*, 64(5), 052312.
 12. Bogaerts, W., et al. (2020). Programmable photonic circuits. *Nature*, 586(7828), 207-216.
 
+---
+
 ## License
+
 MIT License.
