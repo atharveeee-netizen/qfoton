@@ -1,6 +1,6 @@
 """
 Qfóton: 1-Command Comprehensive Physical Simulation Suite
-Executes all quantum optics, Clements compilation, and topological simulations.
+Executes all quantum optics, Clements compilation, thermal calibration, and topological simulations.
 """
 
 import time
@@ -16,17 +16,16 @@ from simulator.reck_compiler import reck_decompose
 from simulator.fast_permanents import fast_glynn_permanent
 from simulator.graph_solver import PhotonicGraphSolver
 from simulator.hardware_noise import PhotonicHardwareNoiseModel
-from simulator.klm_cnot import KLMPhotonicCNOT
-from simulator.gds_layout import PhotonicLayoutExporter
-from simulator.matlab_simulink_bridge import MatlabSimulinkBridge
 from simulator.topological_protection import TopologicalPhotonicLattice
 from simulator.photonic_gemm import PhotonicGEMMEngine
+from simulator.thermal_crosstalk import ThermalCrossTalkOptimizer
+from simulator.gds_layout import PhotonicLayoutExporter
 
 def banner():
     print("""
 ================================================================================
                 Qfóton | LINEAR OPTICAL QUANTUM SIMULATOR
-          Universal Clements Compilation, Photonics & Topological Protection
+   Universal Clements Compilation, Topological Photonics & Thermal Calibration
 ================================================================================
 """)
 
@@ -34,7 +33,7 @@ def run_all():
     banner()
     
     # 1. Clements vs Reck Unitary Mesh Compilation
-    print("[1/7] UNIVERSAL UNITARY MATRIX DECOMPOSITION (CLEMENTS vs RECK)")
+    print("[1/8] UNIVERSAL UNITARY MATRIX DECOMPOSITION (CLEMENTS vs RECK)")
     print("-" * 80)
     N = 6
     np.random.seed(42)
@@ -57,7 +56,7 @@ def run_all():
     print()
 
     # 2. Hong-Ou-Mandel Quantum Destructive Interference
-    print("[2/7] HONG-OU-MANDEL (HOM) TWO-PHOTON INTERFERENCE")
+    print("[2/8] HONG-OU-MANDEL (HOM) TWO-PHOTON INTERFERENCE")
     print("-" * 80)
     noise = PhotonicHardwareNoiseModel(indistinguishability_v=0.995, g2_zero=0.002)
     delays_ps = [-3.0, -1.5, 0.0, 1.5, 3.0]
@@ -75,7 +74,7 @@ def run_all():
     print()
 
     # 3. Vectorized Glynn Matrix Permanent Scaling
-    print("[3/7] MATRIX PERMANENT BENCHMARK (#P-HARD BOSON SAMPLING)")
+    print("[3/8] MATRIX PERMANENT BENCHMARK (#P-HARD BOSON SAMPLING)")
     print("-" * 80)
     matrix_sizes = [4, 8, 10, 12]
     
@@ -98,7 +97,7 @@ def run_all():
     print()
 
     # 4. NP-Hard Dense Subgraph & Max-Clique Solver
-    print("[4/7] NP-HARD GRAPH OPTIMIZATION VIA OPTICAL INTERFERENCE")
+    print("[4/8] NP-HARD GRAPH OPTIMIZATION VIA OPTICAL INTERFERENCE")
     print("-" * 80)
     adj_matrix = np.array([
         [0, 1, 1, 1, 0, 0],
@@ -116,7 +115,7 @@ def run_all():
     print()
 
     # 5. Topological Quantum Photonic Protection (Nature 2024)
-    print("[5/7] TOPOLOGICAL QUANTUM PHOTONIC PROTECTION (SSH LATTICE)")
+    print("[5/8] TOPOLOGICAL QUANTUM PHOTONIC PROTECTION (SSH LATTICE)")
     print("-" * 80)
     lattice = TopologicalPhotonicLattice(num_cells=8, t1_intra=0.4, t2_inter=1.0)
     invariants = lattice.compute_topological_invariants()
@@ -131,8 +130,24 @@ def run_all():
     print(f"+---------------------+-----------------------------+----------------------------+")
     print()
 
-    # 6. Speed-of-Light Optical Matrix Engine (GEMM)
-    print("[6/7] SPEED-OF-LIGHT PASSIVE OPTICAL MATRIX ACCELERATOR (GEMM)")
+    # 6. Thermal Cross-Talk Auto-Calibration Optimizer
+    print("[6/8] SILICON THERMAL CROSS-TALK & INVERSE-COUPLING AUTO-CALIBRATION")
+    print("-" * 80)
+    calibrator = ThermalCrossTalkOptimizer(num_mzis=15, coupling_strength=0.18)
+    theta_targets = np.array([m[2] for m in c_mzi])
+    cal_res = calibrator.benchmark_calibration(theta_targets)
+    print(f"Inter-Heater Thermal Coupling Matrix: 18% Heat Diffusion to Adjacent Waveguides")
+    print(f"+----------------------------------+-------------------+----------------------+")
+    print(f"| Calibration State                | Phase Error (rad) | Quantum Fidelity (%) |")
+    print(f"+----------------------------------+-------------------+----------------------+")
+    print(f"| Uncalibrated (Thermal Bleed)     | {cal_res['uncalibrated_error_rad']:<17.4f} | {cal_res['uncalibrated_fidelity_pct']:<20.2f}% |")
+    print(f"| Qfóton Auto-Calibrated (Inv-K)   | {cal_res['calibrated_error_rad']:<17.4f} | {cal_res['calibrated_fidelity_pct']:<20.2f}% |")
+    print(f"+----------------------------------+-------------------+----------------------+")
+    print(f"Calibration Recovery Factor: {cal_res['improvement_factor']:.1f}x")
+    print()
+
+    # 7. Speed-of-Light Optical Matrix Engine (GEMM)
+    print("[7/8] SPEED-OF-LIGHT PASSIVE OPTICAL MATRIX ACCELERATOR (GEMM)")
     print("-" * 80)
     gemm = PhotonicGEMMEngine(num_modes=6)
     x_in = np.array([1.0, 0.0, 1.0, 0.0, 0.0, 0.0])
@@ -141,8 +156,8 @@ def run_all():
     print(f"Output Statevector Norm: {np.linalg.norm(y_out):.4f} (Unitarity Conserved)")
     print()
 
-    # 7. Silicon Microfabrication GDSII Blueprint
-    print("[7/7] SILICON GDSII / FOUNDRY MICROFABRICATION BLUEPRINT")
+    # 8. Silicon Microfabrication GDSII Blueprint
+    print("[8/8] SILICON GDSII / FOUNDRY MICROFABRICATION BLUEPRINT")
     print("-" * 80)
     exporter = PhotonicLayoutExporter()
     layout = exporter.export_clements_layout(c_mzi)
