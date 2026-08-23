@@ -1,0 +1,6 @@
+numpy>=1.24.0
+scipy>=1.10.0
+matplotlib>=3.7.0
+edge-tts>=6.1.0
+imageio>=2.30.0
+imageio-ffmpeg>=0.4.8
