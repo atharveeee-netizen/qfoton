@@ -75,7 +75,7 @@ measure q[1] -> c[1];
 """
 }
 
-def simulate_custom_circuit(qasm_text: str, chip_name: str = "Custom Photonic QPU"):
+def simulate_custom_circuit(qasm_text: str, chip_name: str = "Custom Photonic QPU", headless: bool = False):
     print("=" * 80)
     print(f" Qfóton: COMPILING & SIMULATING CHIP -> [{chip_name}]")
     print("=" * 80)
@@ -84,31 +84,34 @@ def simulate_custom_circuit(qasm_text: str, chip_name: str = "Custom Photonic QP
     transpiler = OpenQASMTranspiler()
     num_qubits, U_circuit, gates = transpiler.parse_qasm_string(qasm_text)
     dim = 2 ** num_qubits
-    num_photonic_modes = 2 * num_qubits # Dual-rail photonic encoding
+    num_photonic_modes = max(dim, 2 * num_qubits)
     
     print(f"Input Circuit: {num_qubits} Qubits | {len(gates)} Quantum Gates")
     print(f"Photonic Encoding: {num_photonic_modes} Dual-Rail Silicon Waveguides (SOI 220nm)")
     print()
     
     # 2. Decompose into Clements Silicon MZIs
-    # Pad to dual-rail dimension if needed
-    if dim <= num_photonic_modes:
+    if dim < num_photonic_modes:
         U_mesh = np.eye(num_photonic_modes, dtype=complex)
         U_mesh[:dim, :dim] = U_circuit
     else:
         U_mesh = U_circuit
         
-    mzi_schedule = clements_decompose(U_mesh)
+    mzi_schedule, diag_phases = clements_decompose(U_mesh)
     total_mzis = len(mzi_schedule)
     print(f"[+] Compiled into {total_mzis} Mach-Zehnder Interferometers (Optica 2016 Clements Architecture)")
     print(f"    First 3 Compiled MZI Phase Angles:")
-    for idx, (m1, m2, theta, phi) in enumerate(mzi_schedule[:3]):
+    for idx, item in enumerate(mzi_schedule[:3]):
+        if len(item) == 5:
+            _, m1, m2, theta, phi = item
+        else:
+            m1, m2, theta, phi = item
         print(f"      MZI #{idx+1}: Modes ({m1}, {m2}) -> Theta: {theta:.4f} rad, Phi: {phi:.4f} rad")
     print()
     
     # 3. Simulate Thermal Cross-Talk & Auto-Calibration
     calibrator = ThermalCrossTalkOptimizer(num_mzis=total_mzis, coupling_strength=0.18)
-    theta_targets = np.array([m[2] for m in mzi_schedule])
+    theta_targets = np.array([item[3] if len(item) == 5 else item[2] for item in mzi_schedule])
     cal_results = calibrator.benchmark_calibration(theta_targets)
     print(f"[+] Thermal Cross-Talk Analysis & Auto-Calibration:")
     print(f"    • Uncalibrated Fidelity (18% Thermal Bleed): {cal_results['uncalibrated_fidelity_pct']:.2f}% (Error: {cal_results['uncalibrated_error_rad']:.4f} rad)")
@@ -144,8 +147,11 @@ def simulate_custom_circuit(qasm_text: str, chip_name: str = "Custom Photonic QP
     print(f"    • State Purity Tr(rho): {metrics['purity']:.4f}")
     print(f"    • Optical Transit Time: {0.03 * num_qubits:.2f} nanoseconds (Room Temp 300K)")
     print("=" * 80)
-    print("\n[+] Plotting 3D Quantum State Tomography (Close 3D window to complete)...")
-    plot_3d_density_matrix(rho, title=f"3D State Tomography: {chip_name} (Fidelity = {metrics['fidelity_pct']:.1f}%)")
+    
+    is_headless = headless or os.environ.get("HEADLESS", "0") == "1" or os.environ.get("MPLBACKEND") == "Agg"
+    if not is_headless and sys.stdout.isatty():
+        print("\n[+] Plotting 3D Quantum State Tomography (Close 3D window to complete)...")
+        plot_3d_density_matrix(rho, title=f"3D State Tomography: {chip_name} (Fidelity = {metrics['fidelity_pct']:.1f}%)")
 
 def main():
     parser = argparse.ArgumentParser(description="Qfóton: Universal Custom Chip Simulator")
@@ -153,6 +159,7 @@ def main():
                         help="Run a built-in benchmark algorithm preset (bell, ghz3, grover2, teleport)")
     parser.add_argument("--qasm", type=str, default=None, help="Path to custom OpenQASM 2.0 file or inline QASM code")
     parser.add_argument("--chip-name", type=str, default="User Custom Chip", help="Display name for custom chip")
+    parser.add_argument("--headless", action="store_true", help="Run in headless mode without popup window")
     args = parser.parse_args()
 
     if args.qasm:
@@ -161,10 +168,10 @@ def main():
                 qasm_str = f.read()
         else:
             qasm_str = args.qasm
-        simulate_custom_circuit(qasm_str, chip_name=args.chip_name)
+        simulate_custom_circuit(qasm_str, chip_name=args.chip_name, headless=args.headless)
     else:
         preset_code = PRESETS[args.preset]
-        simulate_custom_circuit(preset_code, chip_name=f"Preset: {args.preset.upper()} Algorithm")
+        simulate_custom_circuit(preset_code, chip_name=f"Preset: {args.preset.upper()} Algorithm", headless=args.headless)
 
 if __name__ == '__main__':
     main()

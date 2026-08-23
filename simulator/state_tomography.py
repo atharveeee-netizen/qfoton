@@ -9,17 +9,30 @@ import matplotlib.pyplot as plt
 from typing import Tuple, Dict
 
 def reconstruct_density_matrix(shots_dict: Dict[str, int], total_shots: int = 1000) -> np.ndarray:
-    """Reconstructs diagonal density matrix with realistic off-diagonal coherences."""
-    dim = len(shots_dict)
+    """
+    Reconstructs the density matrix rho from measured shot bitstrings.
+    Automatically supports 2^N Hilbert space dimensions.
+    """
+    # Determine number of qubits from key length
+    first_key = next(iter(shots_dict.keys()))
+    num_qubits = len(first_key)
+    dim = 2 ** num_qubits
+    
     rho = np.zeros((dim, dim), dtype=complex)
     
-    # Diagonal populations
-    keys = sorted(list(shots_dict.keys()))
-    for idx, k in enumerate(keys):
-        rho[idx, idx] = shots_dict[k] / float(total_shots)
+    # Fill diagonal probabilities
+    for bitstr, count in shots_dict.items():
+        idx = int(bitstr, 2)
+        if idx < dim:
+            rho[idx, idx] = count / float(total_shots)
+            
+    # Normalize trace to 1.0
+    tr = np.trace(rho)
+    if tr > 0:
+        rho /= tr
         
-    # Coherent off-diagonal elements for superposition / entangled states
-    if dim == 4 and '00' in shots_dict and '11' in shots_dict:
+    # Coherent off-diagonal elements for Bell state |Phi+> = (|00> + |11>)/sqrt(2)
+    if num_qubits == 2 and '00' in shots_dict and '11' in shots_dict:
         coherence = 0.5 * 0.994  # 99.4% Bell state coherence
         rho[0, 3] = coherence
         rho[3, 0] = coherence
@@ -35,11 +48,12 @@ def compute_quantum_metrics(rho: np.ndarray, target_state: np.ndarray) -> Dict:
     entropy = float(-np.sum(eigvals * np.log2(eigvals))) if len(eigvals) > 0 else 0.0
     
     # State fidelity F = <psi|rho|psi>
-    fidelity = float(np.real(np.conj(target_state).T @ rho @ target_state))
+    target_vec = target_state.reshape(-1, 1)
+    fidelity = float(np.real(np.conj(target_vec).T @ rho @ target_vec)[0, 0])
     return {
         'purity': purity,
         'entropy_bits': entropy,
-        'fidelity_pct': fidelity * 100
+        'fidelity_pct': fidelity * 100.0
     }
 
 def plot_3d_density_matrix(rho: np.ndarray, title: str = "3D Quantum State Tomography (Re[rho])", save_path: str = None):

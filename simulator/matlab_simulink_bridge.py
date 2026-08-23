@@ -15,9 +15,14 @@ class MatlabSimulinkBridge:
         self.r_heater = heater_resistance_ohms
         self.dac_bits = dac_resolution_bits
 
-    def calculate_heater_voltages(self, mzi_schedule: List[Tuple[int, int, float, float]]) -> List[Dict]:
+    def calculate_heater_voltages(self, mzi_schedule: List) -> List[Dict]:
         control_signals = []
-        for idx, (m1, m2, theta, phi) in enumerate(mzi_schedule):
+        for idx, item in enumerate(mzi_schedule):
+            if len(item) == 5:
+                op, m1, m2, theta, phi = item
+            else:
+                m1, m2, theta, phi = item
+                
             # Phase is proportional to dissipated electrical power: phi = pi * (V / V_pi)^2
             phi_norm = np.mod(phi, 2 * np.pi)
             v_phi = self.v_pi * np.sqrt(phi_norm / np.pi)
@@ -30,7 +35,7 @@ class MatlabSimulinkBridge:
             
             control_signals.append({
                 'mzi_index': idx + 1,
-                'modes': (m1, m2),
+                'modes': (int(m1), int(m2)),
                 'theta_rad': float(theta),
                 'theta_voltage_v': float(np.round(v_theta, 4)),
                 'phi_rad': float(phi),
@@ -65,5 +70,6 @@ class MatlabSimulinkBridge:
             "grid on;",
             "disp('Qfóton MATLAB / Simulink Control Vector Loaded Successfully.');"
         ])
+        os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
         with open(output_path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
