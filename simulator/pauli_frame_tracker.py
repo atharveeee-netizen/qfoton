@@ -1,6 +1,6 @@
 """
 Qfóton: Real-Time Pauli Frame Syndrome Tracker for Fusion-Based Quantum Computing (FBQC).
-Inspired by PsiQuantum FBQC architecture (Bartolucci et al., Nature Communications 2023).
+Real-time software Pauli frame syndrome tracker for Fusion-Based Quantum Computing (Bartolucci et al., Nature Communications 2023).
 Tracks measurement outcomes of probabilistic two-qubit fusion gates and dynamically updates
 the software Pauli frame (P = X^sx * Z^sz) without resetting or interrupting physical optical circuits.
 """

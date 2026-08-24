@@ -1,6 +1,6 @@
 """
 Qfóton: Digital DAC Pre-Emphasis Pulse Shaper for Micro-Heaters.
-Inspired by Lightmatter Envise architecture (Shen et al., Nature Photonics).
+Digital DAC pre-emphasis overdrive for micro-heaters based on thermal step-response dynamics (Shen et al., Nature Photonics).
 Applies high-voltage overdrive spikes (V_boost) to overcome thermal time-constants (tau_th),
 accelerating phase shifter switching from 10 µs down to 1.2 µs.
 """

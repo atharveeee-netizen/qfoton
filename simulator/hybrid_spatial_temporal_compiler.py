@@ -1,6 +1,6 @@
 """
 Qfóton: Hybrid Spatial-Temporal Quantum Photonic Compiler.
-Inspired by Xanadu Borealis architecture (Madsen et al., Nature 2022).
+Time-bin delay loop-based multiplexed compiler (Madsen et al., Nature 2022).
 Folds large N-mode unitary transformations into compact spatial Clements sub-blocks
 interleaved with optical time-bin delay loops (1τ, 6τ, 36τ).
 """

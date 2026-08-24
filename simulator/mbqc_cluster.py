@@ -4,7 +4,7 @@ Grounding:
   "A One-Way Quantum Computer",
   R. Raussendorf, H. J. Briegel, Phys. Rev. Lett. 86, 5188 (2001). https://doi.org/10.1103/PhysRevLett.86.5188
   "Fusion-based quantum computation",
-  S. Bartolucci et al. (PsiQuantum), Nature Communications 14, 912 (2023). https://doi.org/10.1038/s41467-023-36493-1
+  S. Bartolucci et al. , Nature Communications 14, 912 (2023). https://doi.org/10.1038/s41467-023-36493-1
 
 Constructs 2D and 3D Raussendorf cluster states for fault-tolerant photonic computing,
 generates stabilizer generators K_v = X_v * prod_{u in N(v)} Z_u, and simulates

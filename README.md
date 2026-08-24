@@ -31,7 +31,7 @@ Unlike superconducting quantum computers that require $2M+ cryogenic dilution re
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                 LAYER 2: HYBRID SPATIAL-TEMPORAL GRAPH COMPILER                        │
 │  • Universal Clements SU(N) Rectangular Decomposition (Minimal Optical Depth N)        │
-│  • Time-Bin Delay Loop Folding (Xanadu-style 1τ, 6τ Multiplexing: 128 modes in 12 MZIs)│
+│  • Time-Bin Delay Loop Folding (Time-Bin 1τ, 6τ Delay Loop Multiplexing: 128 modes in 12 MZIs)│
 │  • Loss-Aware Heuristic Routing (Prioritizes Lowest-Loss Waveguides)                   │
 │  • MBQC 3D Raussendorf Cluster State Generation (Science 2023)                         │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
