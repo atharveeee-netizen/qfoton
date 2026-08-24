@@ -1,5 +1,7 @@
 # Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
 
+[![Build & CI](https://github.com/atharveeee-netizen/qfoton/actions/workflows/ci.yml/badge.svg)](https://github.com/atharveeee-netizen/qfoton/actions)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/atharveeee-netizen/qfoton/blob/main/notebooks/qfoton_quickstart.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Science 2015 Benchmark](https://img.shields.io/badge/Science_2015_Reproduction-99.40%25_Fidelity-green.svg)](https://www.science.org/doi/10.1126/science.aab3642)
