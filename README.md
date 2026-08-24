@@ -4,7 +4,7 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/atharveeee-netizen/qfoton/blob/main/notebooks/qfoton_quickstart.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Science 2015 Benchmark](https://img.shields.io/badge/Science_2015_Reproduction-99.40%25_Fidelity-green.svg)](https://www.science.org/doi/10.1126/science.aab3642)
+[![Science 2015 Benchmark](https://img.shields.io/badge/Science_2015-Benchmark_Validated-green.svg)](https://www.science.org/doi/10.1126/science.aab3642)
 [![Cleanroom Noise](https://img.shields.io/badge/IMEC_220nm_Noise-0.148_dB%2Fcm-purple.svg)](https://www.imec-int.com/)
 
 <div align="center">
@@ -78,7 +78,7 @@ When you run Qfóton, your quantum circuit travels through a 5-stage physical co
              │                     Injects 0.148 dB/cm loss, DAC jitter, and cancels heat bleed
              ▼
   [ 4. State Verification ]        3D Quantum State Tomography (Re[rho]), Purity & HOM Visibility
-             │                     Confirms quantum output matches theoretical target > 99.4%
+             │                     Verifies quantum output fidelity against theoretical target
              ▼
   [ 5. Cleanroom Tapeout ]         DRC-Clean GDSII CAD Layout Export for Semiconductor Foundries
                                    Generates physical layout polygons (IMEC / AIM Photonics)
@@ -151,14 +151,14 @@ Thermal Inversion Equation:       Phi_calibrated = K^-1 * Phi_target
 │                  LAYER 4: 12 ADVANCED LOQC QUANTUM PHYSICS ENGINES                     │
 │  1. SFWM Micro-Ring Single-Photon Pair Generator (Optica 2021, g²(0) = 0.0045)         │
 │  2. Universal Clements vs. Reck Unitary Compilers                                      │
-│  3. Hong-Ou-Mandel 99.3% Quantum Interference Dip Simulator                            │
-│  4. #P-Hard Boson Sampling Matrix Permanent Engine (100,000,000x Optical Speedup)      │
+│  3. Hong-Ou-Mandel 97.5% Quantum Interference Dip Simulator                            │
+│  4. #P-Hard Boson Sampling Matrix Permanent Engine (Dimension-Dependent Speedup)       │
 │  5. SSH Topological Edge Protection (Zak Phase π, Survives 25% Physical Damage)        │
 │  6. Silicon Thermal Cross-Talk Inverse-Coupling Auto-Calibrator                        │
 │  7. Real-Time PID Thermo-Optic Phase Drift Stabilizer (Nature Photonics 2022)          │
 │  8. Measurement-Based Quantum Computing (MBQC) 3D Cluster Generator (Science 2023)     │
-│  9. Photonic VQE Molecular Chemistry Solver (H₂ / LiH within 1.6 kcal/mol)             │
-│  10. Zero-Noise Extrapolation (ZNE) Error Mitigation (91.2% Noise Reduction)           │
+│  9. Photonic VQE Molecular Chemistry Solver (H₂ / LiH Chemical Accuracy)               │
+│  10. Zero-Noise Extrapolation (ZNE) Error Mitigation (Unclamped Richardson Extrap.)     │
 │  11. Photonic True QRNG with NIST SP 800-22 Cryptographic Battery Verification        │
 │  12. Sub-Wavelength Fiber Grating Coupler & GDSII Foundry Mask Optimizer               │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘

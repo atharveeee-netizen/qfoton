@@ -30,10 +30,14 @@ class PhotonicVQESolver:
             exact_fci.append(float(e_exact))
             
         eq_idx = np.argmin(exact_fci)
+        # Compute actual chemical accuracy: max |E_VQE - E_FCI| in kcal/mol
+        # 1 Hartree = 627.509 kcal/mol
+        max_error_hartree = max(abs(e - f) for e, f in zip(energies_hartree, exact_fci))
+        chem_accuracy_kcal_mol = float(max_error_hartree * 627.509)
         return {
             'molecule': self.molecule,
             'equilibrium_bond_length_angstrom': bond_distances[eq_idx],
             'ground_state_energy_hartree': energies_hartree[eq_idx],
-            'chemical_accuracy_kcal_mol': 1.6, # Under 1.6 kcal/mol standard
+            'chemical_accuracy_kcal_mol': chem_accuracy_kcal_mol,
             'vqe_energy_points': list(zip(bond_distances, energies_hartree))
         }

@@ -115,5 +115,5 @@ class GaussianBosonSampling:
             'core_hafnian_amplitude': float(np.abs(haf_kernel)),
             'sampled_unique_patterns': len(patterns),
             'top_detection_patterns': top_patterns,
-            'sampling_fidelity_pct': 99.1
+            'sampling_fidelity_pct': float(100.0 * (1.0 - patterns.get('0' * self.modes, 0) / num_samples))
         }

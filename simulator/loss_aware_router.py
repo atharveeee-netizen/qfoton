@@ -34,7 +34,13 @@ class LossAwareMZIRouter:
         optimized_total_loss_db = float(np.sum(optimized_loss_matrix[:, :dim//2]) * 0.5)
         
         loss_reduction_pct = (1.0 - (optimized_total_loss_db / unoptimized_total_loss_db)) * 100.0
-        fidelity_improvement_pct = loss_reduction_pct * 0.65
+        
+        # Derive fidelity improvement from the actual loss difference
+        # Loss in dB maps to transmission: T = 10^(-loss_dB/10)
+        # Process fidelity scales with sqrt(T) for amplitude damping
+        T_unopt = 10.0 ** (-unoptimized_total_loss_db / 10.0)
+        T_opt = 10.0 ** (-optimized_total_loss_db / 10.0)
+        fidelity_improvement_pct = (np.sqrt(T_opt) - np.sqrt(T_unopt)) / np.sqrt(T_unopt) * 100.0
 
         return {
             'optical_modes': dim,

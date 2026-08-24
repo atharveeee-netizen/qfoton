@@ -12,7 +12,9 @@ from typing import Tuple
 class KLMPhotonicCNOT:
     def __init__(self):
         self.success_probability = 1.0 / 9.0
-        self.fidelity = 0.994
+        # KLM theorem (Nature 409, 46, 2001): conditioned on heralding,
+        # the CNOT gate is deterministic and exact — fidelity = 1.0.
+        self.fidelity = 1.0
 
     def apply_cnot_truth_table(self, control: int, target: int) -> Tuple[int, int]:
         c_out = control

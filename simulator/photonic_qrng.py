@@ -29,10 +29,19 @@ class PhotonicQRNG:
         pi_hat = np.mean(quantum_bits)
         p_val_runs = float(np.exp(-0.5 * (((v_obs - 2 * self.n_bits * pi_hat * (1 - pi_hat)) / (2 * np.sqrt(2 * self.n_bits) * pi_hat * (1 - pi_hat))) ** 2)))
         
+        # Determine NIST SP 800-22 compliance from actual test p-values
+        monobit_pass = p_val_monobit > 0.01
+        runs_pass = p_val_runs > 0.01
+        nist_status = 'PASSED' if (monobit_pass and runs_pass) else 'FAILED'
+        
+        # Min-entropy from observed bit bias: H_min = -log2(max(p, 1-p))
+        p_bias = np.mean(quantum_bits)
+        min_entropy = float(-np.log2(max(p_bias, 1.0 - p_bias, 0.5 + 1e-12)))
+        
         return {
             'total_quantum_bits_generated': self.n_bits,
             'monobit_frequency_p_value': p_val_monobit,
             'runs_test_p_value': p_val_runs,
-            'nist_sp800_22_compliance': 'PASSED (p > 0.01 True Quantum Non-Determinism)',
-            'entropy_per_bit': 1.000
+            'nist_sp800_22_compliance': f'{nist_status} (Monobit p={p_val_monobit:.4f}, Runs p={p_val_runs:.4f})',
+            'entropy_per_bit': min_entropy
         }
