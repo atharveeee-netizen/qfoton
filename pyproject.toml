@@ -5,13 +5,26 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "qfoton"
 version = "2.0.0"
-description = "Full-Stack Silicon Photonic Quantum Computing Simulator and Compiler"
+description = "Full-Stack Silicon Photonic Quantum Computing Simulator, Clements Compiler, and GDSII CAD Engine"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
 authors = [{ name = "Atharve", email = "atharveeee@gmail.com" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Physics",
+]
 dependencies = [
     "numpy>=1.22.0",
     "scipy>=1.8.0",
     "matplotlib>=3.5.0",
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/atharveeee-netizen/qfoton"
+"Bug Tracker" = "https://github.com/atharveeee-netizen/qfoton/issues"
+"Documentation" = "https://github.com/atharveeee-netizen/qfoton#readme"
