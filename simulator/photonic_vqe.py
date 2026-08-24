@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Photonic Variational Quantum Eigensolver (VQE) Molecular Chemistry Engine (Nature Chemistry 2022).
 Calculates ground-state potential energy curves of molecular Hydrogen (H2) and Lithium Hydride (LiH).

@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Real-Time Pauli Frame Syndrome Tracker for Fusion-Based Quantum Computing (FBQC).
 Real-time software Pauli frame syndrome tracker for Fusion-Based Quantum Computing (Bartolucci et al., Nature Communications 2023).

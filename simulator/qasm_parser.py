@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Universal OpenQASM 2.0 Parser and Transpiler.
 Parses standard quantum assembly (QASM) and converts it into unitary matrices

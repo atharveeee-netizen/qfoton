@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Universal Custom Chip Simulator & Gateway (simulate_custom_chip.py)
 Allows users to paste or specify any arbitrary quantum circuit (OpenQASM, JSON, or Preset)

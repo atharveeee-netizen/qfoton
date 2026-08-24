@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Topological Quantum Photonic Protection Engine (Nature 2024 / Science 2023).
 Grounding:

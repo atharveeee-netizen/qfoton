@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton Studio: Real-World Physical Silicon Photonic Processor Simulator (simulate_chip.py)
 Calibrated to Carolan et al., Science 349, 711 (2015) with exact cleanroom noise parameters:

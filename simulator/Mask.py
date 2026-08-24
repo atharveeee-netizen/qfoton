@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
 """
 Created on Fri Mar 21 13:32:34 2025
 

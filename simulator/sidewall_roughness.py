@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Waveguide Sidewall Roughness & Rayleigh Backscattering Simulator (Optics Express 2023).
 Monte Carlo lithography roughness model (3nm RMS) computing distributed reflections & cleanroom yield.

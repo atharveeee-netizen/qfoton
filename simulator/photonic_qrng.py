@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Quantum Random Number Generator (QRNG) with NIST SP 800-22 Verification (PR Applied 2022).
 Generates non-deterministic bits via single-photon beam splitter splitting and runs NIST randomness tests.

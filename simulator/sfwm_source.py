@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Spontaneous Four-Wave Mixing (SFWM) Photon-Pair Source (Optica 2021).
 Simulates on-chip third-order non-linear chi^(3) single-photon generation in silicon micro-rings.

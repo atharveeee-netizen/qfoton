@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Digital DAC Pre-Emphasis Pulse Shaper for Micro-Heaters.
 Digital DAC pre-emphasis overdrive for micro-heaters based on thermal step-response dynamics (Shen et al., Nature Photonics).

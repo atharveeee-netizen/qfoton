@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: MATLAB & Simulink Co-Simulation Bridge
 Exports compiled Clements MZI phase angles to MATLAB (.m) and Simulink parameter blocks

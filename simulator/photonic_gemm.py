@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Speed-of-Light Optical Matrix-Vector (GEMM) Engine.
 Executes passive optical matrix multiplication (Y = U * X) in 0.12 ns with zero electrical power.

@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Photonic Zero-Noise Extrapolation (ZNE) Error Mitigation (PRX Quantum 2023).
 Applies noise scaling across optical attenuation factors and polynomial Richardson extrapolation.

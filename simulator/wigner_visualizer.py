@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Continuous-Variable (CV) 3D Wigner Function Phase-Space Engine (PRL 2023).
 Calculates W(x, p) quasi-probability distribution showing negative Wigner volume supremacy signatures.

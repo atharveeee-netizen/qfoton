@@ -1,3 +1,9 @@
+# ==============================================================================
+# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
+# Released under the MIT License.
+# ==============================================================================
+
 """
 Qfóton: Hybrid Spatial-Temporal Quantum Photonic Compiler.
 Time-bin delay loop-based multiplexed compiler (Madsen et al., Nature 2022).
