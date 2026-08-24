@@ -56,6 +56,63 @@ Unlike superconducting quantum computers that require $2M+ cryogenic dilution re
 
 ---
 
+
+---
+
+## 🚀 How Qfóton Works (The End-to-End Pipeline)
+
+When you run Qfóton, your quantum circuit travels through a 5-stage physical compilation pipeline:
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                             THE QFÓTON COMPILATION & SIMULATION FLOW                        │
+└─────────────────────────────────────────────────────────────────────────────────────────────┘
+
+  [ 1. Quantum Algorithm ]         OPENQASM 2.0 / 3.0 or Arbitrary Unitary Matrix U in SU(N)
+             │
+             ▼
+  [ 2. MZI Transpilation ]         Clements SU(N) Rectangular Decomposition -> Array of MZIs
+             │                     Calculates internal phase theta and external phase phi
+             ▼
+  [ 3. Multiphysics & HIL ]        Thermal Cross-Talk Matrix Inversion (K^-1) + 220nm Noise
+             │                     Injects 0.148 dB/cm loss, DAC jitter, and cancels heat bleed
+             ▼
+  [ 4. State Verification ]        3D Quantum State Tomography (Re[rho]), Purity & HOM Visibility
+             │                     Confirms quantum output matches theoretical target > 99.4%
+             ▼
+  [ 5. Cleanroom Tapeout ]         DRC-Clean GDSII CAD Layout Export for Semiconductor Foundries
+                                   Generates physical layout polygons (IMEC / AIM Photonics)
+```
+
+---
+
+## 🔬 Physical Anatomy of a Silicon Photonic Qubit Gate
+
+Every quantum logic operation in Qfóton is physically executed using a **Mach-Zehnder Interferometer (MZI)** composed of two 50:50 directional beam splitters and two titanium nitride (TiN) thermo-optic micro-heaters:
+
+```text
+Mode i   ──────[ 50:50 BS ]───/──[ Theta Thermo-Optic Heater ]───[ 50:50 BS ]───/──[ Phi Thermo-Optic Heater ]─── Mode i
+                               \                                /
+Mode i+1 ──────[ 50:50 BS ]───\─────────────────────────────────[ 50:50 BS ]───────────────────────────────────── Mode i+1
+
+Physical Phase Shift Equation:   Delta Phi = (2 * pi / lambda) * (dn / dT) * L * Delta T
+Thermal Inversion Equation:       Phi_calibrated = K^-1 * Phi_target
+```
+
+---
+
+## 🎯 Quick Navigation Cheat Sheet
+
+| What Do You Want to Do? | One-Line Command | Output / Result Produced |
+| :--- | :--- | :--- |
+| **Run the full 16-stage physics suite** | `python run_demo.py` | Complete terminal execution across all 16 physical engines |
+| **Launch interactive circuit studio** | `python simulate_chip.py` | Dark-mode GUI with live pulse dynamics & Simulink DAC voltages |
+| **Reproduce Science (2015) 6-mode chip** | `python simulate_science_2015_chip.py` | 4-panel cleanroom benchmark matching published 99.40% lab data |
+| **Simulate 3-qubit GHZ state chip** | `python simulate_custom_chip.py --preset ghz3` | 3D Density matrix Re[rho] (8x8 pillars) & GDSII layout mask |
+| **Simulate 2-qubit Bell pair chip** | `python simulate_custom_chip.py --preset bell` | 2-qubit entangled state simulation and fidelity report |
+| **Simulate custom OpenQASM file** | `python simulate_custom_chip.py --qasm file.qasm` | Custom circuit transpilation, noise injection, and CAD export |
+| **Run in Google Colab (no setup)** | *Click "Open in Colab" badge above* | Interactive browser notebook for quick simulation |
+
 ## 🏛️ The 5-Layer Master Architecture
 
 ```
