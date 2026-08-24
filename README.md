@@ -159,12 +159,115 @@ python simulate_custom_chip.py --preset teleport   # Quantum Teleportation
 
 ---
 
+
+---
+
+## 🛠️ How to Simulate Your Own Custom Photonic Chip
+
+Qfóton makes it effortless to compile, simulate, calibrate, and tape out custom quantum photonic hardware in 5 modular steps:
+
+### Method A: Command-Line Interface (Fast Preset & OpenQASM Simulation)
+
+You can simulate predefined benchmark chips or pass your own custom OpenQASM 2.0/3.0 file:
+
+```bash
+# 1. Simulate a 3-Qubit Greenberger-Horne-Zeilinger (GHZ) State Chip
+python simulate_custom_chip.py --preset ghz3
+
+# 2. Simulate a 2-Qubit Bell Pair (EPR State)
+python simulate_custom_chip.py --preset bell
+
+# 3. Simulate a 2-Qubit Grover Quantum Search Circuit
+python simulate_custom_chip.py --preset grover2
+
+# 4. Simulate a 3-Qubit Quantum Teleportation Protocol
+python simulate_custom_chip.py --preset teleport
+
+# 5. Simulate an Arbitrary External OpenQASM Circuit File
+python simulate_custom_chip.py --qasm path/to/my_circuit.qasm
+```
+
+---
+
+### Method B: Python API Step-by-Step Walkthrough
+
+#### Step 1: Ingest Quantum Circuit or Unitary Matrix
+```python
+import numpy as np
+from simulator.clements_compiler import ClementsCompiler
+from simulator.qasm_parser import OpenQASMParser
+
+# Option 1: Parse an OpenQASM circuit string
+qasm_str = '''
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[2];
+h q[0];
+cx q[0], q[1];
+'''
+parser = OpenQASMParser()
+U_target = parser.parse_to_unitary(qasm_str)
+
+# Option 2: Define an arbitrary 4x4 or 8x8 unitary matrix U in SU(N)
+# U_target = np.array([...], dtype=complex)
+```
+
+#### Step 2: Universal Clements MZI Grid Decomposition
+```python
+# Decompose into a rectangular grid of balanced Mach-Zehnder Interferometers
+compiler = ClementsCompiler(num_modes=4)
+mesh = compiler.decompose(U_target)
+
+print(f"Physical MZIs Required: {len(mesh['mzi_list'])}")
+print(f"Max Optical Depth: {mesh['optical_depth']}")
+print(f"Decomposition Fidelity: {mesh['decomposition_fidelity'] * 100:.4f}%")
+```
+
+#### Step 3: Inject 220nm Cleanroom Multiphysics Noise & Thermal Bleed
+```python
+from simulator.hardware_noise import CleanroomNoiseModel
+from simulator.thermal_crosstalk import ThermalCrossTalkOptimizer
+
+# Instantiate foundry-calibrated 220nm SOI noise (0.148 dB/cm loss, phase jitter)
+noise_model = CleanroomNoiseModel(loss_db_per_cm=0.148, phase_jitter_std=0.019)
+noisy_unitary = noise_model.apply_noise(mesh['reconstructed_unitary'])
+
+# Auto-calibrate inter-heater thermal bleeding using inverse-coupling matrix (K⁻¹)
+calibrator = ThermalCrossTalkOptimizer(num_mzis=len(mesh['mzi_list']))
+calibrated_phases = calibrator.invert_thermal_cross_talk(target_phases=mesh['phase_vector'])
+```
+
+#### Step 4: Extract 3D Quantum State Tomography & Purity
+```python
+from simulator.state_tomography import QuantumStateTomographer
+
+tomographer = QuantumStateTomographer()
+rho_density = tomographer.compute_density_matrix(unitary=noisy_unitary, input_state="|1,0,0,0>")
+
+fidelity = tomographer.compute_fidelity(rho_density, ideal_state="|1,0,0,0>")
+purity = tomographer.compute_purity(rho_density)
+
+print(f"Output State Fidelity: {fidelity * 100:.2f}%")
+print(f"Quantum Purity: {purity:.4f}")
+```
+
+#### Step 5: Export DRC-Clean GDSII CAD Mask for Semiconductor Tapeout
+```python
+from simulator.gds_layout import GDSIIPhotonicLayout
+
+# Generate physical foundry layout polygons (waveguides, directional couplers, TiN micro-heaters)
+gds = GDSIIPhotonicLayout(num_modes=4, waveguide_width_um=0.45, bend_radius_um=15.0)
+gds.build_clements_mesh(mesh['mzi_list'])
+gds.export_gdsii("custom_photonic_chip.gds")
+print("Exported custom_photonic_chip.gds ready for IMEC / AIM Photonics cleanroom fabrication!")
+```
+
 ## 📚 Key Academic Citations
-* **Carolan, J., et al.** *"Universal linear optics."* **Science** 349.6249 (2015): 711–716.
-* **Clements, W. R., et al.** *"Optimal design for universal multiport interferometers."* **Optica** 3.12 (2016): 1460–1465.
+* **Carolan, J., et al.** *"Universal linear optics."* **Science** 349.6249 (2015): 711-716.
+* **Clements, W. R., et al.** *"Optimal design for universal multiport interferometers."* **Optica** 3.12 (2016): 1460-1465.
 * **Hong, C. K., Ou, Z. Y., & Mandel, L.** *"Measurement of subpicosecond time intervals between two photons by interference."* **Physical Review Letters** 59.18 (1987): 2044.
 * **Bartolucci, S., et al.** *"Fusion-based quantum computation."* **Nature Communications** 14.1 (2023): 912.
-* **Madsen, L. S., et al.** *"Quantum computational advantage with a programmable photonic processor."* **Nature** 606.7912 (2022): 75–81.
+* **Madsen, L. S., et al.** *"Quantum computational advantage with a programmable photonic processor."* **Nature** 606.7912 (2022): 75-81.
 
 ---
 
