@@ -5,9 +5,52 @@
 [![Science 2015 Benchmark](https://img.shields.io/badge/Science_2015_Reproduction-99.40%25_Fidelity-green.svg)](https://www.science.org/doi/10.1126/science.aab3642)
 [![Cleanroom Noise](https://img.shields.io/badge/IMEC_220nm_Noise-0.148_dB%2Fcm-purple.svg)](https://www.imec-int.com/)
 
+<div align="center">
+  <img src="assets/gallery_15/01_interactive_quantum_teleportation_studio.png" alt="Qfóton Interactive Quantum Teleportation Studio" width="100%" style="border-radius: 10px;" />
+</div>
+
+<br/>
+
 **Qfóton** is an open-source, full-stack quantum photonics design automation and hardware simulation framework. It compiles high-level quantum circuits (**OpenQASM 2.0/3.0**) into physical silicon photonic **Mach-Zehnder Interferometer (MZI)** meshes, eliminates inter-heater thermal cross-talk with analytical matrix inversion ($K^{-1}$), injects cleanroom-calibrated foundry noise matching published *Science (2015)* laboratory experiments within 0.05%, and outputs DRC-clean **GDSII CAD layout masks** for semiconductor foundry manufacturing.
 
 Unlike superconducting quantum computers that require $2M+ cryogenic dilution refrigerators cooled to 15 millikelvin (-273°C), silicon photonic quantum processors operate at **room temperature (300 K)** with single photons traveling at the **speed of light (0.12 ns)**.
+
+---
+
+## 🖼️ Visual Architecture & Benchmark Showcase
+
+<table align="center" width="100%">
+  <tr>
+    <td width="50%" align="center">
+      <b>Landmark Science (2015) 6-Mode Chip Reproduction</b><br/>
+      <img src="assets/gallery_15/02_science_2015_cleanroom_benchmark.png" alt="Science 2015 Benchmark" width="100%" style="border-radius: 8px;" />
+    </td>
+    <td width="50%" align="center">
+      <b>3D Quantum State Tomography (Re[ρ] GHZ State)</b><br/>
+      <img src="assets/gallery_15/03_3d_quantum_state_tomography_ghz.png" alt="3D State Tomography" width="100%" style="border-radius: 8px;" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <b>MATLAB & Simulink 16-Bit DAC Co-Simulation</b><br/>
+      <img src="assets/gallery_15/04_simulink_electro_thermal_dac_model.png" alt="Simulink Co-Simulation" width="100%" style="border-radius: 8px;" />
+    </td>
+    <td width="50%" align="center">
+      <b>Thermal Cross-Talk Matrix Inversion (K⁻¹)</b><br/>
+      <img src="assets/gallery_15/09_thermal_crosstalk_inverse_k_calibration.png" alt="Thermal Calibration" width="100%" style="border-radius: 8px;" />
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <b>Topological Waveguide Protection (SSH Lattice)</b><br/>
+      <img src="assets/gallery_15/08_ssh_topological_waveguide_protection.png" alt="Topological Protection" width="100%" style="border-radius: 8px;" />
+    </td>
+    <td width="50%" align="center">
+      <b>Hybrid Spatial-Temporal Time-Bin Delay Loops</b><br/>
+      <img src="assets/gallery_15/14_hybrid_spatial_temporal_delay_loops.png" alt="Hybrid Delay Loops" width="100%" style="border-radius: 8px;" />
+    </td>
+  </tr>
+</table>
 
 ---
 
@@ -31,7 +74,7 @@ Unlike superconducting quantum computers that require $2M+ cryogenic dilution re
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
 │                 LAYER 2: HYBRID SPATIAL-TEMPORAL GRAPH COMPILER                        │
 │  • Universal Clements SU(N) Rectangular Decomposition (Minimal Optical Depth N)        │
-│  • Time-Bin Delay Loop Folding (Time-Bin 1τ, 6τ Delay Loop Multiplexing: 128 modes in 12 MZIs)│
+│  • Time-Bin Delay Loop Folding (1τ, 6τ Delay Line Multiplexing: 128 modes in 12 MZIs) │
 │  • Loss-Aware Heuristic Routing (Prioritizes Lowest-Loss Waveguides)                   │
 │  • MBQC 3D Raussendorf Cluster State Generation (Science 2023)                         │
 └───────────────────────────────────────────┬────────────────────────────────────────────┘
