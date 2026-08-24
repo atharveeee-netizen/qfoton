@@ -61,8 +61,13 @@ class PhotonicHardwareNoiseModel:
         
         noisy_U = trans_amp * (ideal_unitary * np.exp(1j * phase_jitter) + coupler_noise * 0.05)
         
-        # State fidelity calculation: normalized overlap * photon indistinguishability
-        fid_sim = float(np.clip(self.visibility * (1.0 - 0.5 * (self.phase_noise_rad**2 + self.delta_kappa**2)), 0.985, 0.998))
+        # Unitary process fidelity normalized against optical loss
+        noisy_U_norm = noisy_U / trans_amp
+        overlap = np.trace(ideal_unitary.conj().T @ noisy_U_norm)
+        process_fid = float(np.real((np.abs(overlap) ** 2 + dim) / (dim * (dim + 1))))
+        
+        # Total effective fidelity accounting for indistinguishability
+        fid_sim = process_fid * self.visibility
         
         metrics = {
             'waveguide_loss_db_cm': self.loss_db_per_cm,
@@ -73,6 +78,7 @@ class PhotonicHardwareNoiseModel:
             'snspd_timing_jitter_ps': self.jitter,
             'snspd_dark_counts_hz': self.dcr,
             'noisy_state_fidelity_pct': fid_sim * 100.0,
+            'process_fidelity_pct': process_fid * 100.0,
             'science_2015_lab_fidelity_pct': 99.40
         }
         return noisy_U, metrics

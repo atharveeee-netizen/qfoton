@@ -39,7 +39,7 @@ def reconstruct_density_matrix(shots_dict: Dict[str, int], total_shots: int = 10
         
     # Coherent off-diagonal elements for Bell state |Phi+> = (|00> + |11>)/sqrt(2)
     if num_qubits == 2 and '00' in shots_dict and '11' in shots_dict:
-        coherence = 0.5 * 0.994  # 99.4% Bell state coherence
+        coherence = np.sqrt(rho[0, 0] * rho[3, 3])
         rho[0, 3] = coherence
         rho[3, 0] = coherence
         

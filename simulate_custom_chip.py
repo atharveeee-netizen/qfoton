@@ -121,7 +121,7 @@ def simulate_custom_circuit(qasm_text: str, chip_name: str = "Custom Photonic QP
     cal_results = calibrator.benchmark_calibration(theta_targets)
     print(f"[+] Thermal Cross-Talk Analysis & Auto-Calibration:")
     print(f"    • Uncalibrated Fidelity (18% Thermal Bleed): {cal_results['uncalibrated_fidelity_pct']:.2f}% (Error: {cal_results['uncalibrated_error_rad']:.4f} rad)")
-    print(f"    • Auto-Calibrated Pre-Distorted Fidelity:    {cal_results['calibrated_fidelity_pct']:.2f}% (Restored > 99.5%)")
+    print(f"    • Auto-Calibrated Pre-Distorted Fidelity:    {cal_results['calibrated_fidelity_pct']:.2f}% (Condition Number kappa = {cal_results['thermal_matrix_condition_number']:.2f})")
     print(f"    • Calibration Improvement Factor:          {cal_results['improvement_factor']:.1f}x")
     print()
 

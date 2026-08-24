@@ -62,14 +62,17 @@ def run_science_2015_chip_simulation(headless: bool = False):
     phase_noise = np.random.normal(0, phase_jitter_rad, size=(N, N))
     U_noisy = trans_amp * (U_ideal * np.exp(1j * phase_noise) + np.random.normal(0, delta_kappa, size=(N, N)) * 0.05)
     
-    # Calculate exact state fidelities
+    # Calculate physical state & process fidelities
     ideal_fidelity = 100.0
-    science_lab_fidelity = 99.40 # Published in Science
+    science_lab_fidelity = 99.40 # Published in Science 2015
     science_lab_error = 0.30
     
-    # In Carolan Science 2015, state fidelity F = <psi_ideal | rho_noisy | psi_ideal> / Tr(rho_noisy)
-    # Calibrated voltage DACs give physical quantum fidelity:
-    qfoton_sim_fidelity = 99.42
+    # Physics-derived average gate process fidelity for d-dimensional channel
+    U_noisy_norm = U_noisy / trans_amp
+    overlap = np.trace(U_ideal.conj().T @ U_noisy_norm)
+    process_fidelity = float(np.real((np.abs(overlap)**2 + N) / (N * (N + 1))))
+    qfoton_sim_fidelity = process_fidelity * 100.0
+    deviation = abs(qfoton_sim_fidelity - science_lab_fidelity)
     
     print(f"[1/4] Cleanroom Hardware Calibration:")
     print(f"      • Waveguide Loss:       {loss_db_cm} dB/cm (Total Insertion Loss: {total_loss_db:.3f} dB)")
@@ -82,7 +85,7 @@ def run_science_2015_chip_simulation(headless: bool = False):
     print(f"      • Total Clements MZIs:  15 Mach-Zehnder Interferometers (Optical Depth: 6)")
     print(f"      • Optical Latency:      0.12 nanoseconds (Speed of Light across 2.4 cm chip)")
     print()
-    print(f"[3/4] EXACT FIDELITY VALIDATION VS. SCIENCE 2015 LABORATORY EXPERIMENT:")
+    print(f"[3/4] HONEST FIDELITY BENCHMARK VS. SCIENCE 2015 LABORATORY EXPERIMENT:")
     print(f"      +-----------------------------------------+-----------------------+")
     print(f"      | Benchmark Metric                        | Quantum Fidelity (%)  |")
     print(f"      +-----------------------------------------+-----------------------+")
@@ -90,7 +93,7 @@ def run_science_2015_chip_simulation(headless: bool = False):
     print(f"      | Carolan et al. (Science 2015 Experiment)| {science_lab_fidelity:>14.2f}% +/- 0.3% |")
     print(f"      | Qfóton Real Foundry Simulation          | {qfoton_sim_fidelity:>20.2f}% |")
     print(f"      +-----------------------------------------+-----------------------+")
-    print(f"      -> Physical Match: EXACT (Within 0.02% of published laboratory data!)")
+    print(f"      -> Published Benchmark Deviation: {deviation:.2f} percentage points (Honest physical derivation)")
     print("-" * 80)
     print("\n[4/4] Generating 4-Panel Scientific Validation Dashboard...")
 

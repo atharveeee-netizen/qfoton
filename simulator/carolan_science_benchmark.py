@@ -26,6 +26,16 @@ Exact experimental parameters reproduced:
 import numpy as np
 from typing import Dict, Tuple
 
+def compute_process_fidelity(U_ideal: np.ndarray, U_noisy: np.ndarray) -> float:
+    """
+    Computes standard average gate fidelity between an ideal unitary and a normalized noisy unitary.
+    F = (|Tr(U_ideal^dagger @ U_noisy)|^2 + d) / (d * (d + 1))
+    """
+    d = U_ideal.shape[0]
+    overlap = np.trace(U_ideal.conj().T @ U_noisy)
+    F = (np.abs(overlap) ** 2 + d) / (d * (d + 1))
+    return float(np.real(F))
+
 class RealFoundryNoiseModel:
     def __init__(self):
         self.loss_db_per_cm = 0.148
@@ -54,12 +64,12 @@ class RealFoundryNoiseModel:
         # Physical noisy unitary transfer matrix
         noisy_unitary = trans_amp * (ideal_unitary * phase_matrix + coupler_pert * 0.05)
         
-        # 4. Physical State Fidelity:
-        # In Carolan Science 2015, quantum process and state fidelity is measured as:
-        # F = Tr(rho_ideal rho_noisy) / (Tr(rho_noisy)) * Indistinguishability
-        # With calibrated MZI voltage DACs, phase jitter and coupler delta give fidelity:
-        fid_base = 0.9940 + np.random.normal(0, 0.001)
-        effective_fidelity = float(np.clip(fid_base, 0.991, 0.997))
+        # 4. Renormalize to separate loss attenuation from unitary compilation / phase fidelity
+        noisy_unitary_normalized = noisy_unitary / trans_amp
+
+        # 5. Physics-derived average gate process fidelity
+        effective_fidelity = compute_process_fidelity(ideal_unitary, noisy_unitary_normalized)
+        deviation = abs(effective_fidelity * 100.0 - 99.40)
         
         metrics = {
             'benchmark_paper': 'Carolan et al., Science 349, 711 (2015)',
@@ -75,6 +85,7 @@ class RealFoundryNoiseModel:
             'snspd_dark_counts_hz': self.snspd_dark_counts_hz,
             'noisy_state_fidelity_pct': effective_fidelity * 100.0,
             'science_2015_published_fidelity_pct': 99.40,
-            'fidelity_match_status': 'EXACT MATCH (Within published +/-0.30% error bar)'
+            'deviation_from_published_pct': deviation,
+            'fidelity_match_status': f"Deviation from published value: {deviation:.3f} percentage points"
         }
         return noisy_unitary, metrics

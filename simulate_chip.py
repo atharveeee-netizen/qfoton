@@ -255,13 +255,13 @@ class QfotonRealisticSimulator:
         ax.set_facecolor(QF_PANEL)
 
         categories = ['Ideal Theory (Math)', 'Carolan et al. (Science 2015)', 'Qfóton Real Foundry Sim']
-        fidelities = [100.0, 99.4, 99.4]
+        fidelities = [100.0, 99.40, metrics['noisy_state_fidelity_pct']]
         colors = [QF_BLUE, QF_PINK, QF_GREEN]
 
         bars = ax.bar(categories, fidelities, color=colors, width=0.5, edgecolor='#f4f4f4', linewidth=1.0)
         ax.set_ylim(90, 101)
-        ax.set_ylabel("Quantum State Fidelity (%)", color=QF_TEXT, fontsize=10)
-        ax.set_title("Exact Validation: Qfóton Physical Noise vs. Science (2015) Experiment", color=QF_TEXT, fontsize=11, fontweight='bold', pad=15)
+        ax.set_ylabel("Quantum Process Fidelity (%)", color=QF_TEXT, fontsize=10)
+        ax.set_title("Physical Benchmark: Qfóton Process Noise vs. Science (2015) Experiment", color=QF_TEXT, fontsize=11, fontweight='bold', pad=15)
         ax.grid(True, alpha=0.15, linestyle=':')
 
         for bar in bars:

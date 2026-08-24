@@ -33,10 +33,12 @@ class DACPreEmphasisShaper:
         # Standard unmitigated thermal 10%-90% rise time: 2.2 * tau_th
         unmitigated_rise_time_us = 2.2 * self.tau_th
         
-        # Pre-emphasized boosted rise time
-        boost_duration_us = self.tau_th * np.log(v_boost**2 / (v_boost**2 - v_steady_state**2 + 1e-9))
-        boost_duration_us = float(np.clip(boost_duration_us, 0.8, 1.6))
-        accelerated_rise_time_us = boost_duration_us * 1.05
+        # Pre-emphasized boosted rise time from analytic thermal step response
+        if v_boost > v_steady_state:
+            boost_duration_us = float(self.tau_th * np.log(v_boost**2 / (v_boost**2 - v_steady_state**2 + 1e-9)))
+        else:
+            boost_duration_us = 0.0
+        accelerated_rise_time_us = max(0.1, boost_duration_us * 1.05)
         
         speedup_ratio = unmitigated_rise_time_us / accelerated_rise_time_us
 

@@ -56,13 +56,16 @@ class ThermalCrossTalkOptimizer:
         # 1. Uncalibrated case
         uncal_actual = self.apply_thermal_distortion(target_phases)
         uncal_err = float(np.mean(np.abs(uncal_actual - target_phases)))
-        uncal_fid = float(np.clip(1.0 - 1.8 * uncal_err, 0.50, 1.0)) * 100.0
+        uncal_fid = float(np.clip(1.0 - 1.8 * uncal_err, 0.0, 1.0)) * 100.0
 
-        # 2. Pre-distorted calibrated case
+        # 2. Pre-distorted calibrated case (no artificial floor)
         cal_drives, residual = self.calibrate_heater_drives(target_phases)
         cal_actual = self.apply_thermal_distortion(cal_drives)
         cal_err = float(np.mean(np.abs(cal_actual - target_phases)))
-        cal_fid = float(np.clip(1.0 - 1.8 * cal_err, 0.995, 1.0)) * 100.0
+        cal_fid = float(np.clip(1.0 - 1.8 * cal_err, 0.0, 1.0)) * 100.0
+
+        # Matrix conditioning for research-grade thermal inverse analysis
+        cond_number = float(np.linalg.cond(self.thermal_matrix))
 
         return {
             'num_mzis': self.num_mzis,
@@ -72,6 +75,7 @@ class ThermalCrossTalkOptimizer:
             'calibrated_fidelity_pct': cal_fid,
             'calibrated_error_rad': cal_err,
             'residual_l2_norm': residual,
+            'thermal_matrix_condition_number': cond_number,
             'improvement_factor': uncal_err / (cal_err + 1e-9)
         }
 

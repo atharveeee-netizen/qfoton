@@ -77,8 +77,8 @@ class MBQCClusterGenerator:
         A = self.build_adjacency_matrix()
         total_edges = int(np.sum(A) // 2)
         
-        # Type-II fusion fidelity under waveguide loss
-        fusion_fidelity = float(np.clip(1.0 - 1.2 * p_loss, 0.95, 0.998))
+        # Type-II fusion fidelity under waveguide loss (physical error rate model)
+        fusion_fidelity = float(np.clip(1.0 - 1.2 * p_loss, 0.0, 1.0))
         percolation_threshold = 0.625 # 3D Raussendorf cubic lattice bond percolation threshold
         
         return {

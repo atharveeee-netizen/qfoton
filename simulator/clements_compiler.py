@@ -132,13 +132,16 @@ def compute_clements_metrics(U: np.ndarray) -> Dict:
     theoretical_mzis = N * (N - 1) // 2
     optical_depth = N
     
+    overlap = np.trace(U.conj().T @ U_rec)
+    process_fidelity = float(np.real((np.abs(overlap) ** 2 + N) / (N * (N + 1)))) * 100.0
+    
     return {
         'num_modes': N,
         'total_mzi_count': total_mzis,
         'theoretical_mzi_count': theoretical_mzis,
         'max_optical_depth': optical_depth,
         'reconstruction_error': recon_error,
-        'unitary_fidelity_pct': float(np.clip(1.0 - recon_error, 0.999999999, 1.0)) * 100,
+        'unitary_fidelity_pct': process_fidelity,
         'mzi_schedule': mzi_list,
         'diagonal_phase_screen': diag_phases
     }

@@ -31,11 +31,14 @@ class PhotonicZNEMitigator:
         raw_error = float(abs(noisy_expectations[0] - ideal_expectation))
         mitigated_error = float(abs(zne_mitigated_val - ideal_expectation))
         
+        # True unconstrained error reduction
+        error_red = float(np.clip((1.0 - mitigated_error / (raw_error + 1e-9)) * 100.0, 0.0, 100.0))
+        
         return {
             'ideal_expectation': ideal_expectation,
             'unmitigated_expectation': noisy_expectations[0],
             'zne_mitigated_expectation': zne_mitigated_val,
             'raw_error': raw_error,
             'mitigated_error': mitigated_error,
-            'error_reduction_pct': float(np.clip((1.0 - mitigated_error / (raw_error + 1e-9)) * 100, 70.0, 98.0))
+            'error_reduction_pct': error_red
         }

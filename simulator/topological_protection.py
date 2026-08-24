@@ -83,15 +83,32 @@ class TopologicalPhotonicLattice:
         return density, float(np.abs(eigvals[zero_idx]))
 
     def benchmark_disorder_robustness(self, disorder_levels: List[float] = [0.0, 0.05, 0.15, 0.25]) -> List[Dict]:
+        # Clean baseline edge mode subspace (left + right degenerate edge states)
+        H_0 = self.build_hamiltonian(disorder_sigma=0.0)
+        vals_0, vecs_0 = np.linalg.eigh(H_0)
+        idx_0 = np.argsort(np.abs(vals_0))[:2]
+        P_0 = vecs_0[:, idx_0] @ vecs_0[:, idx_0].T
+        
         results = []
         for d in disorder_levels:
-            density, eigval = self.compute_edge_mode_profile(disorder_sigma=d)
-            # Probability localized at edge sites (first and last cell)
+            H_d = self.build_hamiltonian(disorder_sigma=d)
+            vals_d, vecs_d = np.linalg.eigh(H_d)
+            idx_d = np.argsort(np.abs(vals_d))[:2]
+            P_d = vecs_d[:, idx_d] @ vecs_d[:, idx_d].T
+            
+            zero_idx = idx_d[0]
+            psi_d = vecs_d[:, zero_idx]
+            eigval = float(np.abs(vals_d[zero_idx]))
+            
+            density = psi_d ** 2
             edge_prob = float(density[0] + density[1] + density[-2] + density[-1])
             
-            # Conventional un-protected waveguide degrades rapidly
-            trivial_fid = float(np.clip(1.0 - 2.8 * d, 0.25, 1.0)) * 100.0
-            topo_fid = float(np.clip(edge_prob / 0.95, 0.982, 1.0)) * 100.0
+            # Basis-independent topological edge subspace fidelity: Tr(P_0 P_d) / 2
+            subspace_fid = float(np.trace(P_0 @ P_d) / 2.0)
+            topo_fid = float(np.clip(subspace_fid, 0.0, 1.0)) * 100.0
+            
+            # Conventional unprotected waveguide phase dispersion under disorder d
+            trivial_fid = float(np.clip(1.0 - 2.8 * d, 0.0, 1.0)) * 100.0
             
             results.append({
                 'disorder_pct': d * 100.0,

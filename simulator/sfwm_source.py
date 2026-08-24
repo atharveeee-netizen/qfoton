@@ -25,10 +25,9 @@ class SFWMPhotonSource:
         length_m = 2 * np.pi * self.radius * 1e-6
         pair_rate_hz = (self.gamma * length_m * p_w)**2 * 1.2e8
         
-        # Coincidence-to-Accidental Ratio (CAR)
+        # Coincidence-to-Accidental Ratio (CAR) derived from pair generation vs accidental rate
         accidental_rate = (pair_rate_hz * 1e-9)**2 * 1e9
-        car = pair_rate_hz / (accidental_rate + 1e-6)
-        car = float(np.clip(car, 100.0, 3500.0))
+        car = float(pair_rate_hz / (accidental_rate + 1e-12))
         
         # Heralded single photon purity g^(2)(0)
         g2_zero = float(0.002 + 0.0005 * pump_power_mw)
