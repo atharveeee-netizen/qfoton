@@ -1,20 +1,23 @@
 # ==============================================================================
-# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Qfóton: Hardware-Aware Silicon Photonic Quantum Compiler & Simulator
 # Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
 # Released under the MIT License.
 # ==============================================================================
 
 """
-Qfóton: GDSII Silicon Photonic Mask & Geometry Layout Exporter.
+Qfóton: GDSII Silicon Photonic Layout Geometry Exporter.
 Grounding:
   GDSII Stream Format Specification (Calma / SEMI Standard).
-  Cleanroom standard photolithography masks for 220nm Silicon-on-Insulator (SOI).
+  Layout geometry parameters based on 220nm Silicon-on-Insulator (SOI) process specs.
 
-Exports genuine binary GDSII (.gds) mask files compliant with foundry lithography tools (KLayout, Cadence, L-Edit):
+Exports binary GDSII (.gds) layout files viewable in KLayout, Cadence, L-Edit:
   - Layer 1: Silicon Waveguide Core (450 nm width, 220 nm height)
   - Layer 2: Sub-Wavelength Grating Couplers (630 nm pitch)
   - Layer 3: TiN Thermo-Optic Micro-Heater Filaments (120 Ohm)
   - Layer 4: Aluminium / Copper Wire-Bond Contact Pads & Routing Vias
+
+NOTE: These layouts are generated from parameterized geometry models. They would
+require external DRC validation against a specific foundry PDK before fabrication.
 """
 
 import os

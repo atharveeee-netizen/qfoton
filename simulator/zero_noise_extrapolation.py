@@ -1,5 +1,5 @@
 # ==============================================================================
-# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Qfóton: Hardware-Aware Silicon Photonic Quantum Compiler & Simulator
 # Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
 # Released under the MIT License.
 # ==============================================================================

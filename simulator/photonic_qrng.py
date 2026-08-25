@@ -1,12 +1,18 @@
 # ==============================================================================
-# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Qfóton: Hardware-Aware Silicon Photonic Quantum Compiler & Simulator
 # Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
 # Released under the MIT License.
 # ==============================================================================
 
 """
-Qfóton: Quantum Random Number Generator (QRNG) with NIST SP 800-22 Verification (PR Applied 2022).
-Generates non-deterministic bits via single-photon beam splitter splitting and runs NIST randomness tests.
+Qfóton: QRNG Beam-Splitter Simulation & NIST SP 800-22 Statistical Validation.
+
+Simulates a photonic 50:50 beam-splitter measurement process using stochastic
+Bernoulli sampling and validates the output against NIST SP 800-22 randomness tests.
+
+NOTE: This is a software simulation of a photonic QRNG measurement model.
+It uses numpy pseudorandom sampling to model the beam-splitter output distribution.
+It is NOT connected to physical quantum random number generation hardware.
 """
 
 import numpy as np
@@ -17,7 +23,7 @@ class PhotonicQRNG:
         self.n_bits = num_bits
 
     def generate_and_test_randomness(self) -> Dict:
-        # Quantum single-photon 50:50 beam splitter Bernoulli trials
+        # Model 50:50 beam-splitter output as Bernoulli(p=0.5) trials (software simulation)
         quantum_bits = np.random.binomial(n=1, p=0.5, size=self.n_bits)
         
         # 1. NIST Frequency (Monobit) Test

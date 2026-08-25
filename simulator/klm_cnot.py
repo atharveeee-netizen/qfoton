@@ -1,5 +1,5 @@
 # ==============================================================================
-# Qfóton: Full-Stack Silicon Photonic Quantum Computing & Compiler Suite
+# Qfóton: Hardware-Aware Silicon Photonic Quantum Compiler & Simulator
 # Copyright (c) 2026 Atharve and the Qfóton Contributors. All rights reserved.
 # Released under the MIT License.
 # ==============================================================================
@@ -13,7 +13,7 @@ class KLMPhotonicCNOT:
     def __init__(self):
         self.success_probability = 1.0 / 9.0
         # KLM theorem (Nature 409, 46, 2001): conditioned on heralding,
-        # the CNOT gate is deterministic and exact — fidelity = 1.0.
+        # the CNOT gate is deterministic and exact - fidelity = 1.0.
         self.fidelity = 1.0
 
     def apply_cnot_truth_table(self, control: int, target: int) -> Tuple[int, int]:
