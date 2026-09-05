@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Qfóton GitHub Discussions
+    url: https://github.com/atharveeee-netizen/qfoton/discussions
+    about: Ask questions, share simulation designs, or discuss quantum optics theory with the community.
+  - name: Security Vulnerability Reporting
+    url: https://github.com/atharveeee-netizen/qfoton/security/advisories
+    about: Privately report security advisories or software vulnerabilities.

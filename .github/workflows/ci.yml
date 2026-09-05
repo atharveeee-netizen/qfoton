@@ -26,7 +26,45 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install -e .
+        pip install pytest
 
-    - name: Execute 16-Stage Master Physical Simulation Engine
+    - name: Execute Automated Quantum Unit Test Suite
+      run: |
+        pytest tests/test_quantum_suite.py -v
+
+    - name: Execute 16-Stage Master Physical Simulation Suite
       run: |
         python run_demo.py
+
+    - name: Execute SOTA Photonic Benchmarks
+      run: |
+        python benchmarks/run_sota_benchmarks.py
+
+    - name: Execute Carolan et al. Science (2015) Reproduction
+      run: |
+        python simulate_science_2015_chip.py
+
+    - name: Validate Zero En-Dashes and Em-Dashes in Documentation
+      run: |
+        python -c "
+        import os, sys
+        forbidden = ['\u2013', '\u2014']
+        violations = []
+        for root, _, files in os.walk('.'):
+            if '.git' in root:
+                continue
+            for f in files:
+                if f.endswith(('.md', '.yml', '.yaml')):
+                    path = os.path.join(root, f)
+                    with open(path, 'r', encoding='utf-8') as fp:
+                        content = fp.read()
+                        for char in forbidden:
+                            if char in content:
+                                violations.append((path, repr(char)))
+        if violations:
+            print('Detected forbidden en-dash or em-dash characters:')
+            for v in violations:
+                print(f'  {v[0]}: {v[1]}')
+            sys.exit(1)
+        print('All markdown and YAML documentation verified clean (0 en-dashes, 0 em-dashes).')
+        "

@@ -1,0 +1,76 @@
+name: Bug Report
+description: Report a bug, physical calculation anomaly, or compilation error in Qfóton
+title: "[BUG]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue in Qfóton! Please provide detailed physical or programmatic information so we can investigate and resolve it quickly.
+  - type: input
+    id: qfoton-version
+    attributes:
+      label: Qfóton Version
+      description: What version of Qfóton are you using? (e.g. 2.0.0 or commit hash)
+      placeholder: "2.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: module
+    attributes:
+      label: Affected Simulation Module
+      description: Which part of the Qfóton pipeline encountered the issue?
+      options:
+        - "Clements / Reck Unitary Decomposition"
+        - "Cleanroom Noise Engine (Waveguide Loss, Sidewall Roughness)"
+        - "Thermal Cross-Talk (K^-1 Inversion)"
+        - "PID Phase Stabilization"
+        - "Hong-Ou-Mandel (HOM) Interference"
+        - "SFWM Photon Source"
+        - "Boson Sampling / Glynn Matrix Permanent"
+        - "SSH Topological Protection"
+        - "MBQC 3D Raussendorf Cluster"
+        - "Photonic VQE Chemistry"
+        - "Photonic QRNG"
+        - "GDSII Layout Export"
+        - "MATLAB / Simulink Bridge"
+        - "OpenQASM Transpiler"
+        - "Other"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Bug
+      description: A clear and concise description of the bug or calculation error.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Code snippet, QASM circuit, or command line call to reproduce the issue.
+      placeholder: |
+        ```python
+        import numpy as np
+        from simulator.clements_compiler import ClementsCompiler
+        compiler = ClementsCompiler(num_modes=6)
+        ...
+        ```
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Physical or Mathematical Behavior
+      description: What output or fidelity did you expect based on theoretical models or literature?
+    validations:
+      required: true
+  - type: input
+    id: os-env
+    attributes:
+      label: Operating System & Python Environment
+      description: e.g. Ubuntu 22.04, Windows 11, macOS Sonoma | Python 3.10.11 | NumPy 1.26.4
+      placeholder: "Windows 11, Python 3.10, NumPy 1.26.4"
+    validations:
+      required: true

@@ -1,0 +1,45 @@
+name: Feature Request
+description: Propose a new physical simulation model, decomposition algorithm, or hardware capability
+title: "[FEAT]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We appreciate your ideas for expanding Qfóton! Please detail the physical motivation and mathematical background of your proposed feature.
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: What domain does this feature request fall under?
+      options:
+        - "Physical Noise Modeling & Cleanroom Foundry Physics"
+        - "Unitary Decomposition & Compiler Architecture"
+        - "Photonic Quantum Algorithm (VQE, QAOA, Machine Learning)"
+        - "Optical Hardware Integration (GDSII, PDK, Packaging)"
+        - "MATLAB / Simulink Co-Simulation"
+        - "CLI, UI, & Developer Experience"
+        - "Other"
+    validations:
+      required: true
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem Statement or Scientific Motivation
+      description: What challenge or physical limitation does this feature address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Physical Solution & Methodology
+      description: Describe the mathematical formulation, algorithm, or semiconductor physics model.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Academic References & Citations
+      description: Provide relevant journal articles, preprints, or textbook citations (Author, Journal, Year, DOI).
+    validations:
+      required: false

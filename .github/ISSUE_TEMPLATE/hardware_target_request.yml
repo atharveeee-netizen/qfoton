@@ -1,0 +1,45 @@
+name: Foundry PDK Target Request
+description: Request integration or calibration for a new silicon photonic foundry PDK or optical packaging spec
+title: "[PDK TARGET]: "
+labels: ["hardware-target", "foundry-pdk"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request physical parameter calibration for a specific silicon photonic foundry PDK (e.g. IMEC, AIM Photonics, AMF, LioniX, Tower Semiconductor, GlobalFoundries).
+  - type: input
+    id: foundry-name
+    attributes:
+      label: Foundry & PDK Name
+      description: Name of the commercial or academic cleanroom foundry and PDK release.
+      placeholder: "e.g. IMEC iSiPP50G, AIM Photonics, AMF SiP, LioniX TriPleX"
+    validations:
+      required: true
+  - type: input
+    id: process-node
+    attributes:
+      label: Process Node & Material Platform
+      description: e.g. 220nm SOI, 300nm SiN, Thin-Film Lithium Niobate (TFLN)
+      placeholder: "220nm SOI (Silicon-on-Insulator)"
+    validations:
+      required: true
+  - type: textarea
+    id: cleanroom-specs
+    attributes:
+      label: Cleanroom Physical Parameters (if publicly available)
+      description: |
+        Provide known or published physical parameters:
+        - Waveguide propagation loss (dB/cm)
+        - Thermo-optic coefficient (dn/dT)
+        - Heater resistance and V_pi (V)
+        - Directional coupler splitting ratio tolerances
+        - Grating coupler peak insertion loss (dB)
+    validations:
+      required: true
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Intended Quantum Computing or Sensing Application
+      description: What circuits or experiments do you plan to compile for this foundry?
+    validations:
+      required: false
